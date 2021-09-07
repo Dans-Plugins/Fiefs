@@ -34,6 +34,8 @@ Name | Main Contributions
 ------------ | -------------
 DanTheTechMan | Creator
 
+This plugin was requested by Laughingspade.
+
 ## License
 GPL3
 
