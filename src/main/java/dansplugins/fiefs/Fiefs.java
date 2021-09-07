@@ -10,7 +10,7 @@ public final class Fiefs extends JavaPlugin {
 
     private final boolean debug = true;
 
-    private final String version = "v0.1";
+    private final String version = "v0.2";
 
     public static Fiefs getInstance() {
         return instance;

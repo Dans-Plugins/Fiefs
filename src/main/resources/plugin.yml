@@ -1,5 +1,5 @@
 name: Fiefs
-version: v0.1
+version: v0.2
 main: dansplugins.fiefs.Fiefs
 api-version: 1.13
 author: DanTheTechMan
