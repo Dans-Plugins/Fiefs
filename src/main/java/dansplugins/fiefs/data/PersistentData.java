@@ -25,6 +25,10 @@ public class PersistentData {
         return instance;
     }
 
+    public ArrayList<Fief> getFiefs() {
+        return fiefs;
+    }
+
     public Fief getFief(String name) {
         for (Fief fief : fiefs) {
             if (fief.getName().equalsIgnoreCase(name)) {
@@ -94,5 +98,9 @@ public class PersistentData {
         for (Fief fief : listOfFiefs) {
             player.sendMessage(ChatColor.AQUA + fief.getName());
         }
+    }
+
+    public void clearFiefs() {
+        // TODO: implement
     }
 }
