@@ -1,6 +1,7 @@
 package dansplugins.fiefs;
 
 import dansplugins.fiefs.commands.CreateCommand;
+import dansplugins.fiefs.commands.DisbandCommand;
 import dansplugins.fiefs.commands.HelpCommand;
 import dansplugins.fiefs.commands.ListCommand;
 import org.bukkit.ChatColor;
@@ -38,6 +39,12 @@ public class CommandInterpreter {
                 if (!checkPermission(sender, "fiefs.create")) { return false; }
                 CreateCommand command = new CreateCommand();
                 return command.execute(sender, arguments);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("disband")) {
+                if (!checkPermission(sender, "fiefs.disband")) { return false; }
+                DisbandCommand command = new DisbandCommand();
+                return command.execute(sender);
             }
 
         }

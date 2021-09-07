@@ -10,6 +10,7 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/mf help");
         sender.sendMessage(ChatColor.AQUA + "/mf list");
         sender.sendMessage(ChatColor.AQUA + "/mf create");
+        sender.sendMessage(ChatColor.AQUA + "/mf disband");
         return true;
     }
 
