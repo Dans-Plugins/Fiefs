@@ -67,7 +67,7 @@ public class Fief {
         Map<String, String> saveMap = new HashMap<>();
         saveMap.put("name", gson.toJson(name));
         saveMap.put("ownerUUID", gson.toJson(ownerUUID));
-        saveMap.put("factionNam", gson.toJson(factionName));
+        saveMap.put("factionName", gson.toJson(factionName));
 
         return saveMap;
     }

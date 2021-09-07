@@ -20,7 +20,7 @@ public class StorageManager {
     private static StorageManager instance;
 
     private final static String FILE_PATH = "./plugins/Fiefs/";
-    private final static String PETS_FILE_NAME = "fiefs.json";
+    private final static String FIEFS_FILE_NAME = "fiefs.json";
 
     private final static Type LIST_MAP_TYPE = new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType();
 
@@ -48,7 +48,7 @@ public class StorageManager {
     }
 
     public void load() {
-        loadPets();
+        loadFiefs();
     }
 
     private void saveFiefs() {
@@ -65,7 +65,7 @@ public class StorageManager {
         try {
             File parentFolder = new File(FILE_PATH);
             parentFolder.mkdir();
-            File file = new File(FILE_PATH + PETS_FILE_NAME);
+            File file = new File(FILE_PATH + FIEFS_FILE_NAME);
             file.createNewFile();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
             outputStreamWriter.write(gson.toJson(saveData));
@@ -75,11 +75,11 @@ public class StorageManager {
         }
     }
 
-    private void loadPets() {
-        // load each pet individually and reconstruct pet list objects
+    private void loadFiefs() {
+        // load each fief
         PersistentData.getInstance().clearFiefs();
 
-        ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + PETS_FILE_NAME);
+        ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + FIEFS_FILE_NAME);
 
         for (Map<String, String> fiefData : data){
             Fief fief = new Fief(fiefData);
