@@ -1,0 +1,16 @@
+name: Fiefs
+version: v0.1
+main: dansplugins.fiefs.Fiefs
+api-version: 1.13
+author: DanTheTechMan
+
+commands:
+  fiefs:
+
+permissions:
+  fiefs.help:
+    default: true
+  fiefs.list:
+    default: true
+  fiefs.create:
+    default: true
