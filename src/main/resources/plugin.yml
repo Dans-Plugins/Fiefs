@@ -3,7 +3,7 @@ version: v0.2
 main: dansplugins.fiefs.Fiefs
 api-version: 1.13
 author: DanTheTechMan
-depends: [MedievalFactions]
+depend: [MedievalFactions]
 
 commands:
   fiefs:
