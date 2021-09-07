@@ -1,5 +1,6 @@
 package dansplugins.fiefs;
 
+import dansplugins.fiefs.managers.StorageManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,11 +27,13 @@ public final class Fiefs extends JavaPlugin {
             }
             return;
         }
+
+        StorageManager.getInstance().load();
     }
 
     @Override
     public void onDisable() {
-
+        StorageManager.getInstance().save();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
