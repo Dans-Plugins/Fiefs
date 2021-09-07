@@ -24,19 +24,19 @@ public class CreateCommand {
         }
 
         if (args.length == 0) {
-            System.out.println(ChatColor.RED + "Usage: /fiefs create (name)");
+            player.sendMessage(ChatColor.RED + "Usage: /fiefs create (name)");
             return false;
         }
 
         if (PersistentData.getInstance().getFief(player) != null) {
-            System.out.println(ChatColor.RED + "You can't create a fief if you're already in a fief.");
+            player.sendMessage(ChatColor.RED + "You can't create a fief if you're already in a fief.");
             return false;
         }
 
         String name = args[0]; // TODO: allow for spaces
 
         if (PersistentData.getInstance().isNameTaken(name)) {
-            System.out.println(ChatColor.RED + "That name is taken.");
+            player.sendMessage(ChatColor.RED + "That name is taken.");
             return false;
         }
 
