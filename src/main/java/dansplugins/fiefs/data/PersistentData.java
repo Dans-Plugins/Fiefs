@@ -70,6 +70,10 @@ public class PersistentData {
         return true;
     }
 
+    public boolean removeFief(Fief fiefToRemove) {
+        return fiefs.remove(fiefToRemove);
+    }
+
     public void sendListOfFiefsToPlayer(Player player) {
 
         MF_Faction faction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
