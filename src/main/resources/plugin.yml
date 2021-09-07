@@ -15,3 +15,5 @@ permissions:
     default: true
   fiefs.create:
     default: true
+  fiefs.disband:
+    default: true
