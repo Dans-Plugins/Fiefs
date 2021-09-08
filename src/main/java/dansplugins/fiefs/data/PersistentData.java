@@ -2,6 +2,7 @@ package dansplugins.fiefs.data;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ public class PersistentData {
     private static PersistentData instance;
 
     private ArrayList<Fief> fiefs = new ArrayList<>();
+    private ArrayList<ClaimedChunk> claimedChunks = new ArrayList<>();
 
     private PersistentData() {
 
@@ -102,5 +104,21 @@ public class PersistentData {
 
     public void clearFiefs() {
         // TODO: implement
+    }
+
+    public void addChunk(ClaimedChunk chunk) {
+        claimedChunks.add(chunk);
+    }
+
+    public void removeChunk(ClaimedChunk chunk) {
+        claimedChunks.remove(chunk);
+    }
+
+    public int getNumChunks() {
+        return claimedChunks.size();
+    }
+
+    public ArrayList<ClaimedChunk> getClaimedChunks() {
+        return claimedChunks;
     }
 }

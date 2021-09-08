@@ -22,8 +22,11 @@ public class ClaimedChunk {
 
     }
 
-    public ClaimedChunk(Chunk initialChunk) {
-        setChunk(initialChunk);
+    public ClaimedChunk(Chunk chunk, String faction, String fief) {
+        this.chunk = chunk;
+        this.faction = faction;
+        this.fief = fief;
+        this.world = chunk.getWorld().getName();
     }
 
     public ClaimedChunk(Map<String, String> data){
