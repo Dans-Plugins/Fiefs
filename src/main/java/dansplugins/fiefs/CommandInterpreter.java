@@ -1,9 +1,6 @@
 package dansplugins.fiefs;
 
-import dansplugins.fiefs.commands.CreateCommand;
-import dansplugins.fiefs.commands.DisbandCommand;
-import dansplugins.fiefs.commands.HelpCommand;
-import dansplugins.fiefs.commands.ListCommand;
+import dansplugins.fiefs.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -44,6 +41,24 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("disband")) {
                 if (!checkPermission(sender, "fiefs.disband")) { return false; }
                 DisbandCommand command = new DisbandCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("checkclaim")) {
+                if (!checkPermission(sender, "fiefs.checkclaim")) { return false; }
+                CheckClaimCommand command = new CheckClaimCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("claim")) {
+                if (!checkPermission(sender, "fiefs.claim")) { return false; }
+                ClaimCommand command = new ClaimCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("unclaim")) {
+                if (!checkPermission(sender, "fiefs.unclaim")) { return false; }
+                UnclaimCommand command = new UnclaimCommand();
                 return command.execute(sender);
             }
 

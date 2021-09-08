@@ -32,7 +32,7 @@ public class ChunkManager {
         return null;
     }
 
-    public boolean claimChunk(Chunk chunk, Fief fief, Player player) {
+    public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
         /*
         if (!MedievalFactionsIntegrator.getInstance().getAPI().isChunkClaimed(chunk)) {
             player.sendMessage(ChatColor.RED + "You can only claim land which belong to your faction.");
@@ -52,7 +52,7 @@ public class ChunkManager {
         return true;
     }
 
-    public boolean unclaimChunk(Chunk chunk, Fief fief, Player player) {
+    public boolean attemptToUnclaimChunk(Chunk chunk, Fief fief, Player player) {
         // check that chunk is actually claimed
         ClaimedChunk claimedChunk = getClaimedChunk(chunk);
         if (claimedChunk == null) {
@@ -68,6 +68,7 @@ public class ChunkManager {
 
         // unclaim the chunk
         PersistentData.getInstance().removeChunk(claimedChunk);
+        player.sendMessage(ChatColor.GREEN + "Unclaimed.");
         return true;
     }
 
