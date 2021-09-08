@@ -1,6 +1,5 @@
 package dansplugins.fiefs.managers;
 
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
