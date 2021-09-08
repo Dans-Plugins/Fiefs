@@ -3,6 +3,7 @@ package dansplugins.fiefs.commands;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.Fief;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ public class UnclaimCommand {
 
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            // TODO: add message
+            sender.sendMessage("Only players can use this command.");
             return false;
         }
 
@@ -20,7 +21,7 @@ public class UnclaimCommand {
         Fief playersFief = PersistentData.getInstance().getFief(player);
 
         if (playersFief == null) {
-            // TODO: add message
+            player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
             return false;
         }
 
