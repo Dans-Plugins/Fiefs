@@ -13,8 +13,6 @@ public class Fief {
     private UUID ownerUUID;
     private String factionName;
 
-    private ArrayList<ClaimedChunk> claimedChunks = new ArrayList<>();
-
     public Fief(String name, UUID ownerUUID, String factionName) {
         this.name = name;
         this.ownerUUID = ownerUUID;
@@ -47,18 +45,6 @@ public class Fief {
 
     public void setFactionName(String factionName) {
         this.factionName = factionName;
-    }
-
-    public void addChunk(ClaimedChunk chunk) {
-        claimedChunks.add(chunk);
-    }
-
-    public void removeChunk(ClaimedChunk chunk) {
-        claimedChunks.remove(chunk);
-    }
-
-    public int getNumChunks() {
-        return claimedChunks.size();
     }
 
     public Map<String, String> save() {
