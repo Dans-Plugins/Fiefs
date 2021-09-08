@@ -44,12 +44,6 @@ public class CommandInterpreter {
                 return command.execute(sender);
             }
 
-            if (secondaryLabel.equalsIgnoreCase("checkclaim")) {
-                if (!checkPermission(sender, "fiefs.checkclaim")) { return false; }
-                CheckClaimCommand command = new CheckClaimCommand();
-                return command.execute(sender);
-            }
-
             if (secondaryLabel.equalsIgnoreCase("claim")) {
                 if (!checkPermission(sender, "fiefs.claim")) { return false; }
                 ClaimCommand command = new ClaimCommand();
@@ -59,6 +53,12 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("unclaim")) {
                 if (!checkPermission(sender, "fiefs.unclaim")) { return false; }
                 UnclaimCommand command = new UnclaimCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("checkclaim")) {
+                if (!checkPermission(sender, "fiefs.checkclaim")) { return false; }
+                CheckClaimCommand command = new CheckClaimCommand();
                 return command.execute(sender);
             }
 
