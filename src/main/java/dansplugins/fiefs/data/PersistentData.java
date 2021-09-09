@@ -128,7 +128,12 @@ public class PersistentData {
 
 
     public int getNumChunksClaimedByFief(Fief playersFief) {
-        // TODO: implement
-        return -1;
+        int count = 0;
+        for (ClaimedChunk chunk : claimedChunks) {
+            if (chunk.getFief().equalsIgnoreCase(playersFief.getName())) {
+                count++;
+            }
+        }
+        return count;
     }
 }
