@@ -127,4 +127,8 @@ public class PersistentData {
     }
 
 
+    public int getNumChunksClaimedByFief(Fief playersFief) {
+        // TODO: implement
+        return -1;
+    }
 }

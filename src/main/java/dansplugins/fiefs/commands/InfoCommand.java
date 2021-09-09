@@ -1,20 +1,19 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
+import dansplugins.factionsystem.utils.UUIDChecker;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ClaimCommand {
+public class InfoCommand {
 
     public boolean execute(CommandSender sender) {
+
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
             return false;
         }
 
@@ -32,8 +31,11 @@ public class ClaimCommand {
             return false;
         }
 
-        Chunk chunk = player.getLocation().getChunk();
-        return ChunkManager.getInstance().attemptToClaimChunk(chunk, playersFief, player);
+        player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " ===");
+        player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
+        player.sendMessage(ChatColor.AQUA + "Owner: " + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
+        player.sendMessage(ChatColor.AQUA + "Chunks claimed: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief));
+        return true;
     }
 
 }

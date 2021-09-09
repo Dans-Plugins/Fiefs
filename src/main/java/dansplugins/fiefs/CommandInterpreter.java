@@ -62,6 +62,12 @@ public class CommandInterpreter {
                 return command.execute(sender);
             }
 
+            if (secondaryLabel.equalsIgnoreCase("info")) {
+                if (!checkPermission(sender, "fiefs.info")) { return false; }
+                InfoCommand command = new InfoCommand();
+                return command.execute(sender);
+            }
+
             sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         }
         return false;
