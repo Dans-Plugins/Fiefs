@@ -68,6 +68,24 @@ public class CommandInterpreter {
                 return command.execute(sender);
             }
 
+            if (secondaryLabel.equalsIgnoreCase("invite")) {
+                if (!checkPermission(sender, "fiefs.invite")) { return false; }
+                InviteCommand command = new InviteCommand();
+                return command.execute(sender, arguments);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("join")) {
+                if (!checkPermission(sender, "fiefs.join")) { return false; }
+                JoinCommand command = new JoinCommand();
+                return command.execute(sender, arguments);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("leave")) {
+                if (!checkPermission(sender, "fiefs.leave")) { return false; }
+                LeaveCommand command = new LeaveCommand();
+                return command.execute(sender);
+            }
+
             sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         }
         return false;
