@@ -106,6 +106,10 @@ public class PersistentData {
         // TODO: implement
     }
 
+    public void clearClaimedChunks() {
+        // TODO: implement
+    }
+
     public void addChunk(ClaimedChunk chunk) {
         claimedChunks.add(chunk);
     }
@@ -121,4 +125,6 @@ public class PersistentData {
     public ArrayList<ClaimedChunk> getClaimedChunks() {
         return claimedChunks;
     }
+
+
 }

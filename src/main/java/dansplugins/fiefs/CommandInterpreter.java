@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public class CommandInterpreter {
 
     public boolean interpretCommand(CommandSender sender, String label, String[] args) {
-        if (label.equalsIgnoreCase("fiefs")) {
+        if (label.equalsIgnoreCase("fiefs") || label.equalsIgnoreCase("fi")) {
 
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.AQUA + "Fiefs " + Fiefs.getInstance().getVersion());
@@ -62,9 +62,8 @@ public class CommandInterpreter {
                 return command.execute(sender);
             }
 
+            sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         }
-
-        sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         return false;
     }
 

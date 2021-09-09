@@ -7,6 +7,7 @@ depend: [MedievalFactions]
 
 commands:
   fiefs:
+  fi:
 
 permissions:
   fiefs.help:
@@ -16,4 +17,10 @@ permissions:
   fiefs.create:
     default: true
   fiefs.disband:
+    default: true
+  fiefs.claim:
+    default: true
+  fiefs.unclaim:
+    default: true
+  fiefs.checkclaim:
     default: true
