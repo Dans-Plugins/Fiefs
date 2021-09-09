@@ -24,3 +24,5 @@ permissions:
     default: true
   fiefs.checkclaim:
     default: true
+  fiefs.info:
+    default: true

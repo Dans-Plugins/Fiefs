@@ -10,6 +10,7 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/fiefs help");
         sender.sendMessage(ChatColor.AQUA + "/fiefs list");
         sender.sendMessage(ChatColor.AQUA + "/fiefs create");
+        sender.sendMessage(ChatColor.AQUA + "/fiefs info");
         sender.sendMessage(ChatColor.AQUA + "/fiefs disband");
         sender.sendMessage(ChatColor.AQUA + "/fiefs claim");
         sender.sendMessage(ChatColor.AQUA + "/fiefs unclaim");
