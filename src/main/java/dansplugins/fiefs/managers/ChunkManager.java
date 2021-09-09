@@ -33,7 +33,6 @@ public class ChunkManager {
     }
 
     public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
-
         if (!MedievalFactionsIntegrator.getInstance().getAPI().isChunkClaimed(chunk)) {
             player.sendMessage(ChatColor.RED + "You can only claim land which belong to your faction.");
             return false;
