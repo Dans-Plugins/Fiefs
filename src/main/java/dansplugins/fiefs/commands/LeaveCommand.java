@@ -30,6 +30,12 @@ public class LeaveCommand {
             return false;
         }
 
+        if (fief.getOwnerUUID().equals(player.getUniqueId())) {
+            PersistentData.getInstance().removeFief(fief);
+            player.sendMessage(ChatColor.GREEN + "Left. Your fief was disbanded since you were the owner.");
+            return true;
+        }
+
         fief.removeMember(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "Left.");
 
