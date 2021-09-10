@@ -1,9 +1,6 @@
 package dansplugins.fiefs.eventhandlers;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.factionsystem.utils.InteractionAccessChecker;
 import dansplugins.fiefs.Fiefs;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
