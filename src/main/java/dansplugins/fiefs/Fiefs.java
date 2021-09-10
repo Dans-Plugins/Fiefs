@@ -1,9 +1,12 @@
 package dansplugins.fiefs;
 
+import dansplugins.fiefs.managers.ConfigManager;
 import dansplugins.fiefs.managers.StorageManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public final class Fiefs extends JavaPlugin {
 
@@ -11,7 +14,7 @@ public final class Fiefs extends JavaPlugin {
 
     private final boolean debug = true;
 
-    private final String version = "v0.3";
+    private final String version = "v0.4";
 
     public static Fiefs getInstance() {
         return instance;
@@ -20,6 +23,17 @@ public final class Fiefs extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        if (!(new File("./plugins/Fiefs/config.yml").exists())) {
+            ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
+        }
+        else {
+            // pre load compatibility checks
+            if (isVersionMismatched()) {
+                ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            }
+            reloadConfig();
+        }
 
         if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsPresent()) {
             if (debug) {

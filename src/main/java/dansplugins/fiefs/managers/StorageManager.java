@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
@@ -42,12 +43,9 @@ public class StorageManager {
     public void save() {
         saveFiefs();
         saveClaimedChunks();
-        /*
         if (ConfigManager.getInstance().hasBeenAltered()) {
-            WildPets.getInstance().saveConfig();
+            Fiefs.getInstance().saveConfig();
         }
-
-        */
     }
 
     public void load() {
