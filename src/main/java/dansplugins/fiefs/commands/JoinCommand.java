@@ -26,7 +26,7 @@ public class JoinCommand {
 
         Fief fief = PersistentData.getInstance().getFief(player);
         if (fief != null) {
-            player.sendMessage(ChatColor.RED + "You must not be in a fief to use this command.");
+            player.sendMessage(ChatColor.RED + "You're already in a fief.");
             return false;
         }
 
