@@ -2,7 +2,9 @@ package dansplugins.fiefs.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dansplugins.factionsystem.utils.UUIDChecker;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -99,6 +101,13 @@ public class Fief {
 
     public int getNumMembers() {
         return members.size();
+    }
+
+    public void sendMembersListToPlayer(Player player) {
+        player.sendMessage(ChatColor.AQUA + "=== Members of " + name + " ===");
+        for (UUID playerUUID : members) {
+            player.sendMessage(ChatColor.AQUA + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playerUUID));
+        }
     }
 
     public Map<String, String> save() {
