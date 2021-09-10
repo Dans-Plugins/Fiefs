@@ -121,6 +121,12 @@ public class Fief {
         }
     }
 
+    public boolean equals(Fief fief) {
+        return fief.getOwnerUUID().equals(this.getOwnerUUID())
+                && fief.getName().equals(this.getName())
+                && fief.getFactionName().equals(this.getFactionName());
+    }
+
     public Map<String, String> save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
