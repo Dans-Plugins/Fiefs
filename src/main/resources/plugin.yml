@@ -26,3 +26,9 @@ permissions:
     default: true
   fiefs.info:
     default: true
+  fiefs.invite:
+    default: true
+  fiefs.join:
+    default: true
+  fiefs.leave:
+    default: true
