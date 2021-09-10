@@ -1,10 +1,10 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.factionsystem.utils.UUIDChecker;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.utils.UUIDChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Fief {
     // persistent
     private String name;
+    private String description = "Default Description";
     private UUID ownerUUID;
     private String factionName;
 
@@ -40,6 +41,14 @@ public class Fief {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getOwnerUUID() {
