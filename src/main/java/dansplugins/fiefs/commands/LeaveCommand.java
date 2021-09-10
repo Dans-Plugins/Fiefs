@@ -30,7 +30,11 @@ public class LeaveCommand {
             return false;
         }
 
-        // TODO: implement
+        fief.removeMember(player.getUniqueId());
+        player.sendMessage(ChatColor.GREEN + "Left.");
+
+        // TODO: inform fief members that the player has left the fief
+
         return true;
     }
 

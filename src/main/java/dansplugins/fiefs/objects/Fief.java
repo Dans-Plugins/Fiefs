@@ -54,7 +54,21 @@ public class Fief {
         this.factionName = factionName;
     }
 
-    // TODO: add member-related methods here
+    public void addMember(UUID playerUUID) {
+        if (!isMember(playerUUID)) {
+            members.add(playerUUID);
+        }
+    }
+
+    public void removeMember(UUID playerUUID) {
+        if (isMember(playerUUID)) {
+            members.remove(playerUUID);
+        }
+    }
+
+    public boolean isMember(UUID playerUUID) {
+        return members.contains(playerUUID);
+    }
 
     public void invitePlayer(UUID playerUUID) {
         if (!isInvited(playerUUID)) {
