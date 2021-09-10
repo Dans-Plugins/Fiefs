@@ -4,15 +4,13 @@ import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.Fief;
-import dansplugins.fiefs.utils.UUIDChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class InfoCommand {
+public class MembersCommand {
 
     public boolean execute(CommandSender sender) {
-
         if (!(sender instanceof Player)) {
             return false;
         }
@@ -31,15 +29,7 @@ public class InfoCommand {
             return false;
         }
 
-        int cumulativePowerLevel = playersFief.getCumulativePowerLevel();
-
-        player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " ===");
-        player.sendMessage(ChatColor.AQUA + "Name: " + playersFief.getName());
-        player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
-        player.sendMessage(ChatColor.AQUA + "Owner: " + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
-        player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
-        player.sendMessage(ChatColor.AQUA + "Power Level: " + cumulativePowerLevel);
-        player.sendMessage(ChatColor.AQUA + "Demesne Size: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief) + "/" + cumulativePowerLevel);
+        playersFief.sendMembersListToPlayer(player);
         return true;
     }
 

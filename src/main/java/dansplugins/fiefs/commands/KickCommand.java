@@ -12,11 +12,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class InviteCommand {
+public class KickCommand {
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
             return false;
         }
 
@@ -35,19 +34,19 @@ public class InviteCommand {
         }
 
         if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to invite others.");
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to kick members.");
             return false;
         }
 
         if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /fiefs invite (playerName)");
+            player.sendMessage(ChatColor.RED + "Usage: /fiefs kick (playerName)");
             return false;
         }
 
         String targetName = args[0];
 
         if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(ChatColor.RED + "You can't invite yourself.");
+            player.sendMessage(ChatColor.RED + "You can't kick yourself.");
             return false;
         }
 
@@ -65,18 +64,18 @@ public class InviteCommand {
         }
 
         Fief targetsFief = PersistentData.getInstance().getFief(targetName);
-        if (targetsFief != null) {
-            player.sendMessage(ChatColor.RED + "That player is already in " + targetsFief.getName());
+        if (targetsFief == null || !targetsFief.getName().equalsIgnoreCase(playersFief.getName())) {
+            player.sendMessage(ChatColor.RED + "That player is not in your fief.");
             return false;
         }
 
-        playersFief.invitePlayer(targetUUID);
+        playersFief.removeMember(targetUUID);
 
         Player target = Bukkit.getServer().getPlayer(targetUUID);
         if (target != null) {
-            target.sendMessage(ChatColor.AQUA + "You have been invited to " + playersFief.getName() + ". Type /fiefs join (fiefName) to join.");
+            target.sendMessage(ChatColor.AQUA + "You have been kicked from " + playersFief.getName() + " by " + player.getName() + ".");
         }
-        player.sendMessage(ChatColor.GREEN + "Invited.");
+        player.sendMessage(ChatColor.GREEN + "Kicked.");
         return true;
     }
 

@@ -32,3 +32,9 @@ permissions:
     default: true
   fiefs.leave:
     default: true
+  fief.members:
+    default: true
+  fief.desc:
+    default: true
+  fief.kick:
+    default: true
