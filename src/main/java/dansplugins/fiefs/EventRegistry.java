@@ -2,6 +2,7 @@ package dansplugins.fiefs;
 
 import dansplugins.fiefs.eventhandlers.FactionEventHandler;
 import dansplugins.fiefs.eventhandlers.InteractionHandler;
+import dansplugins.fiefs.eventhandlers.MoveHandler;
 import org.bukkit.plugin.PluginManager;
 
 public class EventRegistry {
@@ -26,5 +27,6 @@ public class EventRegistry {
 
         manager.registerEvents(new FactionEventHandler(), mainInstance);
         manager.registerEvents(new InteractionHandler(), mainInstance);
+        manager.registerEvents(new MoveHandler(), mainInstance);
     }
 }
