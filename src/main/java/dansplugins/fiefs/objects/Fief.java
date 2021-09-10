@@ -2,11 +2,13 @@ package dansplugins.fiefs.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import dansplugins.factionsystem.utils.UUIDChecker;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,8 +126,10 @@ public class Fief {
 
         Map<String, String> saveMap = new HashMap<>();
         saveMap.put("name", gson.toJson(name));
+        saveMap.put("description", gson.toJson(description));
         saveMap.put("ownerUUID", gson.toJson(ownerUUID));
         saveMap.put("factionName", gson.toJson(factionName));
+        saveMap.put("members", gson.toJson(members));
 
         return saveMap;
     }
@@ -133,8 +137,13 @@ public class Fief {
     private void load(Map<String, String> data) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+        Type arrayListTypeUUID = new TypeToken<ArrayList<UUID>>(){}.getType();
+
         name = gson.fromJson(data.get("name"), String.class);
+        description = gson.fromJson(data.get("description"), String.class);
         ownerUUID = UUID.fromString(gson.fromJson(data.get("ownerUUID"), String.class));
         factionName = gson.fromJson(data.get("factionName"), String.class);
+
+        members = gson.fromJson(data.get("members"), arrayListTypeUUID);
     }
 }
