@@ -24,7 +24,7 @@ Please fill out a bug report [here](https://github.com/dmccoystephenson/Fiefs/is
 ## Roadmap
 - [Known Bugs](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
 - [Planned Features](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3AEpic)
-- [Planned Improvements](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
+- [Planned Improvements](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Aimprovement)
 
 ## Contributing
 - [Notes for Developers](https://github.com/dmccoystephenson/Fiefs/wiki/Developer-Notes)
