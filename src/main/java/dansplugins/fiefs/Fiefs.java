@@ -1,5 +1,6 @@
 package dansplugins.fiefs;
 
+import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.managers.ConfigManager;
 import dansplugins.fiefs.managers.StorageManager;
 import org.bukkit.command.Command;
@@ -43,6 +44,9 @@ public final class Fiefs extends JavaPlugin {
         StorageManager.getInstance().load();
 
         EventRegistry.getInstance().registerEvents();
+
+        int pluginId = 12743;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     @Override
