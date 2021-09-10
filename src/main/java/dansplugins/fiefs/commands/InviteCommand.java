@@ -44,9 +44,14 @@ public class InviteCommand {
             return false;
         }
 
-        String playerName = args[0];
+        String targetName = args[0];
 
-        UUID targetUUID = UUIDChecker.getInstance().findUUIDBasedOnPlayerName(playerName);
+        if (targetName.equalsIgnoreCase(player.getName())) {
+            player.sendMessage(ChatColor.RED + "You can't invite yourself.");
+            return false;
+        }
+
+        UUID targetUUID = UUIDChecker.getInstance().findUUIDBasedOnPlayerName(targetName);
 
         if (targetUUID == null) {
             player.sendMessage(ChatColor.RED+ "That player wasn't found.");
@@ -55,7 +60,13 @@ public class InviteCommand {
 
         MF_Faction targetsFaction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(targetUUID);
         if (targetsFaction == null || !targetsFaction.getName().equalsIgnoreCase(playersFaction.getName())) {
-            player.sendMessage(ChatColor.RED + "'" + playerName + "'is not in your faction.");
+            player.sendMessage(ChatColor.RED + "'" + targetName + "'is not in your faction.");
+            return false;
+        }
+
+        Fief targetsFief = PersistentData.getInstance().getFief(targetName);
+        if (targetsFief != null) {
+            player.sendMessage(ChatColor.RED + "That player is already in " + targetsFief.getName());
             return false;
         }
 
