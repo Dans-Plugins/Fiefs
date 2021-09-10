@@ -95,13 +95,13 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("desc")) {
                 if (!checkPermission(sender, "fiefs.desc")) { return false; }
                 DescCommand command = new DescCommand();
-                return command.execute(sender);
+                return command.execute(sender, arguments);
             }
 
             if (secondaryLabel.equalsIgnoreCase("kick")) {
                 if (!checkPermission(sender, "fiefs.kick")) { return false; }
                 KickCommand command = new KickCommand();
-                return command.execute(sender);
+                return command.execute(sender, arguments);
             }
 
             sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
