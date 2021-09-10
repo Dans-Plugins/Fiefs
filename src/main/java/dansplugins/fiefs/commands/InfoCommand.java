@@ -32,9 +32,11 @@ public class InfoCommand {
         }
 
         player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " ===");
+        player.sendMessage(ChatColor.AQUA + "Name: " + playersFief.getName());
         player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
         player.sendMessage(ChatColor.AQUA + "Owner: " + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
-        player.sendMessage(ChatColor.AQUA + "Chunks claimed: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief));
+        player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
+        player.sendMessage(ChatColor.AQUA + "Demesne Size: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief) + "/" + playersFief.getCumulativePowerLevel());
         return true;
     }
 
