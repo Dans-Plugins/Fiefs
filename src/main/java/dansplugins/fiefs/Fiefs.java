@@ -29,6 +29,8 @@ public final class Fiefs extends JavaPlugin {
         }
 
         StorageManager.getInstance().load();
+
+        EventRegistry.getInstance().registerEvents();
     }
 
     @Override
