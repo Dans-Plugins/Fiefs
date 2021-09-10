@@ -86,6 +86,24 @@ public class CommandInterpreter {
                 return command.execute(sender);
             }
 
+            if (secondaryLabel.equalsIgnoreCase("members")) {
+                if (!checkPermission(sender, "fiefs.members")) { return false; }
+                MembersCommand command = new MembersCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("desc")) {
+                if (!checkPermission(sender, "fiefs.desc")) { return false; }
+                DescCommand command = new DescCommand();
+                return command.execute(sender);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("kick")) {
+                if (!checkPermission(sender, "fiefs.kick")) { return false; }
+                KickCommand command = new KickCommand();
+                return command.execute(sender);
+            }
+
             sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         }
         return false;
