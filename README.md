@@ -11,7 +11,7 @@ Fiefs is an add-on plugin for Medieval Factions that allows faction members to c
 3) Restart your server.
 
 ## Usage
-- [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide) (coming soon)
+- [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide)
 - [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands) (coming soon)
 - [FAQ](https://github.com/dmccoystephenson/Fiefs/wiki/FAQ) (coming soon)
 
