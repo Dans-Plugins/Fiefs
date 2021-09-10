@@ -28,15 +28,6 @@ public class InteractionHandler implements Listener {
             return;
         }
 
-        MF_Faction playersFaction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
-        if (playersFaction == null) {
-            return;
-        }
-
-        if (!playersFaction.getName().equalsIgnoreCase(claimedChunk.getFaction())) {
-            return;
-        }
-
         Fief playersFief = PersistentData.getInstance().getFief(player);
         if (playersFief == null) {
             return;
@@ -50,7 +41,23 @@ public class InteractionHandler implements Listener {
 
     @EventHandler()
     public void handle(BlockPlaceEvent event) {
-        // TODO: implement
+        Player player = event.getPlayer();
+
+        Block clickedBlock = event.getBlock();
+        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        if (claimedChunk == null) {
+            return;
+        }
+
+        Fief playersFief = PersistentData.getInstance().getFief(player);
+        if (playersFief == null) {
+            return;
+        }
+
+        if (!claimedChunk.getFief().equalsIgnoreCase(playersFief.getName())) {
+            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Cancelling Block Place event."); }
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler()
