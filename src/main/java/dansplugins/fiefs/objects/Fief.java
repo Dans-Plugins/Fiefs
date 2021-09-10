@@ -2,6 +2,7 @@ package dansplugins.fiefs.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dansplugins.fiefs.MedievalFactionsIntegrator;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Fief {
         this.name = name;
         this.ownerUUID = ownerUUID;
         this.factionName = factionName;
+        members.add(ownerUUID);
     }
 
     public Fief(Map<String, String> fiefData) {
@@ -84,6 +86,19 @@ public class Fief {
 
     public boolean isInvited(UUID playerUUID) {
         return invitedPlayers.contains(playerUUID);
+    }
+
+    public int getCumulativePowerLevel() {
+        int cumulativePowerLevel = 0;
+        for (UUID memberUUID : members) {
+            int memberPowerLevel = MedievalFactionsIntegrator.getInstance().getAPI().getPower(memberUUID);
+            cumulativePowerLevel += memberPowerLevel;
+        }
+        return cumulativePowerLevel;
+    }
+
+    public int getNumMembers() {
+        return members.size();
     }
 
     public Map<String, String> save() {

@@ -44,6 +44,11 @@ public class ChunkManager {
             return false;
         }
 
+        if (PersistentData.getInstance().getNumChunksClaimedByFief(fief) >= fief.getCumulativePowerLevel()) {
+            player.sendMessage(ChatColor.RED + "Your fief has reached its demesne limit.");
+            return false;
+        }
+
         ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionName(), fief.getName());
         PersistentData.getInstance().addChunk(newClaimedChunk);
         player.sendMessage(ChatColor.GREEN + "Claimed.");
