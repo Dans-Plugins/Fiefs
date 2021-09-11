@@ -89,7 +89,7 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("members")) {
                 if (!checkPermission(sender, "fiefs.members")) { return false; }
                 MembersCommand command = new MembersCommand();
-                return command.execute(sender);
+                return command.execute(sender, arguments);
             }
 
             if (secondaryLabel.equalsIgnoreCase("desc")) {

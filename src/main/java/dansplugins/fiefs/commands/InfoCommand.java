@@ -29,7 +29,7 @@ public class InfoCommand {
             String fiefName = args[0];
             Fief fief = PersistentData.getInstance().getFief(fiefName);
             if (fief == null) {
-
+                player.sendMessage(ChatColor.RED + "That fief wasn't found.");
                 return false;
             }
 

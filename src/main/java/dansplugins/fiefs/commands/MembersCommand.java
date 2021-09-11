@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class MembersCommand {
 
-    public boolean execute(CommandSender sender) {
+    public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             return false;
         }
@@ -21,6 +21,18 @@ public class MembersCommand {
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
+        }
+
+        if (args.length > 0) {
+            String fiefName = args[0];
+            Fief fief = PersistentData.getInstance().getFief(fiefName);
+            if (fief == null) {
+                player.sendMessage(ChatColor.RED + "That fief wasn't found.");
+                return false;
+            }
+
+            fief.sendMembersListToPlayer(player);
+            return true;
         }
 
         Fief playersFief = PersistentData.getInstance().getFief(player);
