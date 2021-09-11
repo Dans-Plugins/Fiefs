@@ -45,6 +45,11 @@ public class TransferCommand {
 
         String targetName = args[0];
 
+        if (targetName.equalsIgnoreCase(player.getName())) {
+            player.sendMessage(ChatColor.RED + "You can't transfer your faction to yourself.");
+            return false;
+        }
+
         UUID targetUUID = UUIDChecker.getInstance().findUUIDBasedOnPlayerName(targetName);
         if (targetUUID == null) {
             player.sendMessage(ChatColor.RED + "That player wasn't found.");
@@ -57,6 +62,7 @@ public class TransferCommand {
         }
 
         playersFief.setOwnerUUID(targetUUID);
+        player.sendMessage(ChatColor.GREEN + "Transfered.");
 
         // TODO: inform fief members about transfer of power
 
