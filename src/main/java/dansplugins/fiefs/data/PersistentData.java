@@ -99,6 +99,7 @@ public class PersistentData {
         }
 
         player.sendMessage(ChatColor.AQUA + "=== Fiefs of " + faction.getName() + " ===");
+        player.sendMessage(ChatColor.AQUA + "P: power, M: members, L: land");
         for (Fief fief : listOfFiefs) {
             player.sendMessage(ChatColor.AQUA + String.format("%-25s %10s %10s %10s", fief.getName(), "P: " +
                     fief.getCumulativePowerLevel(), "M: " + fief.getNumMembers(), "L: " +
