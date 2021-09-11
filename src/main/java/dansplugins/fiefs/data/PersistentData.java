@@ -2,6 +2,7 @@ package dansplugins.fiefs.data;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
@@ -98,7 +99,9 @@ public class PersistentData {
 
         player.sendMessage(ChatColor.AQUA + "=== Fiefs of " + faction.getName() + " ===");
         for (Fief fief : listOfFiefs) {
-            player.sendMessage(ChatColor.AQUA + fief.getName());
+            player.sendMessage(ChatColor.AQUA + String.format("%-25s %10s %10s %10s", fief.getName(), "P: " +
+                    fief.getCumulativePowerLevel(), "M: " + fief.getNumMembers()), "L: " +
+                    PersistentData.getInstance().getNumChunksClaimedByFief(fief));
         }
     }
 
