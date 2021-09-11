@@ -30,7 +30,7 @@ public class HelpCommand {
     }
 
     private void sendUsageMessage(CommandSender sender) {
-        sender.sendMessage(ChatColor.RED + "Usage: /help { 1 | 2 }");
+        sender.sendMessage(ChatColor.RED + "Usage: /fi help { 1 | 2 }");
     }
 
     private void sendPageOne(CommandSender sender) {
