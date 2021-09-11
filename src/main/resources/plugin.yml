@@ -1,5 +1,5 @@
 name: Fiefs
-version: 0.5
+version: 0.6
 main: dansplugins.fiefs.Fiefs
 api-version: 1.13
 author: DanTheTechMan
@@ -37,4 +37,6 @@ permissions:
   fief.desc:
     default: true
   fief.kick:
+    default: true
+  fief.transfer:
     default: true
