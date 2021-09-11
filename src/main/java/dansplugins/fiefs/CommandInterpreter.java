@@ -65,7 +65,7 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("info")) {
                 if (!checkPermission(sender, "fiefs.info")) { return false; }
                 InfoCommand command = new InfoCommand();
-                return command.execute(sender);
+                return command.execute(sender, arguments);
             }
 
             if (secondaryLabel.equalsIgnoreCase("invite")) {
