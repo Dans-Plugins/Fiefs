@@ -2,7 +2,6 @@ package dansplugins.fiefs.data;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.UUIDChecker;

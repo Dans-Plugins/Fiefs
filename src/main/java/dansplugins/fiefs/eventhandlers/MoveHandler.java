@@ -1,11 +1,9 @@
 package dansplugins.fiefs.eventhandlers;
 
-import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
