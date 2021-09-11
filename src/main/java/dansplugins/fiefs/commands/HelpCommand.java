@@ -39,7 +39,9 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi list");
         sender.sendMessage(ChatColor.AQUA + "/fi join");
         sender.sendMessage(ChatColor.AQUA + "/fi info");
+        sender.sendMessage(ChatColor.AQUA + "/fi members");
         sender.sendMessage(ChatColor.AQUA + "/fi leave");
+        sender.sendMessage(ChatColor.AQUA + "/fi checkclaim");
         sender.sendMessage(ChatColor.AQUA + "/fi create");
         sender.sendMessage(ChatColor.AQUA + "/fi invite");
     }
@@ -49,10 +51,9 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi disband");
         sender.sendMessage(ChatColor.AQUA + "/fi claim");
         sender.sendMessage(ChatColor.AQUA + "/fi unclaim");
-        sender.sendMessage(ChatColor.AQUA + "/fi checkclaim");
         sender.sendMessage(ChatColor.AQUA + "/fi desc");
-        sender.sendMessage(ChatColor.AQUA + "/fi members");
         sender.sendMessage(ChatColor.AQUA + "/fi kick");
+        sender.sendMessage(ChatColor.AQUA + "/fi transfer");
     }
 
 }
