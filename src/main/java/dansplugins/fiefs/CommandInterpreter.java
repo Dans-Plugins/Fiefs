@@ -23,7 +23,7 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("help")) {
                 if (!checkPermission(sender, "fiefs.help")) { return false; }
                 HelpCommand command = new HelpCommand();
-                return command.execute(sender);
+                return command.execute(sender, arguments);
             }
 
             if (secondaryLabel.equalsIgnoreCase("list")) {
@@ -101,6 +101,12 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("kick")) {
                 if (!checkPermission(sender, "fiefs.kick")) { return false; }
                 KickCommand command = new KickCommand();
+                return command.execute(sender, arguments);
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("transfer")) {
+                if (!checkPermission(sender, "fiefs.transfer")) { return false; }
+                TransferCommand command = new TransferCommand();
                 return command.execute(sender, arguments);
             }
 
