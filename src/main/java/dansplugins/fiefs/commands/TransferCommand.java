@@ -51,8 +51,7 @@ public class TransferCommand {
             return false;
         }
 
-        Fief targetsFief = PersistentData.getInstance().getFief(targetName);
-        if (targetsFief == null || !targetsFief.equals(playersFief)) {
+        if (!playersFief.isMember(targetUUID)) {
             player.sendMessage(ChatColor.RED + "That player is not in your fief.");
             return false;
         }
