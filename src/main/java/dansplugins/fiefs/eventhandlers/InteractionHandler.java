@@ -68,6 +68,11 @@ public class InteractionHandler implements Listener {
         Player player = event.getPlayer();
 
         Block clickedBlock = event.getClickedBlock();
+
+        if (clickedBlock == null) {
+            return;
+        }
+
         ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
             return;
