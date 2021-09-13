@@ -190,6 +190,13 @@ public class InteractionHandler implements Listener {
     private boolean shouldEventBeCancelled(ClaimedChunk claimedChunk, Player player) {
         Fief chunkHolder = PersistentData.getInstance().getFief(claimedChunk.getFief());
         Fief playersFief = PersistentData.getInstance().getFief(player);
+
+        boolean claimedLandProtected = (boolean) playersFief.getFlags().getFlag("claimedLandProtected");
+
+        if (!claimedLandProtected) {
+            return false;
+        }
+
         return !chunkHolder.equals(playersFief);
     }
 
