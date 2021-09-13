@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class PersistentData {
 
@@ -50,10 +51,29 @@ public class PersistentData {
         return null;
     }
 
+    public Fief getFief(UUID playerUUID) {
+        for (Fief fief : fiefs) {
+            if (fief.getOwnerUUID().equals(playerUUID)) {
+                return fief;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Fief> getFiefsOfFaction(MF_Faction faction) {
         ArrayList<Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
             if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
+                toReturn.add(fief);
+            }
+        }
+        return toReturn;
+    }
+
+    public ArrayList<Fief> getFiefsOfFaction(String factionName) {
+        ArrayList<Fief> toReturn = new ArrayList<>();
+        for (Fief fief : fiefs) {
+            if (fief.getFactionName().equalsIgnoreCase(factionName)) {
                 toReturn.add(fief);
             }
         }
