@@ -54,6 +54,7 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi desc");
         sender.sendMessage(ChatColor.AQUA + "/fi kick");
         sender.sendMessage(ChatColor.AQUA + "/fi transfer");
+        sender.sendMessage(ChatColor.AQUA + "/fi flags");
     }
 
 }

@@ -110,6 +110,12 @@ public class CommandInterpreter {
                 return command.execute(sender, arguments);
             }
 
+            if (secondaryLabel.equalsIgnoreCase("flags")) {
+                if (!checkPermission(sender, "fiefs.flags")) { return false; }
+                FlagsCommand command = new FlagsCommand();
+                return command.execute(sender, arguments);
+            }
+
             sender.sendMessage(ChatColor.RED + "Fiefs doesn't recognize that command.");
         }
         return false;
