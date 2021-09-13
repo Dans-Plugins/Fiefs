@@ -1,5 +1,7 @@
 package dansplugins.fiefs.commands;
 
+import dansplugins.factionsystem.externalapi.MF_Faction;
+import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
@@ -17,12 +19,27 @@ public class FlagsCommand {
 
         Player player = (Player) sender;
 
+        MF_Faction faction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+        if (faction == null) {
+            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
+            return false;
+        }
+
+        Fief playersFief = PersistentData.getInstance().getFief(player);
+        if (playersFief == null) {
+            player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
+            return false;
+        }
+
+        if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to kick members.");
+            return false;
+        }
+
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "Valid sub-commands: show, set");
             return false;
         }
-
-        final Fief playersFief = PersistentData.getInstance().getFief(player);
 
         if (args[0].equalsIgnoreCase("show")) {
             playersFief.getFlags().sendFlagList(player);
