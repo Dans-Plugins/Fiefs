@@ -1,6 +1,7 @@
 package dansplugins.fiefs;
 
 import dansplugins.fiefs.bstats.Metrics;
+import dansplugins.fiefs.externalapi.FiefsAPI;
 import dansplugins.fiefs.managers.ConfigManager;
 import dansplugins.fiefs.managers.StorageManager;
 import org.bukkit.command.Command;
@@ -64,6 +65,10 @@ public final class Fiefs extends JavaPlugin {
     public boolean isDebugEnabled() {
         return ConfigManager.getInstance().getBoolean("debugMode");
         // return getConfig().getBoolean("debugMode");
+    }
+
+    public FiefsAPI getAPI() {
+        return new FiefsAPI();
     }
 
     private boolean isVersionMismatched() {
