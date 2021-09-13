@@ -35,9 +35,7 @@ public final class Fiefs extends JavaPlugin {
         }
 
         if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsPresent()) {
-            if (isDebugEnabled()) {
-                System.out.println("Medieval Factions wasn't found. Fiefs cannot enable.");
-            }
+            System.out.println("Medieval Factions wasn't found. Fiefs cannot enable.");
             return;
         }
 
