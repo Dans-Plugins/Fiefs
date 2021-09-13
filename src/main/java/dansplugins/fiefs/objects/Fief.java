@@ -23,6 +23,8 @@ public class Fief {
 
     private ArrayList<UUID> members = new ArrayList<>();
 
+    private FiefFlags flags = new FiefFlags();
+
     // ephemeral
     private ArrayList<UUID> invitedPlayers = new ArrayList<>();
 
@@ -31,6 +33,7 @@ public class Fief {
         this.ownerUUID = ownerUUID;
         this.factionName = factionName;
         members.add(ownerUUID);
+        flags.initializeFlagValues();
     }
 
     public Fief(Map<String, String> fiefData) {
@@ -121,6 +124,10 @@ public class Fief {
         }
     }
 
+    public FiefFlags getFlags() {
+        return flags;
+    }
+
     public boolean equals(Fief fief) {
         return fief.getOwnerUUID().equals(this.getOwnerUUID())
                 && fief.getName().equals(this.getName())
@@ -137,6 +144,11 @@ public class Fief {
         saveMap.put("factionName", gson.toJson(factionName));
         saveMap.put("members", gson.toJson(members));
 
+        saveMap.put("integerFlagValues", gson.toJson(flags.getIntegerValues()));
+        saveMap.put("booleanFlagValues", gson.toJson(flags.getBooleanValues()));
+        saveMap.put("doubleFlagValues", gson.toJson(flags.getDoubleValues()));
+        saveMap.put("stringFlagValues", gson.toJson(flags.getStringValues()));
+
         return saveMap;
     }
 
@@ -144,6 +156,10 @@ public class Fief {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         Type arrayListTypeUUID = new TypeToken<ArrayList<UUID>>(){}.getType();
+        Type stringToIntegerMapType = new TypeToken<HashMap<String, Integer>>(){}.getType();
+        Type stringToBooleanMapType = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+        Type stringToDoubleMapType = new TypeToken<HashMap<String, Double>>(){}.getType();
+        Type stringToStringMapType = new TypeToken<HashMap<String, String>>(){}.getType();
 
         name = gson.fromJson(data.get("name"), String.class);
         description = gson.fromJson(data.get("description"), String.class);
@@ -151,5 +167,12 @@ public class Fief {
         factionName = gson.fromJson(data.get("factionName"), String.class);
 
         members = gson.fromJson(data.get("members"), arrayListTypeUUID);
+
+        flags.setIntegerValues(gson.fromJson(data.getOrDefault("integerFlagValues", "[]"), stringToIntegerMapType));
+        flags.setBooleanValues(gson.fromJson(data.getOrDefault("booleanFlagValues", "[]"), stringToBooleanMapType));
+        flags.setDoubleValues(gson.fromJson(data.getOrDefault("doubleFlagValues", "[]"), stringToDoubleMapType));
+        flags.setStringValues(gson.fromJson(data.getOrDefault("stringFlagValues", "[]"), stringToStringMapType));
+
+        flags.loadMissingFlagsIfNecessary();
     }
 }
