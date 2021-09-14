@@ -1,8 +1,10 @@
 package dansplugins.fiefs;
 
+import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandInterpreter {
 
@@ -26,9 +28,26 @@ public class CommandInterpreter {
                 return command.execute(sender, arguments);
             }
 
+            // disallow the usage of most of the commands if Fiefs cannot utilize Medieval Factions
             if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsAPIAvailable()) {
                 sender.sendMessage(ChatColor.RED + "Fiefs cannot utilize Medieval Factions for some reason. It may have to be updated.");
                 return false;
+            }
+
+            if (secondaryLabel.equalsIgnoreCase("checkclaim")) {
+                if (!checkPermission(sender, "fiefs.checkclaim")) { return false; }
+                CheckClaimCommand command = new CheckClaimCommand();
+                return command.execute(sender);
+            }
+
+            // disallow the usage of the most of the commands if the player's faction has disabled fiefs.
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                MF_Faction playersFaction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+                if (playersFaction != null && !((boolean) playersFaction.getFlag("fiefsEnabled"))) {
+                    player.sendMessage(ChatColor.RED + "Your faction has disabled fiefs.");
+                    return false;
+                }
             }
 
             if (secondaryLabel.equalsIgnoreCase("list")) {
@@ -58,12 +77,6 @@ public class CommandInterpreter {
             if (secondaryLabel.equalsIgnoreCase("unclaim")) {
                 if (!checkPermission(sender, "fiefs.unclaim")) { return false; }
                 UnclaimCommand command = new UnclaimCommand();
-                return command.execute(sender);
-            }
-
-            if (secondaryLabel.equalsIgnoreCase("checkclaim")) {
-                if (!checkPermission(sender, "fiefs.checkclaim")) { return false; }
-                CheckClaimCommand command = new CheckClaimCommand();
                 return command.execute(sender);
             }
 
