@@ -2,6 +2,7 @@ package dansplugins.fiefs.eventhandlers;
 
 import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.managers.ChunkManager;
+import dansplugins.fiefs.managers.ConfigManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,6 +15,12 @@ public class MoveHandler implements Listener {
 
     @EventHandler()
     public void handle(PlayerMoveEvent event) {
+
+        if (!ConfigManager.getInstance().getBoolean("enableTerritoryAlerts")) {
+            // territory alerts are disabled
+            return;
+        }
+
         Player player = event.getPlayer();
 
         ClaimedChunk fromChunk = ChunkManager.getInstance().getClaimedChunk(event.getFrom().getChunk());

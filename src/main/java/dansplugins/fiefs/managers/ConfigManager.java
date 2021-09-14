@@ -44,6 +44,9 @@ public class ConfigManager {
         if (!getConfig().isSet("limitLand")) {
             getConfig().set("limitLand", true);
         }
+        if (!getConfig().isSet("enableTerritoryAlerts")) {
+            getConfig().set("enableTerritoryAlerts", true);
+        }
         getConfig().options().copyDefaults(true);
         Fiefs.getInstance().saveConfig();
     }
@@ -59,7 +62,8 @@ public class ConfigManager {
                 getConfig().set(option, Integer.parseInt(value));
                 sender.sendMessage(ChatColor.GREEN + "Integer set.");
             } else if (option.equalsIgnoreCase("debugMode")
-                    || option.equalsIgnoreCase("limitLand")) {
+                    || option.equalsIgnoreCase("limitLand")
+                    || option.equalsIgnoreCase("enableTerritoryAlerts")) {
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + "Boolean set.");
             } else if (option.equalsIgnoreCase("c")) { // no doubles yet
@@ -82,7 +86,8 @@ public class ConfigManager {
         sender.sendMessage(ChatColor.AQUA + "=== Config List ===");
         sender.sendMessage(ChatColor.AQUA + "version: " + getConfig().getString("version")
                 + ", debugMode: " + getBoolean("debugMode")
-                + ", limitLand: " + getBoolean("limitLand"));
+                + ", limitLand: " + getBoolean("limitLand")
+                + ", enableTerritoryAlerts: " + getBoolean("enableTerritoryAlerts"));
     }
 
     public boolean hasBeenAltered() {
