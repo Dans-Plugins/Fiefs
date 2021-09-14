@@ -24,6 +24,9 @@ public final class Fiefs extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        int pluginId = 12743;
+        Metrics metrics = new Metrics(this, pluginId);
+
         if (!(new File("./plugins/Fiefs/config.yml").exists())) {
             ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
         }
@@ -43,9 +46,6 @@ public final class Fiefs extends JavaPlugin {
         StorageManager.getInstance().load();
 
         EventRegistry.getInstance().registerEvents();
-
-        int pluginId = 12743;
-        Metrics metrics = new Metrics(this, pluginId);
     }
 
     @Override

@@ -26,6 +26,11 @@ public class CommandInterpreter {
                 return command.execute(sender, arguments);
             }
 
+            if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsAPIAvailable()) {
+                sender.sendMessage(ChatColor.RED + "Fiefs cannot utilize Medieval Factions for some reason. It may have to be updated.");
+                return false;
+            }
+
             if (secondaryLabel.equalsIgnoreCase("list")) {
                 if (!checkPermission(sender, "fiefs.list")) { return false; }
                 ListCommand command = new ListCommand();
