@@ -44,7 +44,7 @@ public class PersistentData {
 
     public Fief getFief(Player player) {
         for (Fief fief : fiefs) {
-            if (fief.getOwnerUUID().equals(player.getUniqueId())) {
+            if (fief.isMember(player.getUniqueId())) {
                 return fief;
             }
         }
@@ -53,7 +53,7 @@ public class PersistentData {
 
     public Fief getFief(UUID playerUUID) {
         for (Fief fief : fiefs) {
-            if (fief.getOwnerUUID().equals(playerUUID)) {
+            if (fief.isMember(playerUUID)) {
                 return fief;
             }
         }
@@ -128,11 +128,11 @@ public class PersistentData {
     }
 
     public void clearFiefs() {
-        // TODO: implement
+        fiefs.clear();
     }
 
     public void clearClaimedChunks() {
-        // TODO: implement
+        claimedChunks.clear();
     }
 
     public void addChunk(ClaimedChunk chunk) {
@@ -150,7 +150,6 @@ public class PersistentData {
     public ArrayList<ClaimedChunk> getClaimedChunks() {
         return claimedChunks;
     }
-
 
     public int getNumChunksClaimedByFief(Fief playersFief) {
         int count = 0;
