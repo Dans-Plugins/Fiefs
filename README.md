@@ -12,7 +12,7 @@ Fiefs is an add-on plugin for [Medieval Factions](https://github.com/dmccoysteph
 
 ## Usage
 - [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide)
-- [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands) (coming soon)
+- [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands)
 - [FAQ](https://github.com/dmccoystephenson/Fiefs/wiki/FAQ) (coming soon)
 
 ## Support
