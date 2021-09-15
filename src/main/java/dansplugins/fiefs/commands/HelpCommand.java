@@ -35,26 +35,26 @@ public class HelpCommand {
 
     private void sendPageOne(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "=== Fiefs Commands Page 1/" + maxPage + "===");
-        sender.sendMessage(ChatColor.AQUA + "/fi help");
-        sender.sendMessage(ChatColor.AQUA + "/fi list");
-        sender.sendMessage(ChatColor.AQUA + "/fi join");
-        sender.sendMessage(ChatColor.AQUA + "/fi info");
-        sender.sendMessage(ChatColor.AQUA + "/fi members");
-        sender.sendMessage(ChatColor.AQUA + "/fi leave");
-        sender.sendMessage(ChatColor.AQUA + "/fi checkclaim");
-        sender.sendMessage(ChatColor.AQUA + "/fi create");
-        sender.sendMessage(ChatColor.AQUA + "/fi invite");
+        sender.sendMessage(ChatColor.AQUA + "/fi help - View a list of helpful commands.");
+        sender.sendMessage(ChatColor.AQUA + "/fi list - List the fiefs in your faction.");
+        sender.sendMessage(ChatColor.AQUA + "/fi join - Join a fief you've been invited to.");
+        sender.sendMessage(ChatColor.AQUA + "/fi info - View your fief's or another fief's information.");
+        sender.sendMessage(ChatColor.AQUA + "/fi members - View your fief's or another fief's members.");
+        sender.sendMessage(ChatColor.AQUA + "/fi leave - Leave your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi checkclaim - Check which fief owns a chunk.");
+        sender.sendMessage(ChatColor.AQUA + "/fi create - Create a fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi invite - Invite players to your fief.");
     }
 
     private void sendPageTwo(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "=== Fiefs Commands Page 2/" + maxPage + "===");
-        sender.sendMessage(ChatColor.AQUA + "/fi disband");
-        sender.sendMessage(ChatColor.AQUA + "/fi claim");
-        sender.sendMessage(ChatColor.AQUA + "/fi unclaim");
-        sender.sendMessage(ChatColor.AQUA + "/fi desc");
-        sender.sendMessage(ChatColor.AQUA + "/fi kick");
-        sender.sendMessage(ChatColor.AQUA + "/fi transfer");
-        sender.sendMessage(ChatColor.AQUA + "/fi flags");
+        sender.sendMessage(ChatColor.AQUA + "/fi disband - Disband your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi claim - Claim a chunk of land for your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi unclaim - Unclaim a chunk of land for your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi desc - Alter the description of your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi kick - Kick a player from your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi transfer - Transfer your fief to another player.");
+        sender.sendMessage(ChatColor.AQUA + "/fi flags - View and alter your fief's configuration.");
     }
 
 }

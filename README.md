@@ -1,7 +1,7 @@
 # Fiefs
 
 ## Description
-Fiefs is an add-on plugin for Medieval Factions that allows faction members to create fiefs. Fiefs function as sub-factions, essentially.
+Fiefs is an add-on plugin for [Medieval Factions](https://github.com/dmccoystephenson/Medieval-Factions) that allows faction members to create fiefs. Fiefs function as sub-factions, essentially.
 
 ## Installation
 1) You can download the plugin from [this page](https://github.com/dmccoystephenson/Fiefs/releases).
@@ -12,7 +12,7 @@ Fiefs is an add-on plugin for Medieval Factions that allows faction members to c
 
 ## Usage
 - [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide)
-- [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands) (coming soon)
+- [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands)
 - [FAQ](https://github.com/dmccoystephenson/Fiefs/wiki/FAQ) (coming soon)
 
 ## Support

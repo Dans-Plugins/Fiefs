@@ -12,10 +12,15 @@ public class MedievalFactionsIntegrator {
     private MedievalFactionsIntegrator() {
         if (isMedievalFactionsPresent()) {
             if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Medieval Factions was found successfully!"); }
-            mf_api = new MedievalFactionsAPI();
+            try {
+                mf_api = new MedievalFactionsAPI();
+            }
+            catch(NoClassDefFoundError e) {
+                System.out.println("[Fiefs] There was a problem instantiating the Medieval Factions API. Medieval Factions might need to be updated.");
+            }
         }
         else {
-            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Medieval Factions was not found!"); }
+            System.out.println("[Fiefs] Medieval Factions was not found!");
         }
     }
 
@@ -26,7 +31,11 @@ public class MedievalFactionsIntegrator {
         return instance;
     }
 
-    public boolean isMedievalFactionsPresent() {
+    public boolean isMedievalFactionsAPIAvailable() {
+        return isMedievalFactionsPresent() && mf_api != null;
+    }
+
+    private boolean isMedievalFactionsPresent() {
         return (Bukkit.getServer().getPluginManager().getPlugin("MedievalFactions") != null);
     }
 

@@ -24,6 +24,9 @@ public final class Fiefs extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        int pluginId = 12743;
+        Metrics metrics = new Metrics(this, pluginId);
+
         if (!(new File("./plugins/Fiefs/config.yml").exists())) {
             ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
         }
@@ -35,17 +38,14 @@ public final class Fiefs extends JavaPlugin {
             reloadConfig();
         }
 
-        if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsPresent()) {
-            System.out.println("Medieval Factions wasn't found. Fiefs cannot enable.");
+        if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsAPIAvailable()) {
+            System.out.println("[Fiefs] Fiefs cannot enable.");
             return;
         }
 
         StorageManager.getInstance().load();
 
         EventRegistry.getInstance().registerEvents();
-
-        int pluginId = 12743;
-        Metrics metrics = new Metrics(this, pluginId);
     }
 
     @Override
