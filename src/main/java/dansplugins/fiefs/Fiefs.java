@@ -14,7 +14,7 @@ public final class Fiefs extends JavaPlugin {
 
     private static Fiefs instance;
 
-    private final String version = "v0.8-alpha-1";
+    private final String version = "v0.8";
 
     public static Fiefs getInstance() {
         return instance;
