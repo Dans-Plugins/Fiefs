@@ -10,6 +10,9 @@ Fiefs is an add-on plugin for [Medieval Factions](https://github.com/dmccoysteph
 
 3) Restart your server.
 
+### Dependencies
+This plugin depends on Medieval Factions in order to work.
+
 ## Usage
 - [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide)
 - [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands)
