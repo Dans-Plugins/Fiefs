@@ -40,3 +40,5 @@ permissions:
     default: true
   fief.transfer:
     default: true
+  fiefs.config:
+    default: op
