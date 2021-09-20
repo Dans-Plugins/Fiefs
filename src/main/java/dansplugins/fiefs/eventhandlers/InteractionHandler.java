@@ -188,6 +188,10 @@ public class InteractionHandler implements Listener {
     }
 
     private boolean shouldEventBeCancelled(ClaimedChunk claimedChunk, Player player) {
+        if (claimedChunk == null) {
+            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[Fiefs] Claimed chunk was null."); }
+            return false;
+        }
         Fief chunkHolder = PersistentData.getInstance().getFief(claimedChunk.getFief());
         Fief playersFief = PersistentData.getInstance().getFief(player);
 
