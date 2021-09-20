@@ -4,6 +4,7 @@ import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.externalapi.FiefsAPI;
 import dansplugins.fiefs.managers.ConfigManager;
 import dansplugins.fiefs.managers.StorageManager;
+import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,6 +47,8 @@ public final class Fiefs extends JavaPlugin {
         StorageManager.getInstance().load();
 
         EventRegistry.getInstance().registerEvents();
+
+        Scheduler.getInstance().scheduleAutosave();
     }
 
     @Override
