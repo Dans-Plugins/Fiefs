@@ -55,6 +55,7 @@ public class HelpCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi kick - Kick a player from your fief.");
         sender.sendMessage(ChatColor.AQUA + "/fi transfer - Transfer your fief to another player.");
         sender.sendMessage(ChatColor.AQUA + "/fi flags - View and alter your fief's configuration.");
+        sender.sendMessage(ChatColor.AQUA + "/fi config - View and alter this plugin's config options.");
     }
 
 }
