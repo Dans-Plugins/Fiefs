@@ -5,6 +5,7 @@ import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.utils.Logger;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -172,7 +173,7 @@ public class InteractionHandler implements Listener {
 
         if (clickedEntity instanceof ItemFrame) {
             if (Fiefs.getInstance().isDebugEnabled()) {
-                System.out.println("DEBUG: ItemFrame interaction captured in PlayerInteractEntityEvent!");
+                Logger.getInstance().log("ItemFrame interaction captured in PlayerInteractEntityEvent!");
             }
             ItemFrame itemFrame = (ItemFrame) clickedEntity;
 
