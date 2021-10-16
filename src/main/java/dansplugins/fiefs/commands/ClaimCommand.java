@@ -33,6 +33,9 @@ public class ClaimCommand {
         }
 
         Chunk chunk = player.getLocation().getChunk();
+
+        // TODO: make sure the chunk is claimed by the player's faction
+
         return ChunkManager.getInstance().attemptToClaimChunk(chunk, playersFief, player);
     }
 
