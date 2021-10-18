@@ -35,7 +35,7 @@ Please fill out a bug report [here](https://github.com/dmccoystephenson/Fiefs/is
 ## Authors and acknowledgement
 Name | Main Contributions
 ------------ | -------------
-DanTheTechMan | Creator
+Daniel Stephenson | Creator
 
 This plugin was requested by Laughingspade.
 
