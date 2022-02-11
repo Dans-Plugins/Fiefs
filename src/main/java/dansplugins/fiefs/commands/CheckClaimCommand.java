@@ -8,9 +8,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class CheckClaimCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
 
+public class CheckClaimCommand extends AbstractPluginCommand {
+
+    public CheckClaimCommand() {
+        super(new ArrayList<>(Arrays.asList("checkclaim")), new ArrayList<>(Arrays.asList("fiefs.checkclaim")));
+    }
+
+    @Override
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
@@ -30,6 +39,11 @@ public class CheckClaimCommand {
             player.sendMessage(ChatColor.GREEN + "This land is currently not claimed by a fief.");
         }
         return true;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, String[] strings) {
+        return execute(commandSender);
     }
 
 }
