@@ -1,16 +1,24 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.services.LocalChunkService;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class UnclaimCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class UnclaimCommand extends AbstractPluginCommand {
+
+    public UnclaimCommand() {
+        super(new ArrayList<>(Arrays.asList("unclaim")), new ArrayList<>(Arrays.asList("fiefs.unclaim")));
+    }
 
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
@@ -34,6 +42,11 @@ public class UnclaimCommand {
 
         Chunk chunk = player.getLocation().getChunk();
         return LocalChunkService.getInstance().attemptToUnclaimChunk(chunk, playersFief, player);
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, String[] strings) {
+        return execute(commandSender);
     }
 
 }

@@ -1,7 +1,7 @@
 package dansplugins.fiefs.services;
 
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;

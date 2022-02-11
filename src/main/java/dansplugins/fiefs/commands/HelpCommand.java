@@ -2,10 +2,22 @@ package dansplugins.fiefs.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class HelpCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    private int maxPage = 2;
+public class HelpCommand extends AbstractPluginCommand {
+    private final int maxPage = 2;
+
+    public HelpCommand() {
+        super(new ArrayList<>(Arrays.asList("help")), new ArrayList<>(Arrays.asList("fiefs.help")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length == 0) {

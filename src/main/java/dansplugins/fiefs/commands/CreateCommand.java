@@ -1,17 +1,29 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.ArgumentParser;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class CreateCommand {
+public class CreateCommand extends AbstractPluginCommand {
+
+    public CreateCommand() {
+        super(new ArrayList<>(Arrays.asList("create")), new ArrayList<>(Arrays.asList("fiefs.create")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs create 'name'");
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
@@ -28,13 +40,6 @@ public class CreateCommand {
 
         if (PersistentData.getInstance().getFief(player) != null) {
             player.sendMessage(ChatColor.RED + "You can't create a fief if you're already in a fief.");
-            return false;
-        }
-
-
-
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /fiefs create 'name'");
             return false;
         }
 
@@ -57,5 +62,4 @@ public class CreateCommand {
         player.sendMessage(ChatColor.GREEN + "Fief created.");
         return true;
     }
-
 }

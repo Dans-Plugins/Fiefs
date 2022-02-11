@@ -3,8 +3,8 @@ package dansplugins.fiefs.objects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import dansplugins.factionsystem.utils.UUIDChecker;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.utils.UUIDChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -107,7 +107,7 @@ public class Fief {
     public int getCumulativePowerLevel() {
         int cumulativePowerLevel = 0;
         for (UUID memberUUID : members) {
-            int memberPowerLevel = MedievalFactionsIntegrator.getInstance().getAPI().getPower(memberUUID);
+            double memberPowerLevel = MedievalFactionsIntegrator.getInstance().getAPI().getPower(memberUUID);
             cumulativePowerLevel += memberPowerLevel;
         }
         return cumulativePowerLevel;
@@ -118,9 +118,11 @@ public class Fief {
     }
 
     public void sendMembersListToPlayer(Player player) {
+        UUIDChecker uuidChecker = new UUIDChecker();
+
         player.sendMessage(ChatColor.AQUA + "=== Members of " + name + " ===");
         for (UUID playerUUID : members) {
-            player.sendMessage(ChatColor.AQUA + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playerUUID));
+            player.sendMessage(ChatColor.AQUA + uuidChecker.findPlayerNameBasedOnUUID(playerUUID));
         }
     }
 

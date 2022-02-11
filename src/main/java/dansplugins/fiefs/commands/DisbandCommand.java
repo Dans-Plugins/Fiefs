@@ -1,14 +1,22 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class DisbandCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class DisbandCommand extends AbstractPluginCommand {
+
+    public DisbandCommand() {
+        super(new ArrayList<>(Arrays.asList("disband")), new ArrayList<>(Arrays.asList("fiefs.disband")));
+    }
 
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
@@ -37,6 +45,11 @@ public class DisbandCommand {
         PersistentData.getInstance().removeFief(fief);
         player.sendMessage(ChatColor.GREEN + "Fief disbanded.");
         return true;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender, String[] strings) {
+        return execute(commandSender);
     }
 
 }

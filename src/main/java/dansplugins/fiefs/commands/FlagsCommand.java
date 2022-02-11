@@ -1,15 +1,28 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class FlagsCommand {
-    
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class FlagsCommand extends AbstractPluginCommand {
+
+    public FlagsCommand() {
+        super(new ArrayList<>(Arrays.asList("flags")), new ArrayList<>(Arrays.asList("fiefs.flags")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        return false;
+    }
+
     public boolean execute(CommandSender sender, String[] args) {
 
         if (!(sender instanceof Player)) {

@@ -2,8 +2,8 @@ package dansplugins.fiefs.eventhandlers;
 
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
-import dansplugins.fiefs.services.LocalConfigService;
 import dansplugins.fiefs.services.LocalChunkService;
+import dansplugins.fiefs.services.LocalConfigService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

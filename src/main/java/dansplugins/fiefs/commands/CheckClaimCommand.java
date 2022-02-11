@@ -45,5 +45,4 @@ public class CheckClaimCommand extends AbstractPluginCommand {
     public boolean execute(CommandSender commandSender, String[] strings) {
         return execute(commandSender);
     }
-
 }

@@ -14,14 +14,15 @@ import java.util.Arrays;
 public class DefaultCommand extends AbstractPluginCommand {
 
     public DefaultCommand() {
-        super(new ArrayList<>(Arrays.asList("default")), new ArrayList<>(Arrays.asList("epp.default")));
+        super(new ArrayList<>(Arrays.asList("default")), new ArrayList<>(Arrays.asList("fiefs.default")));
     }
 
     @Override
-    public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.AQUA + "ExamplePonderPlugin " + Fiefs.getInstance().getVersion());
-        commandSender.sendMessage(ChatColor.AQUA + "Developed by: Daniel Stephenson");
-        commandSender.sendMessage(ChatColor.AQUA + "Wiki: https://github.com/Preponderous-Software/ExamplePonderPlugin/wiki");
+    public boolean execute(CommandSender sender) {
+        sender.sendMessage(ChatColor.AQUA + "Fiefs " + Fiefs.getInstance().getVersion());
+        sender.sendMessage(ChatColor.AQUA + "Developer: Daniel McCoy Stephenson");
+        sender.sendMessage(ChatColor.AQUA + "Requested by: Laughingspade");
+        sender.sendMessage(ChatColor.AQUA + "Wiki: https://github.com/dmccoystephenson/Fiefs/wiki");
         return true;
     }
 

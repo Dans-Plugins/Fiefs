@@ -2,8 +2,8 @@ package dansplugins.fiefs.services;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.Fiefs;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.commands.*;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
