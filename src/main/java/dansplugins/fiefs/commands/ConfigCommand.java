@@ -1,13 +1,24 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.fiefs.managers.ConfigManager;
+import dansplugins.fiefs.services.LocalConfigService;
 import dansplugins.fiefs.utils.ArgumentParser;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ConfigCommand {
+public class ConfigCommand extends AbstractPluginCommand {
+
+    public ConfigCommand() {
+        super(new ArrayList<>(Arrays.asList("config")), new ArrayList<>(Arrays.asList("fiefs.config")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
@@ -16,7 +27,7 @@ public class ConfigCommand {
         }
 
         if (args[0].equalsIgnoreCase("show")) {
-            ConfigManager.getInstance().sendConfigList(sender);
+            LocalConfigService.getInstance().sendConfigList(sender);
             return true;
         }
         else if (args[0].equalsIgnoreCase("set")) {
@@ -39,7 +50,7 @@ public class ConfigCommand {
                 value = args[2];
             }
 
-            ConfigManager.getInstance().setConfigOption(option, value, sender);
+            LocalConfigService.getInstance().setConfigOption(option, value, sender);
             return true;
         }
         else {
@@ -47,5 +58,4 @@ public class ConfigCommand {
             return false;
         }
     }
-
 }

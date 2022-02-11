@@ -1,4 +1,4 @@
-package dansplugins.fiefs.managers;
+package dansplugins.fiefs.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StorageManager {
+public class LocalStorageService {
 
-    private static StorageManager instance;
+    private static LocalStorageService instance;
 
     private final static String FILE_PATH = "./plugins/Fiefs/";
     private final static String FIEFS_FILE_NAME = "fiefs.json";
@@ -29,13 +29,13 @@ public class StorageManager {
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
-    private StorageManager() {
+    private LocalStorageService() {
 
     }
 
-    public static StorageManager getInstance() {
+    public static LocalStorageService getInstance() {
         if (instance == null) {
-            instance = new StorageManager();
+            instance = new LocalStorageService();
         }
         return instance;
     }
@@ -43,7 +43,7 @@ public class StorageManager {
     public void save() {
         saveFiefs();
         saveClaimedChunks();
-        if (ConfigManager.getInstance().hasBeenAltered()) {
+        if (LocalConfigService.getInstance().hasBeenAltered()) {
             Fiefs.getInstance().saveConfig();
         }
     }

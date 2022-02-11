@@ -1,7 +1,7 @@
 package dansplugins.fiefs.data;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.UUIDChecker;
@@ -162,12 +162,14 @@ public class PersistentData {
     }
 
     public void sendFiefInfoToPlayer(Player player, Fief playersFief) {
+        UUIDChecker uuidChecker = new UUIDChecker();
+
         int cumulativePowerLevel = playersFief.getCumulativePowerLevel();
 
         player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " Fief Info ===");
         player.sendMessage(ChatColor.AQUA + "Name: " + playersFief.getName());
         player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
-        player.sendMessage(ChatColor.AQUA + "Owner: " + UUIDChecker.getInstance().findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
+        player.sendMessage(ChatColor.AQUA + "Owner: " + uuidChecker.findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
         player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
         player.sendMessage(ChatColor.AQUA + "Power Level: " + cumulativePowerLevel);
         player.sendMessage(ChatColor.AQUA + "Demesne Size: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief) + "/" + cumulativePowerLevel);

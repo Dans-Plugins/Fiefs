@@ -1,12 +1,14 @@
-package dansplugins.fiefs;
+package dansplugins.fiefs.services;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
+import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.commands.*;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandInterpreter {
+public class LocalCommandService {
 
     public boolean interpretCommand(CommandSender sender, String label, String[] args) {
         if (label.equalsIgnoreCase("fiefs") || label.equalsIgnoreCase("fi")) {

@@ -1,17 +1,29 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.ArgumentParser;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class DescCommand {
+public class DescCommand extends AbstractPluginCommand {
+
+    public DescCommand() {
+        super(new ArrayList<>(Arrays.asList("desc")), new ArrayList<>(Arrays.asList("fiefs.desc")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs desc 'new description'");
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
@@ -29,11 +41,6 @@ public class DescCommand {
         Fief playersFief = PersistentData.getInstance().getFief(player);
         if (playersFief == null) {
             player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
-            return false;
-        }
-
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /fiefs desc 'new description'");
             return false;
         }
 

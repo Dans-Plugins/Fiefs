@@ -1,6 +1,5 @@
 package dansplugins.fiefs.objects;
 
-import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.utils.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -1,9 +1,9 @@
 package dansplugins.fiefs.eventhandlers;
 
-import dansplugins.fiefs.MedievalFactionsIntegrator;
-import dansplugins.fiefs.managers.ChunkManager;
-import dansplugins.fiefs.managers.ConfigManager;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
+import dansplugins.fiefs.services.LocalChunkService;
+import dansplugins.fiefs.services.LocalConfigService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,18 +16,18 @@ public class MoveHandler implements Listener {
     @EventHandler()
     public void handle(PlayerMoveEvent event) {
 
-        if (!ConfigManager.getInstance().getBoolean("enableTerritoryAlerts")) {
+        if (!LocalConfigService.getInstance().getBoolean("enableTerritoryAlerts")) {
             // territory alerts are disabled
             return;
         }
 
         Player player = event.getPlayer();
 
-        ClaimedChunk fromChunk = ChunkManager.getInstance().getClaimedChunk(event.getFrom().getChunk());
+        ClaimedChunk fromChunk = LocalChunkService.getInstance().getClaimedChunk(event.getFrom().getChunk());
         if (event.getTo() == null) {
             return;
         }
-        ClaimedChunk toChunk = ChunkManager.getInstance().getClaimedChunk(event.getTo().getChunk());
+        ClaimedChunk toChunk = LocalChunkService.getInstance().getClaimedChunk(event.getTo().getChunk());
 
         // if moving from unclaimed land into claimed land
         if (fromChunk == null && toChunk != null) {
@@ -57,8 +57,8 @@ public class MoveHandler implements Listener {
     public void handle(BlockFromToEvent event) {
         // this event handler method will deal with liquid moving from one block to another
 
-        ClaimedChunk fromChunk = ChunkManager.getInstance().getClaimedChunk(event.getBlock().getChunk());
-        ClaimedChunk toChunk = ChunkManager.getInstance().getClaimedChunk(event.getToBlock().getChunk());
+        ClaimedChunk fromChunk = LocalChunkService.getInstance().getClaimedChunk(event.getBlock().getChunk());
+        ClaimedChunk toChunk = LocalChunkService.getInstance().getClaimedChunk(event.getToBlock().getChunk());
 
         // if moving from unclaimed land into claimed land
         if (fromChunk == null && toChunk != null) {

@@ -1,14 +1,22 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class LeaveCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class LeaveCommand extends AbstractPluginCommand {
+
+    public LeaveCommand() {
+        super(new ArrayList<>(Arrays.asList("leave")), new ArrayList<>(Arrays.asList("fiefs.leave")));
+    }
 
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
@@ -44,4 +52,8 @@ public class LeaveCommand {
         return true;
     }
 
+    @Override
+    public boolean execute(CommandSender commandSender, String[] strings) {
+        return execute(commandSender);
+    }
 }

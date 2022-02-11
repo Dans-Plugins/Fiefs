@@ -1,4 +1,4 @@
-package dansplugins.fiefs;
+package dansplugins.fiefs.integrators;
 
 import dansplugins.factionsystem.externalapi.MedievalFactionsAPI;
 import dansplugins.fiefs.utils.Logger;

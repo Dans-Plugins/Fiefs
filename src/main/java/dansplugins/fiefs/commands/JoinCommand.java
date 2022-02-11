@@ -1,14 +1,28 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
-public class JoinCommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class JoinCommand extends AbstractPluginCommand {
+
+    public JoinCommand() {
+        super(new ArrayList<>(Arrays.asList("join")), new ArrayList<>(Arrays.asList("fiefs.join")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs join (fiefName)");
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
@@ -27,11 +41,6 @@ public class JoinCommand {
         Fief fief = PersistentData.getInstance().getFief(player);
         if (fief != null) {
             player.sendMessage(ChatColor.RED + "You're already in a fief.");
-            return false;
-        }
-
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /fiefs join (fiefName)");
             return false;
         }
 
@@ -61,5 +70,4 @@ public class JoinCommand {
 
         return true;
     }
-
 }

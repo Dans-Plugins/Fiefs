@@ -1,18 +1,31 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.UUIDChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
-public class KickCommand {
+public class KickCommand extends AbstractPluginCommand {
+
+    public KickCommand() {
+        super(new ArrayList<>(Arrays.asList("kick")), new ArrayList<>(Arrays.asList("fiefs.kick")));
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs kick (playerName)");
+        return false;
+    }
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
@@ -38,11 +51,6 @@ public class KickCommand {
             return false;
         }
 
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /fiefs kick (playerName)");
-            return false;
-        }
-
         String targetName = args[0];
 
         if (targetName.equalsIgnoreCase(player.getName())) {
@@ -50,7 +58,8 @@ public class KickCommand {
             return false;
         }
 
-        UUID targetUUID = UUIDChecker.getInstance().findUUIDBasedOnPlayerName(targetName);
+        UUIDChecker uuidChecker = new UUIDChecker();
+        UUID targetUUID = uuidChecker.findUUIDBasedOnPlayerName(targetName);
 
         if (targetUUID == null) {
             player.sendMessage(ChatColor.RED+ "That player wasn't found.");
@@ -78,5 +87,4 @@ public class KickCommand {
         player.sendMessage(ChatColor.GREEN + "Kicked.");
         return true;
     }
-
 }
