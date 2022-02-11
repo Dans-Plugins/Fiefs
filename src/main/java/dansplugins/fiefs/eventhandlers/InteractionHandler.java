@@ -2,9 +2,9 @@ package dansplugins.fiefs.eventhandlers;
 
 import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.services.LocalChunkService;
 import dansplugins.fiefs.utils.Logger;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class InteractionHandler implements Listener {
         Player player = event.getPlayer();
 
         Block brokenBlock = event.getBlock();
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(brokenBlock.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(brokenBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
@@ -48,7 +48,7 @@ public class InteractionHandler implements Listener {
         Player player = event.getPlayer();
 
         Block clickedBlock = event.getBlock();
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
@@ -74,7 +74,7 @@ public class InteractionHandler implements Listener {
             return;
         }
 
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class InteractionHandler implements Listener {
 
         if (location != null) {
             Chunk chunk = location.getChunk();
-            ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(chunk);
+            ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(chunk);
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);
@@ -129,7 +129,7 @@ public class InteractionHandler implements Listener {
         Entity entity = event.getEntity();
 
         // get chunk that entity is in
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(entity.getLocation().getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(entity.getLocation().getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -144,7 +144,7 @@ public class InteractionHandler implements Listener {
 
         Block clickedBlock = event.getBlockClicked();
 
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -159,7 +159,7 @@ public class InteractionHandler implements Listener {
 
         Block clickedBlock = event.getBlockClicked();
 
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -180,7 +180,7 @@ public class InteractionHandler implements Listener {
             // get chunk that armor stand is in
             Location location = itemFrame.getLocation();
             Chunk chunk = location.getChunk();
-            ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(chunk);
+            ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(chunk);
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);

@@ -1,9 +1,9 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.services.LocalChunkService;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
@@ -22,7 +22,7 @@ public class CheckClaimCommand {
         Fief playersFief = PersistentData.getInstance().getFief(player);
 
         Chunk chunk = player.getLocation().getChunk();
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(chunk);
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(chunk);
         if (claimedChunk != null) {
             player.sendMessage(ChatColor.AQUA + "This land is claimed by " + playersFief.getName() + " and is located in " + playersFief.getFactionName());
         }

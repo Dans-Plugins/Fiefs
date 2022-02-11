@@ -1,6 +1,6 @@
-package dansplugins.fiefs.managers;
+package dansplugins.fiefs.services;
 
-import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
@@ -8,17 +8,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
-public class ChunkManager {
+public class LocalChunkService {
 
-    private static ChunkManager instance;
+    private static LocalChunkService instance;
 
-    private ChunkManager() {
+    private LocalChunkService() {
 
     }
 
-    public static ChunkManager getInstance() {
+    public static LocalChunkService getInstance() {
         if (instance == null) {
-            instance = new ChunkManager();
+            instance = new LocalChunkService();
         }
         return instance;
     }

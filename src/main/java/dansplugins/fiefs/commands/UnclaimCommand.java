@@ -1,10 +1,10 @@
 package dansplugins.fiefs.commands;
 
 import dansplugins.factionsystem.externalapi.MF_Faction;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.services.LocalChunkService;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
@@ -33,7 +33,7 @@ public class UnclaimCommand {
         }
 
         Chunk chunk = player.getLocation().getChunk();
-        return ChunkManager.getInstance().attemptToUnclaimChunk(chunk, playersFief, player);
+        return LocalChunkService.getInstance().attemptToUnclaimChunk(chunk, playersFief, player);
     }
 
 }

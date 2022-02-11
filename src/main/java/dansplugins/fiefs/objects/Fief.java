@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import dansplugins.factionsystem.utils.UUIDChecker;
-import dansplugins.fiefs.MedievalFactionsIntegrator;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

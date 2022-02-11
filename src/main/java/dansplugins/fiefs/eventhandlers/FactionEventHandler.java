@@ -2,9 +2,9 @@ package dansplugins.fiefs.eventhandlers;
 
 import dansplugins.factionsystem.events.*;
 import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.managers.ChunkManager;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.services.LocalChunkService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -25,7 +25,7 @@ public class FactionEventHandler implements Listener {
 
     @EventHandler()
     public void handle(FactionUnclaimEvent event) {
-        ClaimedChunk claimedChunk = ChunkManager.getInstance().getClaimedChunk(event.getChunk());
+        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(event.getChunk());
         if (claimedChunk != null) {
             PersistentData.getInstance().removeChunk(claimedChunk);
         }

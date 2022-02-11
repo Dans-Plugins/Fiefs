@@ -1,5 +1,6 @@
-package dansplugins.fiefs;
+package dansplugins.fiefs.utils;
 
+import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.eventhandlers.FactionEventHandler;
 import dansplugins.fiefs.eventhandlers.InteractionHandler;
 import dansplugins.fiefs.eventhandlers.MoveHandler;

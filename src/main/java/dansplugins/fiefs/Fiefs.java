@@ -2,8 +2,11 @@ package dansplugins.fiefs;
 
 import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.externalapi.FiefsAPI;
-import dansplugins.fiefs.managers.ConfigManager;
-import dansplugins.fiefs.managers.StorageManager;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.services.LocalConfigService;
+import dansplugins.fiefs.services.LocalCommandService;
+import dansplugins.fiefs.services.LocalStorageService;
+import dansplugins.fiefs.utils.EventRegistry;
 import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,12 +32,12 @@ public final class Fiefs extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         if (!(new File("./plugins/Fiefs/config.yml").exists())) {
-            ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
         }
         else {
             // pre load compatibility checks
             if (isVersionMismatched()) {
-                ConfigManager.getInstance().saveMissingConfigDefaultsIfNotPresent();
+                LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
             }
             reloadConfig();
         }
@@ -44,7 +47,7 @@ public final class Fiefs extends JavaPlugin {
             return;
         }
 
-        StorageManager.getInstance().load();
+        LocalStorageService.getInstance().load();
 
         EventRegistry.getInstance().registerEvents();
 
@@ -53,12 +56,12 @@ public final class Fiefs extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        StorageManager.getInstance().save();
+        LocalStorageService.getInstance().save();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        CommandInterpreter commandInterpreter = new CommandInterpreter();
-        return commandInterpreter.interpretCommand(sender, label, args);
+        LocalCommandService localCommandService = new LocalCommandService();
+        return localCommandService.interpretCommand(sender, label, args);
     }
 
     public String getVersion() {
@@ -66,7 +69,7 @@ public final class Fiefs extends JavaPlugin {
     }
 
     public boolean isDebugEnabled() {
-        return ConfigManager.getInstance().getBoolean("debugMode");
+        return LocalConfigService.getInstance().getBoolean("debugMode");
         // return getConfig().getBoolean("debugMode");
     }
 

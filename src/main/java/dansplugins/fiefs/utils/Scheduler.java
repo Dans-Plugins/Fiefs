@@ -1,7 +1,7 @@
 package dansplugins.fiefs.utils;
 
 import dansplugins.fiefs.Fiefs;
-import dansplugins.fiefs.managers.StorageManager;
+import dansplugins.fiefs.services.LocalStorageService;
 import org.bukkit.Bukkit;
 
 public class Scheduler {
@@ -27,7 +27,7 @@ public class Scheduler {
             @Override
             public void run() {
                 Logger.getInstance().log("[Fiefs] Saving. This will happen hourly.");
-                StorageManager.getInstance().save();
+                LocalStorageService.getInstance().save();
             }
         }, delay * 20, secondsUntilRepeat * 20);
     }
