@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 public final class Fiefs extends PonderBukkitPlugin {
     private static Fiefs instance;
-    private final String version = "v0.10-alpha-1";
+    private final String pluginVersion = "v" + getDescription().getVersion();
 
     public static Fiefs getInstance() {
         return instance;
@@ -70,7 +70,7 @@ public final class Fiefs extends PonderBukkitPlugin {
     }
 
     public String getVersion() {
-        return version;
+        return pluginVersion;
     }
 
     public boolean isDebugEnabled() {
