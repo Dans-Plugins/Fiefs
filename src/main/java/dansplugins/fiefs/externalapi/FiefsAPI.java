@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class FiefsAPI implements IFiefsAPI {
 
     @Override

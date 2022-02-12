@@ -17,17 +17,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class LocalStorageService {
-
     private static LocalStorageService instance;
-
     private final static String FILE_PATH = "./plugins/Fiefs/";
     private final static String FIEFS_FILE_NAME = "fiefs.json";
     private final static String CLAIMED_CHUNKS_FILE_NAME = "claimedChunks.json";
-
     private final static Type LIST_MAP_TYPE = new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType();
-
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
     private LocalStorageService() {
 
@@ -88,7 +87,6 @@ public class LocalStorageService {
     }
 
     private void loadFiefs() {
-        // load each fief
         PersistentData.getInstance().clearFiefs();
 
         ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + FIEFS_FILE_NAME);
@@ -100,7 +98,6 @@ public class LocalStorageService {
     }
 
     private void loadClaimedChunks() {
-        // load each claimed chunk
         PersistentData.getInstance().clearClaimedChunks();
 
         ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + CLAIMED_CHUNKS_FILE_NAME);
@@ -121,5 +118,4 @@ public class LocalStorageService {
         }
         return new ArrayList<>();
     }
-
 }

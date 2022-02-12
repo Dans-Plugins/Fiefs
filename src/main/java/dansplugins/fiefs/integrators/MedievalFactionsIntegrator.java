@@ -4,10 +4,11 @@ import dansplugins.factionsystem.externalapi.MedievalFactionsAPI;
 import dansplugins.fiefs.utils.Logger;
 import org.bukkit.Bukkit;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class MedievalFactionsIntegrator {
-
     private static MedievalFactionsIntegrator instance;
-
     private MedievalFactionsAPI mf_api = null;
 
     private MedievalFactionsIntegrator() {
@@ -43,5 +44,4 @@ public class MedievalFactionsIntegrator {
     public MedievalFactionsAPI getAPI() {
         return mf_api;
     }
-
 }

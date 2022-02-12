@@ -8,8 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class LocalChunkService {
-
     private static LocalChunkService instance;
 
     private LocalChunkService() {
@@ -78,5 +80,4 @@ public class LocalChunkService {
     private boolean areChunksEqual(Chunk chunk1, Chunk chunk2) {
         return (chunk1.getX() == chunk2.getX() && chunk1.getZ() == chunk2.getZ() && chunk1.getWorld().getName().equals(chunk2.getWorld().getName()));
     }
-
 }

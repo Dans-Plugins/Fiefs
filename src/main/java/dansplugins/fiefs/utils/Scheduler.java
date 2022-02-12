@@ -4,8 +4,10 @@ import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.services.LocalStorageService;
 import org.bukkit.Bukkit;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class Scheduler {
-
     private static Scheduler instance;
 
     private Scheduler() {
@@ -20,16 +22,15 @@ public class Scheduler {
     }
 
     public void scheduleAutosave() {
-        Logger.getInstance().log("[Fiefs] Scheduling hourly autosave.");
+        Logger.getInstance().log("Scheduling hourly autosave.");
         int delay = 60 * 60; // 1 hour
         int secondsUntilRepeat = 60 * 60; // 1 hour
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Fiefs.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Logger.getInstance().log("[Fiefs] Saving. This will happen hourly.");
+                Logger.getInstance().log("Saving. This will happen hourly.");
                 LocalStorageService.getInstance().save();
             }
         }, delay * 20, secondsUntilRepeat * 20);
     }
-
 }

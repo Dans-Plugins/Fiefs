@@ -11,6 +11,9 @@ import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class ListCommand extends AbstractPluginCommand {
 
     public ListCommand() {
@@ -38,5 +41,4 @@ public class ListCommand extends AbstractPluginCommand {
     public boolean execute(CommandSender commandSender, String[] strings) {
         return execute(commandSender);
     }
-
 }

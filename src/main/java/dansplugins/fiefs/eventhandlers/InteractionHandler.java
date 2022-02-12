@@ -20,6 +20,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class InteractionHandler implements Listener {
 
     @EventHandler()
@@ -206,5 +209,4 @@ public class InteractionHandler implements Listener {
 
         return !chunkHolder.equals(playersFief);
     }
-
 }

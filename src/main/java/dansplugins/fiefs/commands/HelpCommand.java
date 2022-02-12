@@ -7,6 +7,9 @@ import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class HelpCommand extends AbstractPluginCommand {
     private final int maxPage = 2;
 

@@ -12,6 +12,9 @@ import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class LeaveCommand extends AbstractPluginCommand {
 
     public LeaveCommand() {

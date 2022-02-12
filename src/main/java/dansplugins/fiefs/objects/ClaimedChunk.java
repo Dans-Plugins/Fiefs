@@ -11,8 +11,10 @@ import java.util.Map;
 
 import static org.bukkit.Bukkit.getServer;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class ClaimedChunk {
-
     private Chunk chunk;
     private String faction;
     private String fief;
@@ -98,5 +100,4 @@ public class ClaimedChunk {
                                             gson.fromJson(data.get("Z"), Integer.TYPE));
         }
     }
-
 }

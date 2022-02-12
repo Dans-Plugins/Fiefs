@@ -5,9 +5,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class FI_Fief implements IFI_Fief {
-
-    private Fief fief;
+    private final Fief fief;
 
     public FI_Fief(Fief fief) {
         this.fief = fief;

@@ -14,19 +14,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class Fief {
-    // persistent
     private String name;
     private String description = "Default Description";
     private UUID ownerUUID;
     private String factionName;
-
     private ArrayList<UUID> members = new ArrayList<>();
-
-    private FiefFlags flags = new FiefFlags();
-
-    // ephemeral
-    private ArrayList<UUID> invitedPlayers = new ArrayList<>();
+    private final FiefFlags flags = new FiefFlags();
+    private final ArrayList<UUID> invitedPlayers = new ArrayList<>();
 
     public Fief(String name, UUID ownerUUID, String factionName) {
         this.name = name;

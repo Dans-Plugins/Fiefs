@@ -12,8 +12,10 @@ import org.bukkit.configuration.file.FileConfiguration;
     - sendConfigList()
  */
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class LocalConfigService {
-
     private static LocalConfigService instance;
     private boolean altered = false;
 
@@ -113,5 +115,4 @@ public class LocalConfigService {
     public String getString(String option) {
         return getConfig().getString(option);
     }
-
 }
