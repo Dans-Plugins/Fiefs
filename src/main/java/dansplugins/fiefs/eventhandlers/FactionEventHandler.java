@@ -10,6 +10,9 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class FactionEventHandler implements Listener {
 
     @EventHandler()
@@ -65,5 +68,4 @@ public class FactionEventHandler implements Listener {
 
         // TODO: inform fief members that the player was kicked from the faction
     }
-
 }

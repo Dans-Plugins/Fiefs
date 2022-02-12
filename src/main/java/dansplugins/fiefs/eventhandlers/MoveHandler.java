@@ -11,6 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class MoveHandler implements Listener {
 
     @EventHandler()
@@ -71,10 +74,8 @@ public class MoveHandler implements Listener {
             // if the holders of the chunks are different
             if (!fromChunk.getFief().equalsIgnoreCase(toChunk.getFief())) {
                 event.setCancelled(true);
-                return;
             }
         }
 
     }
-
 }

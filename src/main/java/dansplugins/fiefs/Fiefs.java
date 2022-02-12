@@ -1,6 +1,7 @@
 package dansplugins.fiefs;
 
 import dansplugins.factionsystem.eventhandlers.JoinHandler;
+import dansplugins.factionsystem.utils.Logger;
 import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.commands.*;
 import dansplugins.fiefs.externalapi.FiefsAPI;
@@ -20,6 +21,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public final class Fiefs extends PonderBukkitPlugin {
     private static Fiefs instance;
     private final String pluginVersion = "v" + getDescription().getVersion();
@@ -31,23 +35,11 @@ public final class Fiefs extends PonderBukkitPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        int pluginId = 12743;
-        Metrics metrics = new Metrics(this, pluginId);
-
-        if (!(new File("./plugins/Fiefs/config.yml").exists())) {
-            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
-        }
-        else {
-            // pre load compatibility checks
-            if (isVersionMismatched()) {
-                LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
-            }
-            reloadConfig();
-        }
+        handlebStatsIntegration();
+        initializeConfig();
 
         if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsAPIAvailable()) {
-            System.out.println("[Fiefs] Fiefs cannot enable.");
+            Logger.getInstance().log("Fiefs cannot enable.");
             return;
         }
 
@@ -95,6 +87,24 @@ public final class Fiefs extends PonderBukkitPlugin {
 
     public PonderMC getPonderMC() {
         return (PonderMC) getPonder();
+    }
+
+    private void initializeConfig() {
+        if (!(new File("./plugins/Fiefs/config.yml").exists())) {
+            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+        }
+        else {
+            // pre load compatibility checks
+            if (isVersionMismatched()) {
+                LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            }
+            reloadConfig();
+        }
+    }
+
+    private void handlebStatsIntegration() {
+        int pluginId = 12743;
+        new Metrics(this, pluginId);
     }
 
     private boolean isVersionMismatched() {

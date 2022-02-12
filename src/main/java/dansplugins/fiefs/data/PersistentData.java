@@ -11,10 +11,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class PersistentData {
-
     private static PersistentData instance;
-
     private ArrayList<Fief> fiefs = new ArrayList<>();
     private ArrayList<ClaimedChunk> claimedChunks = new ArrayList<>();
 

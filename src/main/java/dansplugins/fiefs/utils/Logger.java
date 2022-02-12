@@ -2,8 +2,12 @@ package dansplugins.fiefs.utils;
 
 import dansplugins.fiefs.Fiefs;
 
-public class Logger {
+import java.util.logging.Level;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
+public class Logger {
     private static Logger instance;
 
     private Logger() {
@@ -19,8 +23,7 @@ public class Logger {
 
     public void log(String message) {
         if (Fiefs.getInstance().isDebugEnabled()) {
-            System.out.println("[Fiefs] " + message);
+            Fiefs.getInstance().getLogger().log(Level.INFO, "[Fiefs] " + message);
         }
     }
-
 }

@@ -7,16 +7,18 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+    In order to add a new fief flag to this class, the following methods need to be altered:
+    - initializeFlagNames()
+    - initializeFlagValues()
+    - loadMissingFlagsIfNecessary()
+*/
+
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class FiefFlags {
-
-    /*
-        In order to add a new fief flag to this class, the following methods need to be altered:
-        - initializeFlagNames()
-        - initializeFlagValues()
-        - loadMissingFlagsIfNecessary()
-    */
-
-    private ArrayList<String> flagNames = new ArrayList<>();
+    private final ArrayList<String> flagNames = new ArrayList<>();
     private HashMap<String, Integer> integerValues = new HashMap<>();
     private HashMap<String, Boolean> booleanValues = new HashMap<>();
     private HashMap<String, Double> doubleValues = new HashMap<>();
@@ -160,5 +162,4 @@ public class FiefFlags {
         }
         return toReturn;
     }
-
 }

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class TransferCommand extends AbstractPluginCommand {
 
     public TransferCommand() {
@@ -77,5 +80,4 @@ public class TransferCommand extends AbstractPluginCommand {
 
         return true;
     }
-
 }

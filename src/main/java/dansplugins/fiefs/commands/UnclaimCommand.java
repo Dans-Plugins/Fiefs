@@ -14,6 +14,9 @@ import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class UnclaimCommand extends AbstractPluginCommand {
 
     public UnclaimCommand() {
@@ -48,5 +51,4 @@ public class UnclaimCommand extends AbstractPluginCommand {
     public boolean execute(CommandSender commandSender, String[] strings) {
         return execute(commandSender);
     }
-
 }
