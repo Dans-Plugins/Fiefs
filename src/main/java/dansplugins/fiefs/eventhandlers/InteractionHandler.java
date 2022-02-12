@@ -38,7 +38,7 @@ public class InteractionHandler implements Listener {
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Cancelling Block Break event."); }
+            Logger.getInstance().log("Cancelling Block Break event.");
             event.setCancelled(true);
         }
     }
@@ -59,7 +59,7 @@ public class InteractionHandler implements Listener {
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Cancelling Block Place event."); }
+            Logger.getInstance().log("Cancelling Block Place event.");
             event.setCancelled(true);
         }
     }
@@ -80,7 +80,7 @@ public class InteractionHandler implements Listener {
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[DEBUG] Cancelling Player Interact event."); }
+            Logger.getInstance().log("Cancelling Player Interact event.");
             event.setCancelled(true);
         }
     }
@@ -99,9 +99,7 @@ public class InteractionHandler implements Listener {
             location = armorStand.getLocation();
         }
         else if (clickedEntity instanceof ItemFrame) {
-            if (Fiefs.getInstance().isDebugEnabled()) {
-                System.out.println("DEBUG: ItemFrame interaction captured in PlayerInteractAtEntityEvent!");
-            }
+            Logger.getInstance().log("DEBUG: ItemFrame interaction captured in PlayerInteractAtEntityEvent!");
             ItemFrame itemFrame = (ItemFrame) clickedEntity;
 
             // get chunk that armor stand is in
@@ -138,7 +136,7 @@ public class InteractionHandler implements Listener {
 
     @EventHandler()
     public void handle(PlayerBucketFillEvent event) {
-        if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("DEBUG: A player is attempting to fill a bucket!"); }
+        Logger.getInstance().log("A player is attempting to fill a bucket!");
 
         Player player = event.getPlayer();
 
@@ -190,11 +188,15 @@ public class InteractionHandler implements Listener {
 
     private boolean shouldEventBeCancelled(ClaimedChunk claimedChunk, Player player) {
         if (claimedChunk == null) {
-            if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("[Fiefs] Claimed chunk was null."); }
+            Logger.getInstance().log("Claimed chunk was null.");
             return false;
         }
         Fief chunkHolder = PersistentData.getInstance().getFief(claimedChunk.getFief());
         Fief playersFief = PersistentData.getInstance().getFief(player);
+
+        if (playersFief == null) {
+            return true;
+        }
 
         boolean claimedLandProtected = (boolean) playersFief.getFlags().getFlag("claimedLandProtected");
 
