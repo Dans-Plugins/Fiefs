@@ -1,9 +1,10 @@
 package dansplugins.fiefs.services;
 
-import dansplugins.fiefs.Fiefs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import dansplugins.fiefs.Fiefs;
 
 /*
     To add a new config option, the following methods must be altered:

@@ -1,11 +1,12 @@
 package dansplugins.fiefs.objects;
 
-import dansplugins.fiefs.utils.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import dansplugins.fiefs.utils.Logger;
 
 /*
     In order to add a new fief flag to this class, the following methods need to be altered:

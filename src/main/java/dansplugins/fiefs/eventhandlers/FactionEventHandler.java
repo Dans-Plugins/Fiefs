@@ -1,14 +1,19 @@
 package dansplugins.fiefs.eventhandlers;
 
-import dansplugins.factionsystem.events.*;
+import java.util.ArrayList;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+
+import dansplugins.factionsystem.events.FactionDisbandEvent;
+import dansplugins.factionsystem.events.FactionKickEvent;
+import dansplugins.factionsystem.events.FactionLeaveEvent;
+import dansplugins.factionsystem.events.FactionRenameEvent;
+import dansplugins.factionsystem.events.FactionUnclaimEvent;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.services.LocalChunkService;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-
-import java.util.ArrayList;
 
 /**
  * @author Daniel McCoy Stephenson

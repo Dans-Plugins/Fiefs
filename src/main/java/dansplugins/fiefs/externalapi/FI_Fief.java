@@ -1,9 +1,10 @@
 package dansplugins.fiefs.externalapi;
 
-import dansplugins.fiefs.objects.Fief;
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+import dansplugins.fiefs.objects.Fief;
 
 /**
  * @author Daniel McCoy Stephenson

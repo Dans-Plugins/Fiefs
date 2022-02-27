@@ -1,8 +1,9 @@
 package dansplugins.fiefs.integrators;
 
+import org.bukkit.Bukkit;
+
 import dansplugins.factionsystem.externalapi.MedievalFactionsAPI;
 import dansplugins.fiefs.utils.Logger;
-import org.bukkit.Bukkit;
 
 /**
  * @author Daniel McCoy Stephenson
