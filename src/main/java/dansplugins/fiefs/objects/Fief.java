@@ -1,18 +1,20 @@
 package dansplugins.fiefs.objects;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
-import dansplugins.fiefs.utils.UUIDChecker;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.utils.UUIDChecker;
 
 /**
  * @author Daniel McCoy Stephenson

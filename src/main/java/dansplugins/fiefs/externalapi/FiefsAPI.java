@@ -1,11 +1,12 @@
 package dansplugins.fiefs.externalapi;
 
-import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.objects.Fief;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.UUID;
+
+import org.bukkit.entity.Player;
+
+import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.objects.Fief;
 
 /**
  * @author Daniel McCoy Stephenson

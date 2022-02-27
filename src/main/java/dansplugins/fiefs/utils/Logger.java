@@ -1,8 +1,8 @@
 package dansplugins.fiefs.utils;
 
-import dansplugins.fiefs.Fiefs;
-
 import java.util.logging.Level;
+
+import dansplugins.fiefs.Fiefs;
 
 /**
  * @author Daniel McCoy Stephenson

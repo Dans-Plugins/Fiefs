@@ -1,8 +1,9 @@
 package dansplugins.fiefs.utils;
 
+import org.bukkit.Bukkit;
+
 import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.services.LocalStorageService;
-import org.bukkit.Bukkit;
 
 /**
  * @author Daniel McCoy Stephenson
