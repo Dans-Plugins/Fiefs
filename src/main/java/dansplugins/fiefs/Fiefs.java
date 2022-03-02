@@ -37,6 +37,7 @@ import dansplugins.fiefs.utils.Scheduler;
 import preponderous.ponder.minecraft.bukkit.PonderMC;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import preponderous.ponder.minecraft.bukkit.abs.PonderBukkitPlugin;
+import preponderous.ponder.minecraft.bukkit.services.CommandService;
 import preponderous.ponder.minecraft.bukkit.tools.EventHandlerRegistry;
 
 /**
@@ -45,6 +46,7 @@ import preponderous.ponder.minecraft.bukkit.tools.EventHandlerRegistry;
 public final class Fiefs extends PonderBukkitPlugin {
     private static Fiefs instance;
     private final String pluginVersion = "v" + getDescription().getVersion();
+    private final CommandService commandService = new CommandService((PonderMC) getPonder());
 
     /**
      * This can be used to get the instance of the main class that is managed by itself.
@@ -97,7 +99,7 @@ public final class Fiefs extends PonderBukkitPlugin {
             return defaultCommand.execute(sender);
         }
 
-        return getPonderMC().getCommandService().interpretAndExecuteCommand(sender, label, args);
+        return commandService.interpretAndExecuteCommand(sender, label, args);
     }
 
     /**
@@ -189,6 +191,6 @@ public final class Fiefs extends PonderBukkitPlugin {
                 new TransferCommand(),
                 new UnclaimCommand()
         ));
-        getPonderMC().getCommandService().initialize(commands, "That command wasn't found.");
+        commandService.initialize(commands, "That command wasn't found.");
     }
 }
