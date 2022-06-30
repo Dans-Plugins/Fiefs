@@ -1,20 +1,19 @@
 package dansplugins.fiefs.integrators;
 
-import org.bukkit.Bukkit;
-
 import dansplugins.factionsystem.externalapi.MedievalFactionsAPI;
 import dansplugins.fiefs.utils.Logger;
+import org.bukkit.Bukkit;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class MedievalFactionsIntegrator {
-    private static MedievalFactionsIntegrator instance;
+
     private MedievalFactionsAPI mf_api = null;
 
-    private MedievalFactionsIntegrator() {
+    public MedievalFactionsIntegrator(Logger logger) {
         if (isMedievalFactionsPresent()) {
-            Logger.getInstance().log("[DEBUG] Medieval Factions was found successfully!");
+            logger.log("[DEBUG] Medieval Factions was found successfully!");
             try {
                 mf_api = new MedievalFactionsAPI();
             }
@@ -25,13 +24,6 @@ public class MedievalFactionsIntegrator {
         else {
             System.out.println("[Fiefs] Medieval Factions was not found!");
         }
-    }
-
-    public static MedievalFactionsIntegrator getInstance() {
-        if (instance == null) {
-            instance = new MedievalFactionsIntegrator();
-        }
-        return instance;
     }
 
     public boolean isMedievalFactionsAPIAvailable() {

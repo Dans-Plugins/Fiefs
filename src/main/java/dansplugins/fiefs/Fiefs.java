@@ -1,78 +1,60 @@
 package dansplugins.fiefs;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import dansplugins.factionsystem.eventhandlers.JoinHandler;
+import dansplugins.fiefs.bstats.Metrics;
+import dansplugins.fiefs.commands.*;
+import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.externalapi.FiefsAPI;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.services.ChunkService;
+import dansplugins.fiefs.services.ConfigService;
+import dansplugins.fiefs.services.StorageService;
+import dansplugins.fiefs.utils.Logger;
+import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
-
-import dansplugins.factionsystem.eventhandlers.JoinHandler;
-import dansplugins.factionsystem.utils.Logger;
-import dansplugins.fiefs.bstats.Metrics;
-import dansplugins.fiefs.commands.CheckClaimCommand;
-import dansplugins.fiefs.commands.ClaimCommand;
-import dansplugins.fiefs.commands.ConfigCommand;
-import dansplugins.fiefs.commands.CreateCommand;
-import dansplugins.fiefs.commands.DefaultCommand;
-import dansplugins.fiefs.commands.DescCommand;
-import dansplugins.fiefs.commands.DisbandCommand;
-import dansplugins.fiefs.commands.FlagsCommand;
-import dansplugins.fiefs.commands.HelpCommand;
-import dansplugins.fiefs.commands.InfoCommand;
-import dansplugins.fiefs.commands.InviteCommand;
-import dansplugins.fiefs.commands.JoinCommand;
-import dansplugins.fiefs.commands.KickCommand;
-import dansplugins.fiefs.commands.LeaveCommand;
-import dansplugins.fiefs.commands.ListCommand;
-import dansplugins.fiefs.commands.MembersCommand;
-import dansplugins.fiefs.commands.TransferCommand;
-import dansplugins.fiefs.commands.UnclaimCommand;
-import dansplugins.fiefs.externalapi.FiefsAPI;
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
-import dansplugins.fiefs.services.LocalConfigService;
-import dansplugins.fiefs.services.LocalStorageService;
-import dansplugins.fiefs.utils.Scheduler;
 import preponderous.ponder.minecraft.bukkit.PonderMC;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import preponderous.ponder.minecraft.bukkit.abs.PonderBukkitPlugin;
 import preponderous.ponder.minecraft.bukkit.services.CommandService;
 import preponderous.ponder.minecraft.bukkit.tools.EventHandlerRegistry;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * @author Daniel McCoy Stephenson
  */
 public final class Fiefs extends PonderBukkitPlugin {
-    private static Fiefs instance;
     private final String pluginVersion = "v" + getDescription().getVersion();
-    private final CommandService commandService = new CommandService((PonderMC) getPonder());
 
-    /**
-     * This can be used to get the instance of the main class that is managed by itself.
-     * @return The managed instance of the main class.
-     */
-    public static Fiefs getInstance() {
-        return instance;
-    }
+    private final CommandService commandService = new CommandService((PonderMC) getPonder());
+    private final Logger logger = new Logger(this);
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator = new MedievalFactionsIntegrator(logger);
+    private final ConfigService configService = new ConfigService(this);
+    private final PersistentData persistentData = new PersistentData(medievalFactionsIntegrator);
+    private final StorageService storageService = new StorageService(configService, this, persistentData, logger, medievalFactionsIntegrator);
+    private final Scheduler scheduler = new Scheduler(logger, this, storageService);
+    private final ChunkService chunkService = new ChunkService(persistentData, medievalFactionsIntegrator);
 
     /**
      * This runs when the server starts.
      */
     @Override
     public void onEnable() {
-        instance = this;
         initializeConfig();
 
-        if (!MedievalFactionsIntegrator.getInstance().isMedievalFactionsAPIAvailable()) {
-            Logger.getInstance().log("Fiefs cannot enable.");
+        if (!medievalFactionsIntegrator.isMedievalFactionsAPIAvailable()) {
+            logger.log("Fiefs cannot enable.");
             return;
         }
 
-        LocalStorageService.getInstance().load();
+        storageService.load();
         registerEventHandlers();
         initializeCommandService();
-        Scheduler.getInstance().scheduleAutosave();
+        scheduler.scheduleAutosave();
         handlebStatsIntegration();
     }
 
@@ -81,7 +63,7 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     @Override
     public void onDisable() {
-        LocalStorageService.getInstance().save();
+        storageService.save();
     }
 
     /**
@@ -95,7 +77,7 @@ public final class Fiefs extends PonderBukkitPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            DefaultCommand defaultCommand = new DefaultCommand();
+            DefaultCommand defaultCommand = new DefaultCommand(this);
             return defaultCommand.execute(sender);
         }
 
@@ -128,11 +110,11 @@ public final class Fiefs extends PonderBukkitPlugin {
      * @return Whether debug is enabled.
      */
     public boolean isDebugEnabled() {
-        return LocalConfigService.getInstance().getBoolean("debugMode");
+        return configService.getBoolean("debugMode");
     }
 
     public FiefsAPI getAPI() {
-        return new FiefsAPI();
+        return new FiefsAPI(persistentData);
     }
 
     public PonderMC getPonderMC() {
@@ -141,12 +123,12 @@ public final class Fiefs extends PonderBukkitPlugin {
 
     private void initializeConfig() {
         if (!(new File("./plugins/Fiefs/config.yml").exists())) {
-            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            configService.saveMissingConfigDefaultsIfNotPresent();
         }
         else {
             // pre load compatibility checks
             if (isVersionMismatched()) {
-                LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+                configService.saveMissingConfigDefaultsIfNotPresent();
             }
             reloadConfig();
         }
@@ -173,23 +155,23 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     private void initializeCommandService() {
         ArrayList<AbstractPluginCommand> commands = new ArrayList<AbstractPluginCommand>(Arrays.asList(
-                new CheckClaimCommand(),
-                new ClaimCommand(),
-                new ConfigCommand(),
-                new CreateCommand(),
-                new DescCommand(),
-                new DisbandCommand(),
-                new FlagsCommand(),
+                new CheckClaimCommand(persistentData, chunkService),
+                new ClaimCommand(medievalFactionsIntegrator, persistentData, chunkService),
+                new ConfigCommand(configService),
+                new CreateCommand(medievalFactionsIntegrator, persistentData, logger),
+                new DescCommand(medievalFactionsIntegrator, persistentData),
+                new DisbandCommand(medievalFactionsIntegrator, persistentData),
+                new FlagsCommand(medievalFactionsIntegrator, persistentData),
                 new HelpCommand(),
-                new InfoCommand(),
-                new InviteCommand(),
-                new JoinCommand(),
-                new KickCommand(),
-                new LeaveCommand(),
-                new ListCommand(),
-                new MembersCommand(),
-                new TransferCommand(),
-                new UnclaimCommand()
+                new InfoCommand(medievalFactionsIntegrator, persistentData),
+                new InviteCommand(medievalFactionsIntegrator, persistentData),
+                new JoinCommand(medievalFactionsIntegrator, persistentData),
+                new KickCommand(medievalFactionsIntegrator, persistentData),
+                new LeaveCommand(medievalFactionsIntegrator, persistentData),
+                new ListCommand(medievalFactionsIntegrator, persistentData),
+                new MembersCommand(medievalFactionsIntegrator, persistentData),
+                new TransferCommand(medievalFactionsIntegrator, persistentData),
+                new UnclaimCommand(medievalFactionsIntegrator, persistentData, chunkService)
         ));
         commandService.initialize(commands, "That command wasn't found.");
     }

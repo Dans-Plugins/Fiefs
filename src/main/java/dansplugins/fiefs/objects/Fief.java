@@ -1,43 +1,48 @@
 package dansplugins.fiefs.objects;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.utils.Logger;
+import dansplugins.fiefs.utils.UUIDChecker;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
-import dansplugins.fiefs.utils.UUIDChecker;
-
 /**
  * @author Daniel McCoy Stephenson
  */
 public class Fief {
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+
     private String name;
     private String description = "Default Description";
     private UUID ownerUUID;
     private String factionName;
     private ArrayList<UUID> members = new ArrayList<>();
-    private final FiefFlags flags = new FiefFlags();
+    private final FiefFlags flags;
     private final ArrayList<UUID> invitedPlayers = new ArrayList<>();
 
-    public Fief(String name, UUID ownerUUID, String factionName) {
+    public Fief(MedievalFactionsIntegrator medievalFactionsIntegrator, String name, UUID ownerUUID, String factionName, Logger logger) {
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
         this.name = name;
         this.ownerUUID = ownerUUID;
         this.factionName = factionName;
         members.add(ownerUUID);
+        flags = new FiefFlags(logger);
         flags.initializeFlagValues();
     }
 
-    public Fief(Map<String, String> fiefData) {
+    public Fief(Map<String, String> fiefData, MedievalFactionsIntegrator medievalFactionsIntegrator, Logger logger) {
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
         this.load(fiefData);
+        flags = new FiefFlags(logger);
     }
 
     public String getName() {
@@ -107,7 +112,7 @@ public class Fief {
     public int getCumulativePowerLevel() {
         int cumulativePowerLevel = 0;
         for (UUID memberUUID : members) {
-            double memberPowerLevel = MedievalFactionsIntegrator.getInstance().getAPI().getPower(memberUUID);
+            double memberPowerLevel = medievalFactionsIntegrator.getAPI().getPower(memberUUID);
             cumulativePowerLevel += memberPowerLevel;
         }
         return cumulativePowerLevel;

@@ -1,34 +1,27 @@
 package dansplugins.fiefs.data;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.UUIDChecker;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class PersistentData {
-    private static PersistentData instance;
-    private ArrayList<Fief> fiefs = new ArrayList<>();
-    private ArrayList<ClaimedChunk> claimedChunks = new ArrayList<>();
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
 
-    private PersistentData() {
+    private final ArrayList<Fief> fiefs = new ArrayList<>();
+    private final ArrayList<ClaimedChunk> claimedChunks = new ArrayList<>();
 
-    }
-
-    public static PersistentData getInstance() {
-        if (instance == null) {
-            instance = new PersistentData();
-        }
-        return instance;
+    public PersistentData(MedievalFactionsIntegrator medievalFactionsIntegrator) {
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
     }
 
     public ArrayList<Fief> getFiefs() {
@@ -105,7 +98,7 @@ public class PersistentData {
 
     public void sendListOfFiefsToPlayer(Player player) {
 
-        MF_Faction faction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
 
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You are not in a faction.");
@@ -125,7 +118,7 @@ public class PersistentData {
         for (Fief fief : listOfFiefs) {
             player.sendMessage(ChatColor.AQUA + String.format("%-25s %10s %10s %10s", fief.getName(), "P: " +
                     fief.getCumulativePowerLevel(), "M: " + fief.getNumMembers(), "L: " +
-                    PersistentData.getInstance().getNumChunksClaimedByFief(fief)));
+                    getNumChunksClaimedByFief(fief)));
         }
     }
 
@@ -174,6 +167,6 @@ public class PersistentData {
         player.sendMessage(ChatColor.AQUA + "Owner: " + uuidChecker.findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
         player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
         player.sendMessage(ChatColor.AQUA + "Power Level: " + cumulativePowerLevel);
-        player.sendMessage(ChatColor.AQUA + "Demesne Size: " + PersistentData.getInstance().getNumChunksClaimedByFief(playersFief) + "/" + cumulativePowerLevel);
+        player.sendMessage(ChatColor.AQUA + "Demesne Size: " + getNumChunksClaimedByFief(playersFief) + "/" + cumulativePowerLevel);
     }
 }

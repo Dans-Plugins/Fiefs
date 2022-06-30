@@ -1,36 +1,36 @@
 package dansplugins.fiefs.externalapi;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.Fief;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author Daniel McCoy Stephenson
  */
-public class FiefsAPI implements IFiefsAPI {
+public class FiefsAPI {
+    private final PersistentData persistentData;
 
-    @Override
+    public FiefsAPI(PersistentData persistentData) {
+        this.persistentData = persistentData;
+    }
+
     public FI_Fief getFief(String fiefName) {
-        return new FI_Fief(PersistentData.getInstance().getFief(fiefName));
+        return new FI_Fief(persistentData.getFief(fiefName));
     }
 
-    @Override
     public FI_Fief getFief(Player player) {
-        return new FI_Fief(PersistentData.getInstance().getFief(player));
+        return new FI_Fief(persistentData.getFief(player));
     }
 
-    @Override
     public FI_Fief getFief(UUID playerUUID) {
-        return new FI_Fief(PersistentData.getInstance().getFief(playerUUID));
+        return new FI_Fief(persistentData.getFief(playerUUID));
     }
 
-    @Override
     public ArrayList<FI_Fief> getFiefsOfFaction(String factionName) {
-        ArrayList<Fief> fiefs = PersistentData.getInstance().getFiefsOfFaction(factionName);
+        ArrayList<Fief> fiefs = persistentData.getFiefsOfFaction(factionName);
         ArrayList<FI_Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
             toReturn.add(new FI_Fief(fief));

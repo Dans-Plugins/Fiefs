@@ -1,5 +1,11 @@
-package dansplugins.fiefs.eventhandlers;
+package dansplugins.fiefs.listeners;
 
+import dansplugins.factionsystem.utils.Logger;
+import dansplugins.fiefs.Fiefs;
+import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.objects.ClaimedChunk;
+import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.services.ChunkService;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -12,41 +18,41 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-
-import dansplugins.fiefs.Fiefs;
-import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.objects.ClaimedChunk;
-import dansplugins.fiefs.objects.Fief;
-import dansplugins.fiefs.services.LocalChunkService;
-import dansplugins.fiefs.utils.Logger;
+import org.bukkit.event.player.*;
 
 /**
  * @author Daniel McCoy Stephenson
  */
-public class InteractionHandler implements Listener {
+public class InteractionListener implements Listener {
+    private final ChunkService chunkService;
+    private final PersistentData persistentData;
+    private final Logger logger;
+    private final Fiefs fiefs;
+
+    public InteractionListener(ChunkService chunkService, PersistentData persistentData, Logger logger, Fiefs fiefs) {
+        this.chunkService = chunkService;
+        this.persistentData = persistentData;
+        this.logger = logger;
+        this.fiefs = fiefs;
+    }
 
     @EventHandler()
     public void handle(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
         Block brokenBlock = event.getBlock();
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(brokenBlock.getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(brokenBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
 
-        Fief playersFief = PersistentData.getInstance().getFief(player);
+        Fief playersFief = persistentData.getFief(player);
         if (playersFief == null) {
             return;
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            Logger.getInstance().log("Cancelling Block Break event.");
+            logger.log("Cancelling Block Break event.");
             event.setCancelled(true);
         }
     }
@@ -56,18 +62,18 @@ public class InteractionHandler implements Listener {
         Player player = event.getPlayer();
 
         Block clickedBlock = event.getBlock();
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
 
-        Fief playersFief = PersistentData.getInstance().getFief(player);
+        Fief playersFief = persistentData.getFief(player);
         if (playersFief == null) {
             return;
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            Logger.getInstance().log("Cancelling Block Place event.");
+            logger.log("Cancelling Block Place event.");
             event.setCancelled(true);
         }
     }
@@ -82,13 +88,13 @@ public class InteractionHandler implements Listener {
             return;
         }
 
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
             return;
         }
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
-            Logger.getInstance().log("Cancelling Player Interact event.");
+            logger.log("Cancelling Player Interact event.");
             event.setCancelled(true);
         }
     }
@@ -107,7 +113,7 @@ public class InteractionHandler implements Listener {
             location = armorStand.getLocation();
         }
         else if (clickedEntity instanceof ItemFrame) {
-            Logger.getInstance().log("DEBUG: ItemFrame interaction captured in PlayerInteractAtEntityEvent!");
+            logger.log("DEBUG: ItemFrame interaction captured in PlayerInteractAtEntityEvent!");
             ItemFrame itemFrame = (ItemFrame) clickedEntity;
 
             // get chunk that armor stand is in
@@ -116,7 +122,7 @@ public class InteractionHandler implements Listener {
 
         if (location != null) {
             Chunk chunk = location.getChunk();
-            ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(chunk);
+            ClaimedChunk claimedChunk = chunkService.getClaimedChunk(chunk);
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);
@@ -135,7 +141,7 @@ public class InteractionHandler implements Listener {
         Entity entity = event.getEntity();
 
         // get chunk that entity is in
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(entity.getLocation().getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(entity.getLocation().getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -144,13 +150,13 @@ public class InteractionHandler implements Listener {
 
     @EventHandler()
     public void handle(PlayerBucketFillEvent event) {
-        Logger.getInstance().log("A player is attempting to fill a bucket!");
+        logger.log("A player is attempting to fill a bucket!");
 
         Player player = event.getPlayer();
 
         Block clickedBlock = event.getBlockClicked();
 
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(clickedBlock.getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -159,13 +165,13 @@ public class InteractionHandler implements Listener {
 
     @EventHandler()
     public void handle(PlayerBucketEmptyEvent event) {
-        if (Fiefs.getInstance().isDebugEnabled()) { System.out.println("DEBUG: A player is attempting to empty a bucket!"); }
+        if (fiefs.isDebugEnabled()) { System.out.println("DEBUG: A player is attempting to empty a bucket!"); }
 
         Player player = event.getPlayer();
 
         Block clickedBlock = event.getBlockClicked();
 
-        ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(clickedBlock.getChunk());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(clickedBlock.getChunk());
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
@@ -178,15 +184,15 @@ public class InteractionHandler implements Listener {
         Entity clickedEntity = event.getRightClicked();
 
         if (clickedEntity instanceof ItemFrame) {
-            if (Fiefs.getInstance().isDebugEnabled()) {
-                Logger.getInstance().log("ItemFrame interaction captured in PlayerInteractEntityEvent!");
+            if (fiefs.isDebugEnabled()) {
+                logger.log("ItemFrame interaction captured in PlayerInteractEntityEvent!");
             }
             ItemFrame itemFrame = (ItemFrame) clickedEntity;
 
             // get chunk that armor stand is in
             Location location = itemFrame.getLocation();
             Chunk chunk = location.getChunk();
-            ClaimedChunk claimedChunk = LocalChunkService.getInstance().getClaimedChunk(chunk);
+            ClaimedChunk claimedChunk = chunkService.getClaimedChunk(chunk);
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);
@@ -196,11 +202,11 @@ public class InteractionHandler implements Listener {
 
     private boolean shouldEventBeCancelled(ClaimedChunk claimedChunk, Player player) {
         if (claimedChunk == null) {
-            Logger.getInstance().log("Claimed chunk was null.");
+            logger.log("Claimed chunk was null.");
             return false;
         }
-        Fief chunkHolder = PersistentData.getInstance().getFief(claimedChunk.getFief());
-        Fief playersFief = PersistentData.getInstance().getFief(player);
+        Fief chunkHolder = persistentData.getFief(claimedChunk.getFief());
+        Fief playersFief = persistentData.getFief(player);
 
         if (playersFief == null) {
             return true;

@@ -1,25 +1,28 @@
 package dansplugins.fiefs.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class DisbandCommand extends AbstractPluginCommand {
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+    private final PersistentData persistentData;
 
-    public DisbandCommand() {
+    public DisbandCommand(MedievalFactionsIntegrator medievalFactionsIntegrator, PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("disband")), new ArrayList<>(Arrays.asList("fiefs.disband")));
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+        this.persistentData = persistentData;
     }
 
     public boolean execute(CommandSender sender) {
@@ -29,13 +32,13 @@ public class DisbandCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MF_Faction faction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
-        Fief fief = PersistentData.getInstance().getFief(player);
+        Fief fief = persistentData.getFief(player);
         if (fief == null) {
             player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
             return false;
@@ -46,7 +49,7 @@ public class DisbandCommand extends AbstractPluginCommand {
             return false;
         }
 
-        PersistentData.getInstance().removeFief(fief);
+        persistentData.removeFief(fief);
         player.sendMessage(ChatColor.GREEN + "Fief disbanded.");
         return true;
     }

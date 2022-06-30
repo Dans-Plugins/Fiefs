@@ -1,12 +1,17 @@
 package dansplugins.fiefs.services;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import dansplugins.fiefs.Fiefs;
+import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.objects.ClaimedChunk;
+import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.utils.Logger;
+
+import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -14,43 +19,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-
-import dansplugins.fiefs.Fiefs;
-import dansplugins.fiefs.data.PersistentData;
-import dansplugins.fiefs.objects.ClaimedChunk;
-import dansplugins.fiefs.objects.Fief;
-
 /**
  * @author Daniel McCoy Stephenson
  */
-public class LocalStorageService {
-    private static LocalStorageService instance;
+public class StorageService {
+    private final ConfigService configService;
+    private final Fiefs fiefs;
+    private final PersistentData persistentData;
+    private final Logger logger;
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+
     private final static String FILE_PATH = "./plugins/Fiefs/";
     private final static String FIEFS_FILE_NAME = "fiefs.json";
     private final static String CLAIMED_CHUNKS_FILE_NAME = "claimedChunks.json";
     private final static Type LIST_MAP_TYPE = new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
-    private LocalStorageService() {
-
-    }
-
-    public static LocalStorageService getInstance() {
-        if (instance == null) {
-            instance = new LocalStorageService();
-        }
-        return instance;
+    public StorageService(ConfigService configService, Fiefs fiefs, PersistentData persistentData, Logger logger, MedievalFactionsIntegrator medievalFactionsIntegrator) {
+        this.configService = configService;
+        this.fiefs = fiefs;
+        this.persistentData = persistentData;
+        this.logger = logger;
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
     }
 
     public void save() {
         saveFiefs();
         saveClaimedChunks();
-        if (LocalConfigService.getInstance().hasBeenAltered()) {
-            Fiefs.getInstance().saveConfig();
+        if (configService.hasBeenAltered()) {
+            fiefs.saveConfig();
         }
     }
 
@@ -62,7 +59,7 @@ public class LocalStorageService {
     private void saveFiefs() {
         // save each fief object individually
         List<Map<String, String>> fiefs = new ArrayList<>();
-        for (Fief fief : PersistentData.getInstance().getFiefs()){
+        for (Fief fief : persistentData.getFiefs()){
             fiefs.add(fief.save());
         }
 
@@ -72,7 +69,7 @@ public class LocalStorageService {
     private void saveClaimedChunks() {
         // save each claimed chunk object individually
         List<Map<String, String>> claimedChunks = new ArrayList<>();
-        for (ClaimedChunk claimedChunk : PersistentData.getInstance().getClaimedChunks()){
+        for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()){
             claimedChunks.add(claimedChunk.save());
         }
 
@@ -94,24 +91,24 @@ public class LocalStorageService {
     }
 
     private void loadFiefs() {
-        PersistentData.getInstance().clearFiefs();
+        persistentData.clearFiefs();
 
         ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + FIEFS_FILE_NAME);
 
         for (Map<String, String> fiefData : data){
-            Fief fief = new Fief(fiefData);
-            PersistentData.getInstance().addFief(fief);
+            Fief fief = new Fief(fiefData, medievalFactionsIntegrator, logger);
+            persistentData.addFief(fief);
         }
     }
 
     private void loadClaimedChunks() {
-        PersistentData.getInstance().clearClaimedChunks();
+        persistentData.clearClaimedChunks();
 
         ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + CLAIMED_CHUNKS_FILE_NAME);
 
         for (Map<String, String> claimedChunkData : data){
             ClaimedChunk claimedChunk = new ClaimedChunk(claimedChunkData);
-            PersistentData.getInstance().addChunk(claimedChunk);
+            persistentData.addChunk(claimedChunk);
         }
     }
 
