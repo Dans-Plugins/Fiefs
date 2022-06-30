@@ -1,27 +1,30 @@
 package dansplugins.fiefs.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.utils.UUIDChecker;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class TransferCommand extends AbstractPluginCommand {
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+    private final PersistentData persistentData;
 
-    public TransferCommand() {
+    public TransferCommand(MedievalFactionsIntegrator medievalFactionsIntegrator, PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("transfer")), new ArrayList<>(Arrays.asList("fiefs.transfer")));
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+        this.persistentData = persistentData;
     }
 
     @Override
@@ -38,13 +41,13 @@ public class TransferCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MF_Faction playersFaction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+        MF_Faction playersFaction = medievalFactionsIntegrator.getAPI().getFaction(player);
         if (playersFaction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
-        Fief playersFief = PersistentData.getInstance().getFief(player);
+        Fief playersFief = persistentData.getFief(player);
         if (playersFief == null) {
             player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
             return false;

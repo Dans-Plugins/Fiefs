@@ -1,10 +1,9 @@
 package dansplugins.fiefs.services;
 
+import dansplugins.fiefs.Fiefs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import dansplugins.fiefs.Fiefs;
 
 /*
     To add a new config option, the following methods must be altered:
@@ -16,28 +15,22 @@ import dansplugins.fiefs.Fiefs;
 /**
  * @author Daniel McCoy Stephenson
  */
-public class LocalConfigService {
-    private static LocalConfigService instance;
+public class ConfigService {
+    private final Fiefs fiefs;
+
     private boolean altered = false;
 
-    private LocalConfigService() {
-
-    }
-
-    public static LocalConfigService getInstance() {
-        if (instance == null) {
-            instance = new LocalConfigService();
-        }
-        return instance;
+    public ConfigService(Fiefs fiefs) {
+        this.fiefs = fiefs;
     }
 
     public void saveMissingConfigDefaultsIfNotPresent() {
         // set version
         if (!getConfig().isString("version")) {
-            getConfig().addDefault("version", Fiefs.getInstance().getVersion());
+            getConfig().addDefault("version", fiefs.getVersion());
         }
         else {
-            getConfig().set("version", Fiefs.getInstance().getVersion());
+            getConfig().set("version", fiefs.getVersion());
         }
 
         // save config options
@@ -51,7 +44,7 @@ public class LocalConfigService {
             getConfig().set("enableTerritoryAlerts", true);
         }
         getConfig().options().copyDefaults(true);
-        Fiefs.getInstance().saveConfig();
+        fiefs.saveConfig();
     }
 
     public void setConfigOption(String option, String value, CommandSender sender) {
@@ -78,7 +71,7 @@ public class LocalConfigService {
             }
 
             // save
-            Fiefs.getInstance().saveConfig();
+            fiefs.saveConfig();
             altered = true;
         } else {
             sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
@@ -98,7 +91,7 @@ public class LocalConfigService {
     }
 
     public FileConfiguration getConfig() {
-        return Fiefs.getInstance().getConfig();
+        return fiefs.getConfig();
     }
 
     public int getInt(String option) {

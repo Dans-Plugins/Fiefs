@@ -1,25 +1,28 @@
 package dansplugins.fiefs.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import dansplugins.factionsystem.externalapi.MF_Faction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class FlagsCommand extends AbstractPluginCommand {
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+    private final PersistentData persistentData;
 
-    public FlagsCommand() {
+    public FlagsCommand(MedievalFactionsIntegrator medievalFactionsIntegrator, PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("flags")), new ArrayList<>(Arrays.asList("fiefs.flags")));
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+        this.persistentData = persistentData;
     }
 
     @Override
@@ -36,13 +39,13 @@ public class FlagsCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MF_Faction faction = MedievalFactionsIntegrator.getInstance().getAPI().getFaction(player);
+        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
-        Fief playersFief = PersistentData.getInstance().getFief(player);
+        Fief playersFief = persistentData.getFief(player);
         if (playersFief == null) {
             player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
             return false;

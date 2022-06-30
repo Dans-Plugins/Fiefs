@@ -1,22 +1,23 @@
 package dansplugins.fiefs.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import dansplugins.fiefs.services.ConfigService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
-import dansplugins.fiefs.services.LocalConfigService;
-import dansplugins.fiefs.utils.ArgumentParser;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
+import preponderous.ponder.misc.ArgumentParser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class ConfigCommand extends AbstractPluginCommand {
+    private final ConfigService configService;
 
-    public ConfigCommand() {
+    public ConfigCommand(ConfigService configService) {
         super(new ArrayList<>(Arrays.asList("config")), new ArrayList<>(Arrays.asList("fiefs.config")));
+        this.configService = configService;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class ConfigCommand extends AbstractPluginCommand {
         }
 
         if (args[0].equalsIgnoreCase("show")) {
-            LocalConfigService.getInstance().sendConfigList(sender);
+            configService.sendConfigList(sender);
             return true;
         }
         else if (args[0].equalsIgnoreCase("set")) {
@@ -43,9 +44,10 @@ public class ConfigCommand extends AbstractPluginCommand {
 
             String value = "";
             if (option.equalsIgnoreCase("denyUsageMessage") || option.equalsIgnoreCase("denyCreationMessage")) {
-                ArrayList<String> singleQuoteArgs = ArgumentParser.getInstance().getArgumentsInsideSingleQuotes(args);
+                ArgumentParser argumentParser = new ArgumentParser();
+                ArrayList<String> singleQuoteArgs = argumentParser.getArgumentsInsideDoubleQuotes(args);
                 if (singleQuoteArgs.size() == 0) {
-                    sender.sendMessage(ChatColor.RED + "New message must be in between single quotes.");
+                    sender.sendMessage(ChatColor.RED + "New message must be in between double quotes.");
                     return false;
                 }
                 value = singleQuoteArgs.get(0);
@@ -54,7 +56,7 @@ public class ConfigCommand extends AbstractPluginCommand {
                 value = args[2];
             }
 
-            LocalConfigService.getInstance().setConfigOption(option, value, sender);
+            configService.setConfigOption(option, value, sender);
             return true;
         }
         else {

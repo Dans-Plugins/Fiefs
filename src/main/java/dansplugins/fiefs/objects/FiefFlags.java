@@ -1,12 +1,11 @@
 package dansplugins.fiefs.objects;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import dansplugins.fiefs.utils.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import dansplugins.fiefs.utils.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
     In order to add a new fief flag to this class, the following methods need to be altered:
@@ -19,13 +18,15 @@ import dansplugins.fiefs.utils.Logger;
  * @author Daniel McCoy Stephenson
  */
 public class FiefFlags {
+    private final Logger logger;
     private final ArrayList<String> flagNames = new ArrayList<>();
     private HashMap<String, Integer> integerValues = new HashMap<>();
     private HashMap<String, Boolean> booleanValues = new HashMap<>();
     private HashMap<String, Double> doubleValues = new HashMap<>();
     private HashMap<String, String> stringValues = new HashMap<>();
 
-    public FiefFlags() {
+    public FiefFlags(Logger logger) {
+        this.logger = logger;
         initializeFlagNames();
     }
 
@@ -77,24 +78,24 @@ public class FiefFlags {
 
     public Object getFlag(String flag) {
         if (!isFlag(flag)) {
-            Logger.getInstance().log(String.format("[DEBUG] Flag '%s' was not found!", flag));
+            logger.log(String.format("[DEBUG] Flag '%s' was not found!", flag));
             return false;
         }
 
         if (integerValues.containsKey(flag)) {
-            Logger.getInstance().log(String.format("Flag '%s' was found! Value: '%s'", flag, integerValues.get(flag)));
+            logger.log(String.format("Flag '%s' was found! Value: '%s'", flag, integerValues.get(flag)));
             return integerValues.get(flag);
         }
         else if (booleanValues.containsKey(flag)) {
-            Logger.getInstance().log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, booleanValues.get(flag)));
+            logger.log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, booleanValues.get(flag)));
             return booleanValues.get(flag);
         }
         else if (doubleValues.containsKey(flag)) {
-            Logger.getInstance().log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, doubleValues.get(flag)));
+            logger.log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, doubleValues.get(flag)));
             return doubleValues.get(flag);
         }
         else if (stringValues.containsKey(flag)) {
-            Logger.getInstance().log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, stringValues.get(flag)));
+            logger.log(String.format("[DEBUG] Flag '%s' was found! Value: '%s'", flag, stringValues.get(flag)));
             return stringValues.get(flag);
         }
         return null;

@@ -1,33 +1,27 @@
 package dansplugins.fiefs.services;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.entity.Player;
-
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.entity.Player;
 
 /**
  * @author Daniel McCoy Stephenson
  */
-public class LocalChunkService {
-    private static LocalChunkService instance;
+public class ChunkService {
+    private final PersistentData persistentData;
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
 
-    private LocalChunkService() {
-
-    }
-
-    public static LocalChunkService getInstance() {
-        if (instance == null) {
-            instance = new LocalChunkService();
-        }
-        return instance;
+    public ChunkService(PersistentData persistentData, MedievalFactionsIntegrator medievalFactionsIntegrator) {
+        this.persistentData = persistentData;
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
     }
 
     public ClaimedChunk getClaimedChunk(Chunk chunk) {
-        for (ClaimedChunk claimedChunk : PersistentData.getInstance().getClaimedChunks()) {
+        for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()) {
             if (areChunksEqual(claimedChunk.getChunk(), chunk)) {
                 return claimedChunk;
             }
@@ -36,7 +30,7 @@ public class LocalChunkService {
     }
 
     public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
-        if (!MedievalFactionsIntegrator.getInstance().getAPI().isChunkClaimed(chunk)) {
+        if (!medievalFactionsIntegrator.getAPI().isChunkClaimed(chunk)) {
             player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
             return false;
         }
@@ -47,13 +41,13 @@ public class LocalChunkService {
             return false;
         }
 
-        if (PersistentData.getInstance().getNumChunksClaimedByFief(fief) >= fief.getCumulativePowerLevel()) {
+        if (persistentData.getNumChunksClaimedByFief(fief) >= fief.getCumulativePowerLevel()) {
             player.sendMessage(ChatColor.RED + "Your fief has reached its demesne limit.");
             return false;
         }
 
         ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionName(), fief.getName());
-        PersistentData.getInstance().addChunk(newClaimedChunk);
+        persistentData.addChunk(newClaimedChunk);
         player.sendMessage(ChatColor.GREEN + "Claimed.");
         return true;
     }
@@ -73,7 +67,7 @@ public class LocalChunkService {
         }
 
         // unclaim the chunk
-        PersistentData.getInstance().removeChunk(claimedChunk);
+        persistentData.removeChunk(claimedChunk);
         player.sendMessage(ChatColor.GREEN + "Unclaimed.");
         return true;
     }

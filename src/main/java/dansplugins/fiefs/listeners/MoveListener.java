@@ -1,5 +1,9 @@
-package dansplugins.fiefs.eventhandlers;
+package dansplugins.fiefs.listeners;
 
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.objects.ClaimedChunk;
+import dansplugins.fiefs.services.ChunkService;
+import dansplugins.fiefs.services.ConfigService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,31 +11,35 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
-import dansplugins.fiefs.objects.ClaimedChunk;
-import dansplugins.fiefs.services.LocalChunkService;
-import dansplugins.fiefs.services.LocalConfigService;
-
 /**
  * @author Daniel McCoy Stephenson
  */
-public class MoveHandler implements Listener {
+public class MoveListener implements Listener {
+    private final ConfigService configService;
+    private final ChunkService chunkService;
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+
+    public MoveListener(ConfigService configService, ChunkService chunkService, MedievalFactionsIntegrator medievalFactionsIntegrator) {
+        this.configService = configService;
+        this.chunkService = chunkService;
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+    }
 
     @EventHandler()
     public void handle(PlayerMoveEvent event) {
 
-        if (!LocalConfigService.getInstance().getBoolean("enableTerritoryAlerts")) {
+        if (!configService.getBoolean("enableTerritoryAlerts")) {
             // territory alerts are disabled
             return;
         }
 
         Player player = event.getPlayer();
 
-        ClaimedChunk fromChunk = LocalChunkService.getInstance().getClaimedChunk(event.getFrom().getChunk());
+        ClaimedChunk fromChunk = chunkService.getClaimedChunk(event.getFrom().getChunk());
         if (event.getTo() == null) {
             return;
         }
-        ClaimedChunk toChunk = LocalChunkService.getInstance().getClaimedChunk(event.getTo().getChunk());
+        ClaimedChunk toChunk = chunkService.getClaimedChunk(event.getTo().getChunk());
 
         // if moving from unclaimed land into claimed land
         if (fromChunk == null && toChunk != null) {
@@ -50,7 +58,7 @@ public class MoveHandler implements Listener {
 
         // if moving into unclaimed land
         if (fromChunk != null && toChunk == null) {
-            if (MedievalFactionsIntegrator.getInstance().getAPI().isChunkClaimed(event.getTo().getChunk())) {
+            if (medievalFactionsIntegrator.getAPI().isChunkClaimed(event.getTo().getChunk())) {
                 player.sendMessage(ChatColor.AQUA + "Leaving " + fromChunk.getFief());
             }
         }
@@ -61,8 +69,8 @@ public class MoveHandler implements Listener {
     public void handle(BlockFromToEvent event) {
         // this event handler method will deal with liquid moving from one block to another
 
-        ClaimedChunk fromChunk = LocalChunkService.getInstance().getClaimedChunk(event.getBlock().getChunk());
-        ClaimedChunk toChunk = LocalChunkService.getInstance().getClaimedChunk(event.getToBlock().getChunk());
+        ClaimedChunk fromChunk = chunkService.getClaimedChunk(event.getBlock().getChunk());
+        ClaimedChunk toChunk = chunkService.getClaimedChunk(event.getToBlock().getChunk());
 
         // if moving from unclaimed land into claimed land
         if (fromChunk == null && toChunk != null) {
