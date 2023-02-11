@@ -4,6 +4,7 @@ main: com.dansplugins.fiefs.Fiefs
 api-version: 1.13
 author: DanTheTechMan
 depend: [MedievalFactions]
+description: An expansion for Medieval Factions that allows faction members to create fiefs. Fiefs function as sub-factions, essentially.
 
 commands:
   fiefs:

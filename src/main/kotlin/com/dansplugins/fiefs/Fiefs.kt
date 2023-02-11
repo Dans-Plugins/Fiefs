@@ -10,11 +10,13 @@ class Fiefs : JavaPlugin() {
         config.set("version", description.version)
         saveConfig()
 
-        getCommand("fiefs")?.setExecutor(FiefsCommand())
+        getCommand("fiefs")?.setExecutor(FiefsCommand(this))
+
+        logger.info("Fiefs has been enabled.")
     }
 
     override fun onDisable() {
-        // Plugin shutdown logic
+        logger.info("Fiefs has been disabled.")
     }
 
 
