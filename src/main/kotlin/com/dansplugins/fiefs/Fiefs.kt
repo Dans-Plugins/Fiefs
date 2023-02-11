@@ -1,6 +1,7 @@
 package com.dansplugins.fiefs
 
 import com.dansplugins.fiefs.command.fiefs.FiefsCommand
+import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.java.JavaPlugin
 
 class Fiefs : JavaPlugin() {
@@ -9,6 +10,8 @@ class Fiefs : JavaPlugin() {
         config.options().copyDefaults(true)
         config.set("version", description.version)
         saveConfig()
+
+        Metrics(this, 12743)
 
         getCommand("fiefs")?.setExecutor(FiefsCommand(this))
 
