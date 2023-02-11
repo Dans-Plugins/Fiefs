@@ -1,44 +1,16 @@
 name: Fiefs
-version: '${project.version}'
-main: dansplugins.fiefs.Fiefs
+version: @version@
+main: com.dansplugins.fiefs.Fiefs
 api-version: 1.13
 author: DanTheTechMan
 depend: [MedievalFactions]
 
 commands:
   fiefs:
-  fi:
+    description: The main command for Fiefs.
+    usage: /fiefs
+    aliases: [fi]
 
 permissions:
   fiefs.help:
     default: true
-  fiefs.list:
-    default: true
-  fiefs.create:
-    default: true
-  fiefs.disband:
-    default: true
-  fiefs.claim:
-    default: true
-  fiefs.unclaim:
-    default: true
-  fiefs.checkclaim:
-    default: true
-  fiefs.info:
-    default: true
-  fiefs.invite:
-    default: true
-  fiefs.join:
-    default: true
-  fiefs.leave:
-    default: true
-  fief.members:
-    default: true
-  fief.desc:
-    default: true
-  fief.kick:
-    default: true
-  fief.transfer:
-    default: true
-  fiefs.config:
-    default: op
