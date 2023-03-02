@@ -9,7 +9,6 @@ description: An expansion for Medieval Factions that allows faction members to c
 commands:
   fiefs:
     description: The main command for Fiefs.
-    usage: /fiefs
     aliases: [fi]
 
 permissions:

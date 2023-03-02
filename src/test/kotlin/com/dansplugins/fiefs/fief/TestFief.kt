@@ -13,6 +13,7 @@ class TestFief {
         assertEquals("testFief", fief.getName())
         assertEquals(uuid, fief.getOwnerUUID())
         assertEquals(0, fief.getMembers().size)
+        assertEquals(fief.isMember(uuid), true)
     }
 
     @Test

@@ -19,7 +19,7 @@ class Fief(private val name: String, private val ownerUUID: UUID) {
     }
 
     fun isMember(uuid: UUID): Boolean {
-        return members.contains(uuid)
+        return members.contains(uuid) || ownerUUID == uuid
     }
 
     fun getMembers(): List<UUID> {

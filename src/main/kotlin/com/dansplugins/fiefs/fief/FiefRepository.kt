@@ -54,6 +54,21 @@ class FiefRepository(private val plugin: Fiefs) {
     }
 
     /**
+     * Gets a player's fief from the list.
+     * @param playerUUID The UUID of the player whose fief to get.
+     * @return The Fief which the player is a member of.
+     * @return null if the player is not a member of any fief.
+     */
+    fun getPlayersFief(playerUUID: UUID): Fief? {
+        for (fief in fiefs) {
+            if (fief.isMember(playerUUID)) {
+                return fief
+            }
+        }
+        return null
+    }
+
+    /**
      * Gets a list of all Fiefs.
      * @return A list of all Fiefs.
      */

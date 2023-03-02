@@ -54,4 +54,15 @@ class TestFiefRepository {
         fiefRepository.addFief(fief)
         assertEquals(fief, fiefRepository.getFief(fiefId))
     }
+
+    @Test
+    fun testGetFiefByPlayerUUID() {
+        val mockPlugin = mockk<Fiefs>()
+        val fiefRepository = FiefRepository(mockPlugin)
+        val fief = Fief("testFief", UUID.randomUUID())
+        val playerUUID = UUID.randomUUID()
+        fief.addMember(playerUUID)
+        fiefRepository.addFief(fief)
+        assertEquals(fief, fiefRepository.getPlayersFief(playerUUID))
+    }
 }
