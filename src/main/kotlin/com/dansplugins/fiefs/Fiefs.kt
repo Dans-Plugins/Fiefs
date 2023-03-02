@@ -2,11 +2,16 @@ package com.dansplugins.fiefs
 
 import com.dansplugins.factionsystem.MedievalFactions
 import com.dansplugins.fiefs.command.fiefs.FiefsCommand
+import com.dansplugins.fiefs.fief.FiefFactory
+import com.dansplugins.fiefs.fief.FiefRepository
 import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.java.JavaPlugin
 
 class Fiefs : JavaPlugin() {
     lateinit var medievalFactions: MedievalFactions
+
+    val fiefRepository = FiefRepository(this)
+    val fiefFactory = FiefFactory(this)
 
     override fun onEnable() {
         saveDefaultConfig()

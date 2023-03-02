@@ -12,6 +12,8 @@ class FiefsHelpCommand(private val plugin: Fiefs) : CommandExecutor, TabComplete
         // send list of commands
         sender.sendMessage("${AQUA}=== Fiefs Commands ===")
         sender.sendMessage("${AQUA}/fiefs help - Displays a list of useful commands.")
+        sender.sendMessage("${AQUA}/fiefs create <name> - Creates a fief.")
+        sender.sendMessage("${AQUA}/fiefs list - Lists all fiefs.")
         return true
     }
 

@@ -15,3 +15,10 @@ commands:
 permissions:
   fiefs.help:
     default: true
+    description: Allows the player to view the help menu.
+  fiefs.create:
+    default: true
+    description: Allows the player to create a fief.
+  fiefs.list:
+    default: true
+    description: Allows the player to view a list of all fiefs.
