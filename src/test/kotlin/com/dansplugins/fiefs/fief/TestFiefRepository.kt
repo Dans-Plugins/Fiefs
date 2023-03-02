@@ -50,7 +50,8 @@ class TestFiefRepository {
         val fiefRepository = FiefRepository(mockPlugin)
         val uuid = UUID.randomUUID()
         val fief = Fief("testFief", uuid)
+        val fiefId = fief.getId()
         fiefRepository.addFief(fief)
-        assertEquals(fief, fiefRepository.getFief(uuid))
+        assertEquals(fief, fiefRepository.getFief(fiefId))
     }
 }

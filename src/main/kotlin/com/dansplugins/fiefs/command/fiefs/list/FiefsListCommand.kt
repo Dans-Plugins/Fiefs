@@ -21,7 +21,7 @@ class FiefsListCommand(private val plugin: Fiefs) : CommandExecutor, TabComplete
         alias: String,
         args: Array<out String>
     ): MutableList<String>? {
-        TODO("Not yet implemented")
+        return null
     }
 
 }
