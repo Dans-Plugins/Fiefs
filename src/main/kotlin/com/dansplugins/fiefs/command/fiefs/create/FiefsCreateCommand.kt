@@ -1,6 +1,7 @@
 package com.dansplugins.fiefs.command.fiefs.create
 
 import com.dansplugins.fiefs.Fiefs
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -15,16 +16,16 @@ class FiefsCreateCommand(private val plugin: Fiefs) : CommandExecutor, TabComple
         }
         val name = args.firstOrNull()
         if (name == null) {
-            sender.sendMessage("Please specify a name for the fief.")
+            sender.sendMessage("${ChatColor.RED}" + "Please specify a name for the fief.")
             return false
         }
         if (plugin.fiefRepository.getFief(name) != null) {
-            sender.sendMessage("A fief with that name already exists.")
+            sender.sendMessage("${ChatColor.RED}" + "A fief with that name already exists.")
             return false
         }
         val fief = plugin.fiefFactory.createFief(name, sender.uniqueId)
         plugin.fiefRepository.addFief(fief)
-        sender.sendMessage("Fief created.")
+        sender.sendMessage("${ChatColor.RED}" + "Fief created.")
         return true
     }
 
