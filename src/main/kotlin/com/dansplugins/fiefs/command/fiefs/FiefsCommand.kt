@@ -4,8 +4,7 @@ import com.dansplugins.fiefs.Fiefs
 import com.dansplugins.fiefs.command.fiefs.create.FiefsCreateCommand
 import com.dansplugins.fiefs.command.fiefs.help.FiefsHelpCommand
 import com.dansplugins.fiefs.command.fiefs.list.FiefsListCommand
-import org.bukkit.ChatColor.AQUA
-import org.bukkit.ChatColor.GREEN
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -29,12 +28,12 @@ class FiefsCommand(private val plugin: Fiefs) : CommandExecutor, TabCompleter {
             "list" -> listCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
             else -> {
                 // send plugin information
-                sender.sendMessage("$AQUA" + "Fiefs v${plugin.description.version}")
-                sender.sendMessage("$AQUA" + "Author: ${plugin.description.authors}")
-                sender.sendMessage("$AQUA" + "Description: ${plugin.description.description}")
+                sender.sendMessage("${ChatColor.AQUA}Fiefs v${plugin.description.version}")
+                sender.sendMessage("${ChatColor.AQUA}Author: ${plugin.description.authors}")
+                sender.sendMessage("${ChatColor.AQUA}Description: ${plugin.description.description}")
 
                 // send help message
-                sender.sendMessage("$GREEN" + "Type /fiefs help for a list of commands.")
+                sender.sendMessage("${ChatColor.GREEN}Type /fiefs help for a list of commands.")
                 return true
             }
         }
