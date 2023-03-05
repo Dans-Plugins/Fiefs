@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 class FiefsCreateCommand(private val plugin: Fiefs) : CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
-            sender.sendMessage("This command can only be run by a player.")
+            sender.sendMessage("${ChatColor.RED}" + "This command can only be run by a player.")
             return false
         }
         val name = args.firstOrNull()
