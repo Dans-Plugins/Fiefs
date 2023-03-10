@@ -11,19 +11,15 @@ import org.junit.jupiter.api.Test
 
 class TestFiefsCommand {
 
-    private fun createMockPlugin(): Fiefs {
-        val mockPlugin = mockk<Fiefs>() {
-            every { description.version } returns "1.0.0"
-            every { description.authors } returns listOf("Dan")
-            every { description.description } returns "A plugin about fiefs."
-        }
-        return mockPlugin
+    private val mockPlugin = mockk<Fiefs>() {
+        every { description.version } returns "1.0.0"
+        every { description.authors } returns listOf("Dan")
+        every { description.description } returns "A plugin about fiefs."
     }
 
     @Test
     fun testFiefsCommandNoArguments() {
         // prepare
-        val mockPlugin = createMockPlugin()
         val mockSender = mockk<CommandSender>() {
             every { sendMessage(any<String>()) } returns Unit
         }
@@ -42,7 +38,6 @@ class TestFiefsCommand {
     @Test
     fun testFiefsCommandHelpArgument() {
         // prepare
-        val mockPlugin = createMockPlugin()
         val mockSender = mockk<CommandSender>() {
             every { sendMessage(any<String>()) } returns Unit
         }
