@@ -13,7 +13,7 @@ class TestFief {
         assertEquals("testFief", fief.getName())
         assertEquals(uuid, fief.getOwnerUUID())
         assertEquals(0, fief.getMembers().size)
-        assertEquals(fief.isMember(uuid), true)
+        assertEquals(true, fief.isMember(uuid))
     }
 
     @Test
@@ -22,7 +22,7 @@ class TestFief {
         val fief = Fief("testFief", uuid)
         val memberUUID = UUID.randomUUID()
         fief.addMember(memberUUID)
-        assertEquals(1, fief.getMembers().size)
+        assertEquals(fief.getMembers().size, 1)
         assertEquals(memberUUID, fief.getMembers()[0])
     }
 
