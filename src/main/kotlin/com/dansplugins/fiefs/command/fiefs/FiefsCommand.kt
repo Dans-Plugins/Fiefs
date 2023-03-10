@@ -44,7 +44,7 @@ class FiefsCommand(private val plugin: Fiefs) : CommandExecutor, TabCompleter {
         command: Command,
         alias: String,
         args: Array<out String>
-    ): List<String>? {
+    ): List<String> {
         return when (args.size) {
             1 -> subcommands.filter { it.startsWith(args[0]) }.toMutableList()
             else -> when(args.first().lowercase()) {
@@ -52,7 +52,7 @@ class FiefsCommand(private val plugin: Fiefs) : CommandExecutor, TabCompleter {
                 "create" -> createCommand.onTabComplete(sender, command, alias, args.drop(1).toTypedArray())
                 "list" -> listCommand.onTabComplete(sender, command, alias, args.drop(1).toTypedArray())
                 else -> emptyList()
-            }
+            } as List<String>
         }
     }
 
