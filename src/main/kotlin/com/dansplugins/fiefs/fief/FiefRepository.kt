@@ -42,12 +42,12 @@ class FiefRepository(private val plugin: Fiefs) {
 
     /**
      * Gets a Fief from the list.
-     * @param uuid The UUID of the Fief to get.
+     * @param mfFiefId The ID of the Fief to get.
      * @return The Fief with the given UUID.
      */
-    fun getFief(uuid: UUID): Fief? {
+    fun getFief(mfFiefId: MfFiefId): Fief? {
         for (fief in fiefs) {
-            if (fief.getId() == uuid) {
+            if (fief.getId() == mfFiefId) {
                 return fief
             }
         }
@@ -56,7 +56,7 @@ class FiefRepository(private val plugin: Fiefs) {
 
     /**
      * Gets a player's fief from the list.
-     * @param playerUUID The UUID of the player whose fief to get.
+     * @param mfPlayerId The ID of the player whose fief to get.
      * @return The Fief which the player is a member of.
      * @return null if the player is not a member of any fief.
      */

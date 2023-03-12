@@ -5,11 +5,11 @@ import com.dansplugins.factionsystem.player.MfPlayerId
 import java.util.UUID
 
 data class Fief(private val name: String, private val ownerMfPlayerId: MfPlayerId, private val mfFactionid: MfFactionId) {
-    private var uuid = UUID.randomUUID()
+    private var id = MfFiefId.generate()
     private var members: MutableList<MfPlayerId> = mutableListOf()
 
-    fun getId(): UUID {
-        return uuid
+    fun getId(): MfFiefId {
+        return id
     }
 
     fun addMember(mfPlayerId: MfPlayerId) {
