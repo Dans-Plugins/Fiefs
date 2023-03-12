@@ -25,8 +25,7 @@ class FiefsListCommand(private val plugin: Fiefs) : CommandExecutor, TabComplete
         command: Command,
         alias: String,
         args: Array<out String>
-    ): MutableList<String>? {
-        return null
+    ): List<String> {
+        return emptyList()
     }
-
 }
