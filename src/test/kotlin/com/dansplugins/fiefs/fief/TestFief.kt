@@ -1,5 +1,6 @@
 package com.dansplugins.fiefs.fief
 
+import com.dansplugins.factionsystem.player.MfPlayerId
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -8,40 +9,39 @@ class TestFief {
 
     @Test
     fun testInitialization() {
-        val uuid = UUID.randomUUID()
-        val fief = Fief("testFief", uuid)
+        val mfPlayerId = MfPlayerId("test")
+        val fief = Fief("testFief", mfPlayerId)
         assertEquals("testFief", fief.getName())
-        assertEquals(uuid, fief.getOwnerUUID())
+        assertEquals(mfPlayerId, fief.getOwnerId())
         assertEquals(0, fief.getMembers().size)
-        assertEquals(true, fief.isMember(uuid))
+        assertEquals(true, fief.isMember(mfPlayerId))
     }
 
     @Test
     fun testAddMember() {
-        val uuid = UUID.randomUUID()
-        val fief = Fief("testFief", uuid)
-        val memberUUID = UUID.randomUUID()
-        fief.addMember(memberUUID)
+        val mfPlayerId = MfPlayerId("test")
+        val fief = Fief("testFief", mfPlayerId)
+        fief.addMember(mfPlayerId)
         assertEquals(fief.getMembers().size, 1)
-        assertEquals(memberUUID, fief.getMembers()[0])
+        assertEquals(mfPlayerId, fief.getMembers()[0])
     }
 
     @Test
     fun testRemoveMember() {
-        val uuid = UUID.randomUUID()
-        val fief = Fief("testFief", uuid)
+        val mfPlayerId = MfPlayerId("test")
+        val fief = Fief("testFief", mfPlayerId)
         val memberUUID = UUID.randomUUID()
-        fief.addMember(memberUUID)
-        fief.removeMember(memberUUID)
+        fief.addMember(mfPlayerId)
+        fief.removeMember(mfPlayerId)
         assertEquals(0, fief.getMembers().size)
     }
 
     @Test
     fun testIsMember() {
-        val uuid = UUID.randomUUID()
-        val fief = Fief("testFief", uuid)
+        val mfPlayerId = MfPlayerId("test")
+        val fief = Fief("testFief", mfPlayerId)
         val memberUUID = UUID.randomUUID()
-        fief.addMember(memberUUID)
-        assertEquals(true, fief.isMember(memberUUID))
+        fief.addMember(mfPlayerId)
+        assertEquals(true, fief.isMember(mfPlayerId))
     }
 }

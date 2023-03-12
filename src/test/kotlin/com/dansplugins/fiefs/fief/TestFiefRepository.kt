@@ -1,5 +1,6 @@
 package com.dansplugins.fiefs.fief
 
+import com.dansplugins.factionsystem.player.MfPlayerId
 import com.dansplugins.fiefs.Fiefs
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,7 +20,7 @@ class TestFiefRepository {
     fun testAddFief() {
         val mockPlugin = mockk<Fiefs>()
         val fiefRepository = FiefRepository(mockPlugin)
-        val fief = Fief("testFief", UUID.randomUUID())
+        val fief = Fief("testFief", MfPlayerId("test"))
         fiefRepository.addFief(fief)
         assertEquals(1, fiefRepository.getFiefs().size)
         assertEquals(fief, fiefRepository.getFiefs()[0])
@@ -29,7 +30,7 @@ class TestFiefRepository {
     fun testRemoveFief() {
         val mockPlugin = mockk<Fiefs>()
         val fiefRepository = FiefRepository(mockPlugin)
-        val fief = Fief("testFief", UUID.randomUUID())
+        val fief = Fief("testFief", MfPlayerId("test"))
         fiefRepository.addFief(fief)
         fiefRepository.removeFief(fief)
         assertEquals(0, fiefRepository.getFiefs().size)
@@ -39,7 +40,7 @@ class TestFiefRepository {
     fun testGetFiefByName() {
         val mockPlugin = mockk<Fiefs>()
         val fiefRepository = FiefRepository(mockPlugin)
-        val fief = Fief("testFief", UUID.randomUUID())
+        val fief = Fief("testFief", MfPlayerId("test"))
         fiefRepository.addFief(fief)
         assertEquals(fief, fiefRepository.getFief("testFief"))
     }
@@ -49,7 +50,7 @@ class TestFiefRepository {
         val mockPlugin = mockk<Fiefs>()
         val fiefRepository = FiefRepository(mockPlugin)
         val uuid = UUID.randomUUID()
-        val fief = Fief("testFief", uuid)
+        val fief = Fief("testFief", MfPlayerId("test"))
         val fiefId = fief.getId()
         fiefRepository.addFief(fief)
         assertEquals(fief, fiefRepository.getFief(fiefId))
@@ -59,10 +60,10 @@ class TestFiefRepository {
     fun testGetFiefByPlayerUUID() {
         val mockPlugin = mockk<Fiefs>()
         val fiefRepository = FiefRepository(mockPlugin)
-        val fief = Fief("testFief", UUID.randomUUID())
-        val playerUUID = UUID.randomUUID()
-        fief.addMember(playerUUID)
+        val fief = Fief("testFief", MfPlayerId("test"))
+        val playerId = MfPlayerId("test")
+        fief.addMember(playerId)
         fiefRepository.addFief(fief)
-        assertEquals(fief, fiefRepository.getPlayersFief(playerUUID))
+        assertEquals(fief, fiefRepository.getPlayersFief(playerId))
     }
 }

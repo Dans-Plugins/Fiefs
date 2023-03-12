@@ -34,13 +34,13 @@ class FiefsCreateCommand(private val plugin: Fiefs) : CommandExecutor, TabComple
         }
 
         // player must not be in a fief already
-        val playersFief = plugin.fiefRepository.getPlayersFief(sender.uniqueId)
+        val playersFief = plugin.fiefRepository.getPlayersFief(mfPlayer.id)
         if (playersFief != null) {
             sender.sendMessage("${ChatColor.RED}You're already in a fief. You must leave it first.")
             return false
         }
 
-        val newFief = Fief(name, sender.uniqueId)
+        val newFief = Fief(name, mfPlayer.id)
         plugin.fiefRepository.addFief(newFief)
         sender.sendMessage("${ChatColor.GREEN}Fief created.")
         return true

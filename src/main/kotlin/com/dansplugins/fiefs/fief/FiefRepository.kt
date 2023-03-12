@@ -1,5 +1,6 @@
 package com.dansplugins.fiefs.fief
 
+import com.dansplugins.factionsystem.player.MfPlayerId
 import com.dansplugins.fiefs.Fiefs
 import java.util.*
 
@@ -59,9 +60,9 @@ class FiefRepository(private val plugin: Fiefs) {
      * @return The Fief which the player is a member of.
      * @return null if the player is not a member of any fief.
      */
-    fun getPlayersFief(playerUUID: UUID): Fief? {
+    fun getPlayersFief(mfPlayerId: MfPlayerId): Fief? {
         for (fief in fiefs) {
-            if (fief.isMember(playerUUID)) {
+            if (fief.isMember(mfPlayerId)) {
                 return fief
             }
         }

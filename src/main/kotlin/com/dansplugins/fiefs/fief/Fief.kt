@@ -1,33 +1,34 @@
 package com.dansplugins.fiefs.fief
 
+import com.dansplugins.factionsystem.player.MfPlayerId
 import java.util.UUID
 
-data class Fief(private val name: String, private val ownerUUID: UUID) {
+data class Fief(private val name: String, private val ownerMfPlayerId: MfPlayerId) {
     private var uuid = UUID.randomUUID()
-    private var members: MutableList<UUID> = mutableListOf()
+    private var members: MutableList<MfPlayerId> = mutableListOf()
 
     fun getId(): UUID {
         return uuid
     }
 
-    fun addMember(uuid: UUID) {
-        members.add(uuid)
+    fun addMember(mfPlayerId: MfPlayerId) {
+        members.add(mfPlayerId)
     }
 
-    fun removeMember(uuid: UUID) {
-        members.remove(uuid)
+    fun removeMember(mfPlayerId: MfPlayerId) {
+        members.remove(mfPlayerId)
     }
 
-    fun isMember(uuid: UUID): Boolean {
-        return members.contains(uuid) || ownerUUID == uuid
+    fun isMember(mfPlayerId: MfPlayerId): Boolean {
+        return members.contains(mfPlayerId) || ownerMfPlayerId == mfPlayerId
     }
 
-    fun getMembers(): List<UUID> {
+    fun getMembers(): List<MfPlayerId> {
         return members
     }
 
-    fun getOwnerUUID(): UUID {
-        return ownerUUID
+    fun getOwnerId(): MfPlayerId {
+        return ownerMfPlayerId
     }
 
     fun getName(): String {
