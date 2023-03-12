@@ -8,10 +8,16 @@ description: An expansion for Medieval Factions that allows faction members to c
 
 commands:
   fiefs:
-    description: The main command for Fiefs.
-    usage: /fiefs
+    description: The main command for Fiefs. Subcommands include:: help, create, list
     aliases: [fi]
 
 permissions:
   fiefs.help:
     default: true
+    description: Allows the player to view the help menu.
+  fiefs.create:
+    default: true
+    description: Allows the player to create a fief.
+  fiefs.list:
+    default: true
+    description: Allows the player to view a list of all fiefs.
