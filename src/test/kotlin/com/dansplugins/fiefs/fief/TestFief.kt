@@ -1,5 +1,6 @@
 package com.dansplugins.fiefs.fief
 
+import com.dansplugins.factionsystem.faction.MfFactionId
 import com.dansplugins.factionsystem.player.MfPlayerId
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -10,7 +11,8 @@ class TestFief {
     @Test
     fun testInitialization() {
         val mfPlayerId = MfPlayerId("test")
-        val fief = Fief("testFief", mfPlayerId)
+        val mfFactionId = MfFactionId("test")
+        val fief = Fief("testFief", mfPlayerId, mfFactionId)
         assertEquals("testFief", fief.getName())
         assertEquals(mfPlayerId, fief.getOwnerId())
         assertEquals(0, fief.getMembers().size)
@@ -20,7 +22,8 @@ class TestFief {
     @Test
     fun testAddMember() {
         val mfPlayerId = MfPlayerId("test")
-        val fief = Fief("testFief", mfPlayerId)
+        val mfFactionId = MfFactionId("test")
+        val fief = Fief("testFief", mfPlayerId, mfFactionId)
         fief.addMember(mfPlayerId)
         assertEquals(fief.getMembers().size, 1)
         assertEquals(mfPlayerId, fief.getMembers()[0])
@@ -29,8 +32,8 @@ class TestFief {
     @Test
     fun testRemoveMember() {
         val mfPlayerId = MfPlayerId("test")
-        val fief = Fief("testFief", mfPlayerId)
-        val memberUUID = UUID.randomUUID()
+        val mfFactionId = MfFactionId("test")
+        val fief = Fief("testFief", mfPlayerId, mfFactionId)
         fief.addMember(mfPlayerId)
         fief.removeMember(mfPlayerId)
         assertEquals(0, fief.getMembers().size)
@@ -39,8 +42,8 @@ class TestFief {
     @Test
     fun testIsMember() {
         val mfPlayerId = MfPlayerId("test")
-        val fief = Fief("testFief", mfPlayerId)
-        val memberUUID = UUID.randomUUID()
+        val mfFactionId = MfFactionId("test")
+        val fief = Fief("testFief", mfPlayerId, mfFactionId)
         fief.addMember(mfPlayerId)
         assertEquals(true, fief.isMember(mfPlayerId))
     }

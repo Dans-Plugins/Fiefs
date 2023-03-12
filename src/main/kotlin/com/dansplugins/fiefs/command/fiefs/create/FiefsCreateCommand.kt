@@ -40,7 +40,7 @@ class FiefsCreateCommand(private val plugin: Fiefs) : CommandExecutor, TabComple
             return false
         }
 
-        val newFief = Fief(name, mfPlayer.id)
+        val newFief = Fief(name, mfPlayer.id, faction.id)
         plugin.fiefRepository.addFief(newFief)
         sender.sendMessage("${ChatColor.GREEN}Fief created.")
         return true
