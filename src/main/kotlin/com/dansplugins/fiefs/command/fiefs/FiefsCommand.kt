@@ -52,7 +52,7 @@ class FiefsCommand(private val plugin: Fiefs) : CommandExecutor, TabCompleter {
                 "create" -> createCommand.onTabComplete(sender, command, alias, args.drop(1).toTypedArray())
                 "list" -> listCommand.onTabComplete(sender, command, alias, args.drop(1).toTypedArray())
                 else -> emptyList()
-            } as List<String>
+            }
         }
     }
 
