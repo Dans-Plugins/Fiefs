@@ -5,6 +5,7 @@ import com.dansplugins.fiefs.command.fiefs.FiefsCommand
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.junit.jupiter.api.Test
@@ -32,24 +33,11 @@ class TestFiefsCommand {
         fiefsCommand.onCommand(mockSender, mockCommand, label, args)
 
         // verify
-        verify { mockSender.sendMessage(any<String>()); }
-    }
-
-    @Test
-    fun testFiefsCommandHelpArgument() {
-        // prepare
-        val mockSender = mockk<CommandSender>() {
-            every { sendMessage(any<String>()) } returns Unit
-        }
-        val mockCommand = mockk<Command>()
-        val args = arrayOf("help")
-        val label = "fiefs"
-        val fiefsCommand = FiefsCommand(mockPlugin)
-
-        // execute
-        fiefsCommand.onCommand(mockSender, mockCommand, label, args)
-
-        // verify
-        verify { mockSender.sendMessage(any<String>()); }
+        val expectedAuthors = mockPlugin.description.authors
+        val expectedDescription = mockPlugin.description.description
+        verify(exactly = 1) { mockSender.sendMessage("${ChatColor.AQUA}Fiefs v1.0.0") }
+        verify(exactly = 1) { mockSender.sendMessage("${ChatColor.AQUA}Author: $expectedAuthors") }
+        verify(exactly = 1) { mockSender.sendMessage("${ChatColor.AQUA}Description: $expectedDescription") }
+        verify(exactly = 1) { mockSender.sendMessage("${ChatColor.GREEN}Type /fiefs help for a list of commands.") }
     }
 }
