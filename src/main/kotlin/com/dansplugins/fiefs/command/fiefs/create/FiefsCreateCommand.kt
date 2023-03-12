@@ -1,6 +1,7 @@
 package com.dansplugins.fiefs.command.fiefs.create
 
 import com.dansplugins.fiefs.Fiefs
+import com.dansplugins.fiefs.fief.Fief
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -39,7 +40,7 @@ class FiefsCreateCommand(private val plugin: Fiefs) : CommandExecutor, TabComple
             return false
         }
 
-        val newFief = plugin.fiefFactory.createFief(name, sender.uniqueId)
+        val newFief = Fief(name, sender.uniqueId)
         plugin.fiefRepository.addFief(newFief)
         sender.sendMessage("${ChatColor.GREEN}Fief created.")
         return true

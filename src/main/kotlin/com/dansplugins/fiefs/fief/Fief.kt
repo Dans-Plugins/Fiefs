@@ -2,7 +2,7 @@ package com.dansplugins.fiefs.fief
 
 import java.util.UUID
 
-class Fief(private val name: String, private val ownerUUID: UUID) {
+data class Fief(private val name: String, private val ownerUUID: UUID) {
     private var uuid = UUID.randomUUID()
     private var members: MutableList<UUID> = mutableListOf()
 
