@@ -34,8 +34,22 @@ public class FactionEventListener implements Listener {
             return;
         }
         String newName = event.getName();
+        
+        // Update all fiefs where any member belongs to this faction
         for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
+            // Check if any fief member is in the renamed faction
+            boolean belongsToFaction = false;
+            for (UUID memberUUID : fief.getMembers()) {
+                com.dansplugins.factionsystem.player.MfPlayerId playerId = 
+                    new com.dansplugins.factionsystem.player.MfPlayerId(memberUUID.toString());
+                com.dansplugins.factionsystem.faction.MfFaction memberFaction = 
+                    medievalFactions.getServices().getFactionService().getFaction(playerId);
+                if (memberFaction != null && memberFaction.getId().equals(event.getFactionId())) {
+                    belongsToFaction = true;
+                    break;
+                }
+            }
+            if (belongsToFaction) {
                 fief.setFactionName(newName);
             }
         }
