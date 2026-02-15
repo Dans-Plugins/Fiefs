@@ -7,10 +7,12 @@ import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.services.ChunkService;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author Daniel McCoy Stephenson
@@ -57,8 +59,12 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionUnclaimEvent event) {
-        org.bukkit.Chunk bukkitChunk = Bukkit.getWorld(event.getClaim().getWorldId())
-            .getChunkAt(event.getClaim().getX(), event.getClaim().getZ());
+        World world = Bukkit.getWorld(event.getClaim().getWorldId());
+        if (world == null) {
+            // World not loaded or unknown, cannot process unclaim
+            return;
+        }
+        org.bukkit.Chunk bukkitChunk = world.getChunkAt(event.getClaim().getX(), event.getClaim().getZ());
         ClaimedChunk claimedChunk = chunkService.getClaimedChunk(bukkitChunk);
         if (claimedChunk != null) {
             persistentData.removeChunk(claimedChunk);
@@ -67,14 +73,10 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionLeaveEvent event) {
-        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
-            medievalFactions.getServices().getPlayerService().getPlayer(event.getPlayerId());
-        if (mfPlayer == null) {
-            return;
-        }
-        Fief fief = persistentData.getFief(mfPlayer.getName());
+        UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+        Fief fief = persistentData.getFief(playerUUID);
         if (fief != null) {
-            fief.removeMember(java.util.UUID.fromString(event.getPlayerId().getValue()));
+            fief.removeMember(playerUUID);
 
             // TODO: inform fief members that the player left the faction
         }
@@ -102,14 +104,10 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionKickEvent event) {
-        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
-            medievalFactions.getServices().getPlayerService().getPlayer(event.getPlayerId());
-        if (mfPlayer == null) {
-            return;
-        }
-        Fief fief = persistentData.getFief(mfPlayer.getName());
+        UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+        Fief fief = persistentData.getFief(playerUUID);
         if (fief != null) {
-            fief.removeMember(java.util.UUID.fromString(event.getPlayerId().getValue()));
+            fief.removeMember(playerUUID);
         }
 
         // TODO: inform fief members that the player was kicked from the faction

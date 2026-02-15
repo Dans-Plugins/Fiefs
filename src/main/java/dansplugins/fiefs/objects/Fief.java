@@ -93,6 +93,10 @@ public class Fief {
         return members.contains(playerUUID);
     }
 
+    public ArrayList<UUID> getMembers() {
+        return new ArrayList<>(members);
+    }
+
     public void invitePlayer(UUID playerUUID) {
         if (!isInvited(playerUUID)) {
             invitedPlayers.add(playerUUID);
