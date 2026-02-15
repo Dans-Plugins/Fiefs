@@ -93,7 +93,7 @@ public class InviteCommand extends AbstractPluginCommand {
 
         MfFaction targetsFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(targetMfPlayer.getId());
         if (targetsFaction == null || !targetsFaction.getName().equalsIgnoreCase(playersFaction.getName())) {
-            player.sendMessage(ChatColor.RED + "'" + targetName + "'is not in your faction.");
+            player.sendMessage(ChatColor.RED + "'" + targetName + "' is not in your faction.");
             return false;
         }
 
