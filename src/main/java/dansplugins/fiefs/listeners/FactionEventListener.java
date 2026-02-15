@@ -82,7 +82,7 @@ public class FactionEventListener implements Listener {
                 // TODO: inform fief members that the player left the faction
             }
         } catch (IllegalArgumentException e) {
-            // Invalid UUID format, cannot process leave event
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionLeaveEvent: " + event.getPlayerId().getValue());
         }
     }
 
@@ -117,7 +117,7 @@ public class FactionEventListener implements Listener {
 
             // TODO: inform fief members that the player was kicked from the faction
         } catch (IllegalArgumentException e) {
-            // Invalid UUID format, cannot process kick event
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionKickEvent: " + event.getPlayerId().getValue());
         }
     }
 }
