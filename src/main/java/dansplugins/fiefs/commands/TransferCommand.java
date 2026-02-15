@@ -1,6 +1,7 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
+import com.dansplugins.factionsystem.player.MfPlayer;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -41,7 +42,13 @@ public class TransferCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MF_Faction playersFaction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        if (mfPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Could not load your player data.");
+            return false;
+        }
+
+        MfFaction playersFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
         if (playersFaction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
