@@ -1,6 +1,6 @@
 package dansplugins.fiefs.data;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
@@ -55,7 +55,7 @@ public class PersistentData {
         return null;
     }
 
-    public ArrayList<Fief> getFiefsOfFaction(MF_Faction faction) {
+    public ArrayList<Fief> getFiefsOfFaction(MfFaction faction) {
         ArrayList<Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
             if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
@@ -98,7 +98,9 @@ public class PersistentData {
 
     public void sendListOfFiefsToPlayer(Player player) {
 
-        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(
+            medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player).getId()
+        );
 
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You are not in a faction.");

@@ -30,7 +30,7 @@ public class ChunkService {
     }
 
     public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
-        if (!medievalFactionsIntegrator.getAPI().isChunkClaimed(chunk)) {
+        if (medievalFactionsIntegrator.getAPI().getServices().getClaimService().getClaim(chunk) == null) {
             player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
             return false;
         }

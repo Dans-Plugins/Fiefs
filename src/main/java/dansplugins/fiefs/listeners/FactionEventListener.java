@@ -1,10 +1,12 @@
 package dansplugins.fiefs.listeners;
 
-import dansplugins.factionsystem.events.*;
+import com.dansplugins.factionsystem.MedievalFactions;
+import com.dansplugins.factionsystem.event.faction.*;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.services.ChunkService;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -16,18 +18,24 @@ import java.util.ArrayList;
 public class FactionEventListener implements Listener {
     private final PersistentData persistentData;
     private final ChunkService chunkService;
+    private final MedievalFactions medievalFactions;
 
-    public FactionEventListener(PersistentData persistentData, ChunkService chunkService) {
+    public FactionEventListener(PersistentData persistentData, ChunkService chunkService, MedievalFactions medievalFactions) {
         this.persistentData = persistentData;
         this.chunkService = chunkService;
+        this.medievalFactions = medievalFactions;
     }
 
     @EventHandler()
     public void handle(FactionRenameEvent event) {
-        String oldName = event.getCurrentName();
-        String newName = event.getProposedName();
+        com.dansplugins.factionsystem.faction.MfFaction faction = 
+            medievalFactions.getServices().getFactionService().getFaction(event.getFactionId());
+        if (faction == null) {
+            return;
+        }
+        String newName = event.getName();
         for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(oldName)) {
+            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
                 fief.setFactionName(newName);
             }
         }
@@ -35,7 +43,9 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionUnclaimEvent event) {
-        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(event.getChunk());
+        org.bukkit.Chunk bukkitChunk = Bukkit.getWorld(event.getClaim().getWorldId())
+            .getChunkAt(event.getClaim().getX(), event.getClaim().getZ());
+        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(bukkitChunk);
         if (claimedChunk != null) {
             persistentData.removeChunk(claimedChunk);
         }
@@ -43,9 +53,14 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionLeaveEvent event) {
-        Fief fief = persistentData.getFief(event.getOfflinePlayer().getName());
+        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
+            medievalFactions.getServices().getPlayerService().getPlayer(event.getPlayerId());
+        if (mfPlayer == null) {
+            return;
+        }
+        Fief fief = persistentData.getFief(mfPlayer.getName());
         if (fief != null) {
-            fief.removeMember(event.getOfflinePlayer().getUniqueId());
+            fief.removeMember(java.util.UUID.fromString(event.getPlayerId().getValue()));
 
             // TODO: inform fief members that the player left the faction
         }
@@ -53,9 +68,14 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionDisbandEvent event) {
+        com.dansplugins.factionsystem.faction.MfFaction faction = 
+            medievalFactions.getServices().getFactionService().getFaction(event.getFactionId());
+        if (faction == null) {
+            return;
+        }
         ArrayList<Fief> toRemove = new ArrayList<>();
         for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(event.getFaction().getName())) {
+            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
                 toRemove.add(fief);
             }
         }
@@ -68,9 +88,14 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionKickEvent event) {
-        Fief fief = persistentData.getFief(event.getOfflinePlayer().getName());
+        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
+            medievalFactions.getServices().getPlayerService().getPlayer(event.getPlayerId());
+        if (mfPlayer == null) {
+            return;
+        }
+        Fief fief = persistentData.getFief(mfPlayer.getName());
         if (fief != null) {
-            fief.removeMember(event.getOfflinePlayer().getUniqueId());
+            fief.removeMember(java.util.UUID.fromString(event.getPlayerId().getValue()));
         }
 
         // TODO: inform fief members that the player was kicked from the faction
