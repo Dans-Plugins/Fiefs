@@ -73,12 +73,16 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionLeaveEvent event) {
-        UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
-        Fief fief = persistentData.getFief(playerUUID);
-        if (fief != null) {
-            fief.removeMember(playerUUID);
+        try {
+            UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+            Fief fief = persistentData.getFief(playerUUID);
+            if (fief != null) {
+                fief.removeMember(playerUUID);
 
-            // TODO: inform fief members that the player left the faction
+                // TODO: inform fief members that the player left the faction
+            }
+        } catch (IllegalArgumentException e) {
+            // Invalid UUID format, cannot process leave event
         }
     }
 
@@ -104,12 +108,16 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionKickEvent event) {
-        UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
-        Fief fief = persistentData.getFief(playerUUID);
-        if (fief != null) {
-            fief.removeMember(playerUUID);
-        }
+        try {
+            UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+            Fief fief = persistentData.getFief(playerUUID);
+            if (fief != null) {
+                fief.removeMember(playerUUID);
+            }
 
-        // TODO: inform fief members that the player was kicked from the faction
+            // TODO: inform fief members that the player was kicked from the faction
+        } catch (IllegalArgumentException e) {
+            // Invalid UUID format, cannot process kick event
+        }
     }
 }
