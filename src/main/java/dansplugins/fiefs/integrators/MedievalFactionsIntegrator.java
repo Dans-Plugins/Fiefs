@@ -1,24 +1,28 @@
 package dansplugins.fiefs.integrators;
 
-import dansplugins.factionsystem.externalapi.MedievalFactionsAPI;
+import com.dansplugins.factionsystem.MedievalFactions;
 import dansplugins.fiefs.utils.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class MedievalFactionsIntegrator {
 
-    private MedievalFactionsAPI mf_api = null;
+    private MedievalFactions medievalFactions = null;
 
     public MedievalFactionsIntegrator(Logger logger) {
         if (isMedievalFactionsPresent()) {
             logger.log("[DEBUG] Medieval Factions was found successfully!");
             try {
-                mf_api = new MedievalFactionsAPI();
+                Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("MedievalFactions");
+                if (plugin instanceof MedievalFactions) {
+                    medievalFactions = (MedievalFactions) plugin;
+                }
             }
             catch(NoClassDefFoundError e) {
-                System.out.println("[Fiefs] There was a problem instantiating the Medieval Factions API. Medieval Factions might need to be updated.");
+                System.out.println("[Fiefs] There was a problem accessing Medieval Factions. Medieval Factions might need to be updated.");
             }
         }
         else {
@@ -27,14 +31,14 @@ public class MedievalFactionsIntegrator {
     }
 
     public boolean isMedievalFactionsAPIAvailable() {
-        return isMedievalFactionsPresent() && mf_api != null;
+        return isMedievalFactionsPresent() && medievalFactions != null;
     }
 
     private boolean isMedievalFactionsPresent() {
         return (Bukkit.getServer().getPluginManager().getPlugin("MedievalFactions") != null);
     }
 
-    public MedievalFactionsAPI getAPI() {
-        return mf_api;
+    public MedievalFactions getAPI() {
+        return medievalFactions;
     }
 }

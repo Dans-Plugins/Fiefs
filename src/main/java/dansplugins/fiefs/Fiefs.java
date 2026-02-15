@@ -1,6 +1,5 @@
 package dansplugins.fiefs;
 
-import dansplugins.factionsystem.eventhandlers.JoinHandler;
 import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.commands.*;
 import dansplugins.fiefs.data.PersistentData;
@@ -144,9 +143,7 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     private void registerEventHandlers() {
         EventHandlerRegistry eventHandlerRegistry = new EventHandlerRegistry();
-        ArrayList<Listener> listeners = new ArrayList<>(Arrays.asList(
-                new JoinHandler()
-        ));
+        ArrayList<Listener> listeners = new ArrayList<>();
         eventHandlerRegistry.registerEventHandlers(listeners, this);
     }
 
