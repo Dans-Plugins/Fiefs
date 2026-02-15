@@ -1,11 +1,11 @@
 package dansplugins.fiefs.listeners;
 
-import dansplugins.factionsystem.utils.Logger;
 import dansplugins.fiefs.Fiefs;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
 import dansplugins.fiefs.services.ChunkService;
+import dansplugins.fiefs.utils.Logger;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
