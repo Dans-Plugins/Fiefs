@@ -149,7 +149,7 @@ public final class Fiefs extends PonderBukkitPlugin {
         ArrayList<Listener> listeners = new ArrayList<>(Arrays.asList(
                 new MoveListener(configService, chunkService, medievalFactionsIntegrator),
                 new InteractionListener(chunkService, persistentData, logger, this),
-                new FactionEventListener(persistentData, chunkService, medievalFactionsIntegrator.getAPI())
+                new FactionEventListener(persistentData, medievalFactionsIntegrator.getAPI())
         ));
         eventHandlerRegistry.registerEventHandlers(listeners, this);
     }

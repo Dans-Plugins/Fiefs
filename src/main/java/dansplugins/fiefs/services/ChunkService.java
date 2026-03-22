@@ -30,9 +30,24 @@ public class ChunkService {
     }
 
     public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
-        if (medievalFactionsIntegrator.getAPI().getServices().getClaimService().getClaim(chunk) == null) {
+        com.dansplugins.factionsystem.claim.MfClaimedChunk mfClaim = 
+            medievalFactionsIntegrator.getAPI().getServices().getClaimService().getClaim(chunk);
+        
+        if (mfClaim == null) {
             player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
             return false;
+        }
+        
+        // Verify the MF claim belongs to the player's faction
+        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
+            medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        if (mfPlayer != null) {
+            com.dansplugins.factionsystem.faction.MfFaction playerFaction = 
+                medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+            if (playerFaction == null || !mfClaim.getFactionId().equals(playerFaction.getId())) {
+                player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
+                return false;
+            }
         }
 
         ClaimedChunk claimedChunk = getClaimedChunk(chunk);

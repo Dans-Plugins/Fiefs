@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -93,8 +95,8 @@ public class Fief {
         return members.contains(playerUUID);
     }
 
-    public ArrayList<UUID> getMembers() {
-        return new ArrayList<>(members);
+    public List<UUID> getMembers() {
+        return Collections.unmodifiableList(new ArrayList<>(members));
     }
 
     public void invitePlayer(UUID playerUUID) {

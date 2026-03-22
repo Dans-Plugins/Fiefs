@@ -19,12 +19,10 @@ import java.util.UUID;
  */
 public class FactionEventListener implements Listener {
     private final PersistentData persistentData;
-    private final ChunkService chunkService;
     private final MedievalFactions medievalFactions;
 
-    public FactionEventListener(PersistentData persistentData, ChunkService chunkService, MedievalFactions medievalFactions) {
+    public FactionEventListener(PersistentData persistentData, MedievalFactions medievalFactions) {
         this.persistentData = persistentData;
-        this.chunkService = chunkService;
         this.medievalFactions = medievalFactions;
     }
 
@@ -74,6 +72,10 @@ public class FactionEventListener implements Listener {
         for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()) {
             String claimWorld = claimedChunk.getWorld();
             if (claimWorld != null && claimWorld.equals(worldName)) {
+                // Guard against stale ClaimedChunk entries where the underlying chunk is null
+                if (claimedChunk.getChunk() == null) {
+                    continue;
+                }
                 double[] coords = claimedChunk.getCoordinates();
                 int claimX = (int)coords[0];
                 int claimZ = (int)coords[1];

@@ -46,17 +46,17 @@ Please fill out a bug report [here](https://github.com/Dans-Plugins/Fiefs/issues
 
 ## Testing
 
-### Unit Tests
+### Build Verification
 
 Linux / macOS:
 
-    mvn clean test
+    mvn clean package
 
 Windows:
 
-    mvn clean test
+    mvn clean package
 
-If you see `BUILD SUCCESS`, the tests have passed.
+If you see `BUILD SUCCESS`, the project has built successfully. There are currently no automated unit tests in this repository.
 
 ## Development
 
