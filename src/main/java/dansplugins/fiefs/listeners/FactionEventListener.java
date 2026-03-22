@@ -5,7 +5,6 @@ import com.dansplugins.factionsystem.event.faction.*;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
-import dansplugins.fiefs.services.ChunkService;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
