@@ -72,10 +72,12 @@ public class FactionEventListener implements Listener {
         // Remove claim by matching world name and coordinates without loading the chunk
         ClaimedChunk toRemove = null;
         for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()) {
-            if (claimedChunk.getWorld() != null && 
-                claimedChunk.getWorld().equals(worldName)) {
+            String claimWorld = claimedChunk.getWorld();
+            if (claimWorld != null && claimWorld.equals(worldName)) {
                 double[] coords = claimedChunk.getCoordinates();
-                if ((int)coords[0] == chunkX && (int)coords[1] == chunkZ) {
+                int claimX = (int)coords[0];
+                int claimZ = (int)coords[1];
+                if (claimX == chunkX && claimZ == chunkZ) {
                     toRemove = claimedChunk;
                     break;
                 }
