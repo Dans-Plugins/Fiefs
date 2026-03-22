@@ -64,16 +64,26 @@ public class FactionEventListener implements Listener {
             // World not loaded or unknown, cannot process unclaim
             return;
         }
+        
+        String worldName = world.getName();
         int chunkX = event.getClaim().getX();
         int chunkZ = event.getClaim().getZ();
-        // Avoid synchronously loading chunks that are not already loaded
-        if (!world.isChunkLoaded(chunkX, chunkZ)) {
-            return;
+        
+        // Remove claim by matching world name and coordinates without loading the chunk
+        ClaimedChunk toRemove = null;
+        for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()) {
+            if (claimedChunk.getWorld() != null && 
+                claimedChunk.getWorld().equals(worldName)) {
+                double[] coords = claimedChunk.getCoordinates();
+                if ((int)coords[0] == chunkX && (int)coords[1] == chunkZ) {
+                    toRemove = claimedChunk;
+                    break;
+                }
+            }
         }
-        org.bukkit.Chunk bukkitChunk = world.getChunkAt(chunkX, chunkZ);
-        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(bukkitChunk);
-        if (claimedChunk != null) {
-            persistentData.removeChunk(claimedChunk);
+        
+        if (toRemove != null) {
+            persistentData.removeChunk(toRemove);
         }
     }
 

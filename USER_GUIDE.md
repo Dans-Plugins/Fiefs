@@ -65,4 +65,5 @@
 | `fiefs.desc` | `true` | Change your fief's description |
 | `fiefs.kick` | `true` | Kick a member from your fief |
 | `fiefs.transfer` | `true` | Transfer fief ownership |
+| `fiefs.flags` | `true` | View and modify your fief's flags |
 | `fiefs.config` | `op` | View and modify plugin configuration |
