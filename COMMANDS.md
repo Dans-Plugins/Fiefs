@@ -25,7 +25,7 @@ All Fiefs commands use the base command `/fiefs` (or the alias `/fi`).
 ### /fi members [fief-name]
 
 **Description:** View the members of your fief or a specified fief.
-**Permission:** `fief.members`
+**Permission:** `fiefs.members`
 **Usage:** `/fi members` or `/fi members <fief-name>`
 
 ## Fief Management Commands
@@ -45,13 +45,13 @@ All Fiefs commands use the base command `/fiefs` (or the alias `/fi`).
 ### /fi desc \<description\>
 
 **Description:** Set or change the description of your fief.
-**Permission:** `fief.desc`
+**Permission:** `fiefs.desc`
 **Usage:** `/fi desc <description>`
 
 ### /fi transfer \<player\>
 
 **Description:** Transfer ownership of your fief to another player.
-**Permission:** `fief.transfer`
+**Permission:** `fiefs.transfer`
 **Usage:** `/fi transfer <player>`
 
 ## Land Commands
@@ -97,7 +97,7 @@ All Fiefs commands use the base command `/fiefs` (or the alias `/fi`).
 ### /fi kick \<player\>
 
 **Description:** Kick a player from your fief.
-**Permission:** `fief.kick`
+**Permission:** `fiefs.kick`
 **Usage:** `/fi kick <player>`
 
 ## Configuration Commands
@@ -105,11 +105,11 @@ All Fiefs commands use the base command `/fiefs` (or the alias `/fi`).
 ### /fi flags [flag] [value]
 
 **Description:** View your fief's flags or set a specific flag value.
-**Permission:** None (fief owner only)
+**Permission:** `fiefs.flags`
 **Usage:** `/fi flags` or `/fi flags <flag> <value>`
 
 ### /fi config [option] [value]
 
 **Description:** View or modify the plugin's configuration options.
 **Permission:** `fiefs.config` (op only)
-**Usage:** `/fi config` or `/fi config <option> <value>`
+**Usage:** `/fi config show` or `/fi config set <option> <value>`

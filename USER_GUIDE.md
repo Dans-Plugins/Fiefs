@@ -61,8 +61,8 @@
 | `fiefs.invite` | `true` | Invite a player to your fief |
 | `fiefs.join` | `true` | Join a fief |
 | `fiefs.leave` | `true` | Leave your fief |
-| `fief.members` | `true` | View fief members |
-| `fief.desc` | `true` | Change your fief's description |
-| `fief.kick` | `true` | Kick a member from your fief |
-| `fief.transfer` | `true` | Transfer fief ownership |
+| `fiefs.members` | `true` | View fief members |
+| `fiefs.desc` | `true` | Change your fief's description |
+| `fiefs.kick` | `true` | Kick a member from your fief |
+| `fiefs.transfer` | `true` | Transfer fief ownership |
 | `fiefs.config` | `op` | View and modify plugin configuration |

@@ -1,6 +1,6 @@
 # Configuration Guide
 
-Fiefs stores its configuration in `plugins/Fiefs/config.yml`. Options can also be changed in-game using `/fi config <option> <value>` (requires op).
+Fiefs stores its configuration in `plugins/Fiefs/config.yml`. Options can also be viewed with `/fi config show` and changed in-game using `/fi config set <option> <value>` (requires op).
 
 ## version
 
