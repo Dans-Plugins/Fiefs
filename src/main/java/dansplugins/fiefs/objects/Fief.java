@@ -114,7 +114,7 @@ public class Fief {
     }
 
     public int getCumulativePowerLevel() {
-        int cumulativePowerLevel = 0;
+        double cumulativePowerLevel = 0.0;
         for (UUID memberUUID : members) {
             com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
                 medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(
@@ -123,7 +123,7 @@ public class Fief {
             double memberPowerLevel = mfPlayer != null ? mfPlayer.getPower() : 0.0;
             cumulativePowerLevel += memberPowerLevel;
         }
-        return cumulativePowerLevel;
+        return (int) Math.round(cumulativePowerLevel);
     }
 
     public int getNumMembers() {

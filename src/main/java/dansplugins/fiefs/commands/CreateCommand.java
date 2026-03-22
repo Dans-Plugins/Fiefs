@@ -2,7 +2,6 @@ package dansplugins.fiefs.commands;
 
 import com.dansplugins.factionsystem.faction.MfFaction;
 import com.dansplugins.factionsystem.player.MfPlayer;
-import com.dansplugins.factionsystem.player.MfPlayerId;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
