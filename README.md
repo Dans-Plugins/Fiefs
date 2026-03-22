@@ -1,41 +1,84 @@
 # Fiefs
 
 ## Description
-Fiefs is an expansion for [Medieval Factions](https://github.com/dmccoystephenson/Medieval-Factions) that allows faction members to create fiefs. Fiefs function as sub-factions, essentially.
+
+Fiefs is a Minecraft plugin that allows faction members to create fiefs (sub-factions) within [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions). Fiefs function as sub-factions, allowing for more granular organization within a faction.
 
 ## Installation
-1) You can download the plugin from [this page](https://github.com/dmccoystephenson/Fiefs/releases).
 
-2) Once downloaded, place the jar in the plugins folder of your server files.
+### First Time Installation
 
-3) Restart your server.
+1. Download the plugin from the [releases page](https://github.com/Dans-Plugins/Fiefs/releases).
+2. Place the jar in the `plugins` folder of your server.
+3. Restart your server.
 
 ### Dependencies
-This plugin depends on Medieval Factions in order to work.
+
+This plugin depends on [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions) in order to work.
 
 ## Usage
-- [User Guide](https://github.com/dmccoystephenson/Fiefs/wiki/Guide)
-- [List of Commands](https://github.com/dmccoystephenson/Fiefs/wiki/Commands)
-- [FAQ](https://github.com/dmccoystephenson/Fiefs/wiki/FAQ) (coming soon)
+
+### Documentation
+
+- [User Guide](USER_GUIDE.md) – Getting started and common scenarios
+- [Commands Reference](COMMANDS.md) – Complete list of all commands
+- [Configuration Guide](CONFIG.md) – Detailed configuration options
+
+### Wiki & Additional Resources
+
+- [Wiki Guide](https://github.com/Dans-Plugins/Fiefs/wiki/Guide)
+- [FAQ](https://github.com/Dans-Plugins/Fiefs/wiki/FAQ)
 
 ## Support
-You can find the support discord server [here](https://discord.gg/xXtuAQ2).
+
+You can find the support Discord server [here](https://discord.gg/xXtuAQ2).
 
 ### Experiencing a bug?
-Please fill out a bug report [here](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
 
-## Roadmap
-- [Known Bugs](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
-- [Planned Features](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3AEpic)
-- [Planned Improvements](https://github.com/dmccoystephenson/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Aimprovement)
+Please fill out a bug report [here](https://github.com/Dans-Plugins/Fiefs/issues/new?template=bug_report.md).
+
+- [Known Bugs](https://github.com/Dans-Plugins/Fiefs/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
 
 ## Contributing
-- [Notes for Developers](https://github.com/dmccoystephenson/Fiefs/wiki/Developer-Notes)
 
-## Authors and acknowledgement
-Name | Main Contributions
------------- | -------------
-Daniel Stephenson | Creator
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [Notes for Developers](https://github.com/Dans-Plugins/Fiefs/wiki/Developer-Notes)
+
+## Testing
+
+### Unit Tests
+
+Linux / macOS:
+
+    mvn clean test
+
+Windows:
+
+    mvn clean test
+
+If you see `BUILD SUCCESS`, the tests have passed.
+
+## Development
+
+### Building the Plugin
+
+1. Clone the repository: `git clone https://github.com/Dans-Plugins/Fiefs.git`
+2. Build the plugin: `mvn clean package`
+3. The compiled JAR will be in the `target/` directory.
+
+### Manual Testing
+
+1. Build the plugin with `mvn clean package`.
+2. Copy the JAR from `target/` into your test server's `plugins/` folder.
+3. Start or restart the server.
+
+## Authors and Acknowledgement
+
+### Developers
+
+| Name | Main Contributions |
+|------|--------------------|
+| Daniel Stephenson | Creator |
 
 This plugin was requested by Laughingspade.
 
@@ -44,15 +87,17 @@ This plugin was requested by Laughingspade.
 This project is licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3.0).
 
 You are free to use, modify, and distribute this software, provided that:
+
 - Source code is made available under the same license when distributed.
 - Changes are documented and attributed.
 - No additional restrictions are applied.
 
 See the [LICENSE](LICENSE) file for the full text of the GPL-3.0 license.
 
-
 ## Project Status
+
 This project is in active development.
 
 ### bStats
-You can find the bStats page for this plugin [here](https://bstats.org/plugin/bukkit/Fiefs/12743).
+
+You can view the bStats page for the plugin [here](https://bstats.org/plugin/bukkit/Fiefs/12743).
