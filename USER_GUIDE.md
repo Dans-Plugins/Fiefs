@@ -26,13 +26,23 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 
 | Permission | Default | Description |
 |------------|---------|-------------|
-| `fiefs.help` | `true` | Access general fief commands. |
+| `fiefs.help` | `true` | View the help menu. |
 | `fiefs.list` | `true` | List fiefs. |
 | `fiefs.create` | `true` | Create a fief. |
 | `fiefs.disband` | `true` | Disband a fief. |
+| `fiefs.info` | `true` | View fief information. |
+| `fiefs.members` | `true` | View fief members. |
+| `fiefs.join` | `true` | Join a fief. |
+| `fiefs.leave` | `true` | Leave a fief. |
+| `fiefs.invite` | `true` | Invite a player to a fief. |
+| `fiefs.kick` | `true` | Kick a player from a fief. |
+| `fiefs.transfer` | `true` | Transfer fief ownership. |
+| `fiefs.desc` | `true` | Set a fief description. |
 | `fiefs.claim` | `true` | Claim a chunk for a fief. |
 | `fiefs.unclaim` | `true` | Unclaim a chunk from a fief. |
 | `fiefs.checkclaim` | `true` | Check which fief owns a chunk. |
+| `fiefs.flags` | `op` | View and alter fief flags. |
+| `fiefs.config` | `op` | View and alter plugin config options. |
 
 ## Support
 
