@@ -68,7 +68,7 @@ public class JoinCommand extends AbstractPluginCommand {
         }
 
         if (!targetFief.getFactionId().equals(faction.getId())) {
-            player.sendMessage(ChatColor.RED + "That fief isn't ");
+            player.sendMessage(ChatColor.RED + "That fief isn't in your faction.");
             return false;
         }
 
