@@ -93,6 +93,9 @@ public class PersistentData {
     }
 
     public boolean removeFief(Fief fiefToRemove) {
+        // Unclaim all of the fief's land so the chunks aren't orphaned when the
+        // fief is disbanded (via /fi disband or when its faction disbands). #133
+        claimedChunks.removeIf(chunk -> chunk.getFief().equalsIgnoreCase(fiefToRemove.getName()));
         return fiefs.remove(fiefToRemove);
     }
 
