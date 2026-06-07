@@ -56,23 +56,23 @@ public class PersistentData {
     }
 
     public ArrayList<Fief> getFiefsOfFaction(MfFaction faction) {
+        return getFiefsOfFaction(faction.getId());
+    }
+
+    public ArrayList<Fief> getFiefsOfFaction(String factionId) {
         ArrayList<Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
-            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
+            if (fief.getFactionId().equals(factionId)) {
                 toReturn.add(fief);
             }
         }
         return toReturn;
     }
 
-    public ArrayList<Fief> getFiefsOfFaction(String factionName) {
-        ArrayList<Fief> toReturn = new ArrayList<>();
-        for (Fief fief : fiefs) {
-            if (fief.getFactionName().equalsIgnoreCase(factionName)) {
-                toReturn.add(fief);
-            }
-        }
-        return toReturn;
+    // Fiefs store the faction id; resolve it to the current faction name for display.
+    public String getFactionNameOfFief(Fief fief) {
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByFactionId(fief.getFactionId());
+        return faction != null ? faction.getName() : "Unknown";
     }
 
     public boolean isNameTaken(String name) {
@@ -173,7 +173,7 @@ public class PersistentData {
 
         player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " Fief Info ===");
         player.sendMessage(ChatColor.AQUA + "Name: " + playersFief.getName());
-        player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
+        player.sendMessage(ChatColor.AQUA + "Faction: " + getFactionNameOfFief(playersFief));
         player.sendMessage(ChatColor.AQUA + "Owner: " + uuidChecker.findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
         player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
         player.sendMessage(ChatColor.AQUA + "Power Level: " + cumulativePowerLevel);

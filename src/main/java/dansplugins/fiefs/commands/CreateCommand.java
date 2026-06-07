@@ -75,7 +75,7 @@ public class CreateCommand extends AbstractPluginCommand {
             return false;
         }
 
-        Fief fief = new Fief(medievalFactionsIntegrator, name, player.getUniqueId(), faction.getName(), logger);
+        Fief fief = new Fief(medievalFactionsIntegrator, name, player.getUniqueId(), faction.getId(), logger);
         persistentData.addFief(fief);
         player.sendMessage(ChatColor.GREEN + "Fief created.");
         return true;

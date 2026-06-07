@@ -64,7 +64,7 @@ public class ChunkService {
             return false;
         }
 
-        ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionName(), fief.getName());
+        ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionId(), fief.getName());
         persistentData.addChunk(newClaimedChunk);
         player.sendMessage(ChatColor.GREEN + "Claimed.");
         return true;

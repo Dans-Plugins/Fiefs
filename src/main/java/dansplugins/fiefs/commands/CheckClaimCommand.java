@@ -40,7 +40,7 @@ public class CheckClaimCommand extends AbstractPluginCommand {
         Chunk chunk = player.getLocation().getChunk();
         ClaimedChunk claimedChunk = chunkService.getClaimedChunk(chunk);
         if (claimedChunk != null) {
-            player.sendMessage(ChatColor.AQUA + "This land is claimed by " + playersFief.getName() + " and is located in " + playersFief.getFactionName());
+            player.sendMessage(ChatColor.AQUA + "This land is claimed by " + playersFief.getName() + " and is located in " + persistentData.getFactionNameOfFief(playersFief));
         }
         else {
             player.sendMessage(ChatColor.GREEN + "This land is currently not claimed by a fief.");

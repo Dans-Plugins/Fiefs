@@ -67,7 +67,7 @@ public class JoinCommand extends AbstractPluginCommand {
             return false;
         }
 
-        if (!targetFief.getFactionName().equalsIgnoreCase(faction.getName())) {
+        if (!targetFief.getFactionId().equals(faction.getId())) {
             player.sendMessage(ChatColor.RED + "That fief isn't ");
             return false;
         }

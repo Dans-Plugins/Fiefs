@@ -25,32 +25,7 @@ public class FactionEventListener implements Listener {
         this.medievalFactions = medievalFactions;
     }
 
-    @EventHandler()
-    public void handle(FactionRenameEvent event) {
-        com.dansplugins.factionsystem.faction.MfFaction faction = 
-            medievalFactions.getServices().getFactionService().getFactionByFactionId(event.getFactionId());
-        if (faction == null) {
-            return;
-        }
-        String newName = event.getName();
-        
-        // Update all fiefs where any member belongs to this faction
-        for (Fief fief : persistentData.getFiefs()) {
-            // Check if any fief member is in the renamed faction
-            boolean belongsToFaction = false;
-            for (UUID memberUUID : fief.getMembers()) {
-                com.dansplugins.factionsystem.faction.MfFaction memberFaction =
-                    medievalFactions.getServices().getFactionService().getFactionByPlayerId(memberUUID.toString());
-                if (memberFaction != null && memberFaction.getId().equals(event.getFactionId())) {
-                    belongsToFaction = true;
-                    break;
-                }
-            }
-            if (belongsToFaction) {
-                fief.setFactionName(newName);
-            }
-        }
-    }
+    // Note: faction renames need no handling — fiefs store the faction id, which is stable across renames.
 
     @EventHandler()
     public void handle(FactionUnclaimEvent event) {
@@ -105,14 +80,9 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionDisbandEvent event) {
-        com.dansplugins.factionsystem.faction.MfFaction faction = 
-            medievalFactions.getServices().getFactionService().getFactionByFactionId(event.getFactionId());
-        if (faction == null) {
-            return;
-        }
         ArrayList<Fief> toRemove = new ArrayList<>();
         for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
+            if (fief.getFactionId().equals(event.getFactionId())) {
                 toRemove.add(fief);
             }
         }
