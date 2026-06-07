@@ -42,13 +42,13 @@ public class TransferCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return false;
         }
 
-        MfFaction playersFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction playersFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
         if (playersFaction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;

@@ -99,13 +99,13 @@ public class PersistentData {
     public void sendListOfFiefsToPlayer(Player player) {
 
         com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
-            medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+            medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return;
         }
 
-        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
 
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You are not in a faction.");

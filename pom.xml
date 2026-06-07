@@ -65,6 +65,10 @@
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
 		</repository>
+        <repository>
+            <id>dansplugins</id>
+            <url>https://repo.dansplugins.com/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -75,10 +79,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.Dans-Plugins</groupId>
-            <artifactId>Medieval-Factions</artifactId>
+            <groupId>com.dansplugins</groupId>
+            <artifactId>medieval-factions</artifactId>
             <version>5.7.2</version>
-            <scope>compile</scope>
+            <classifier>all</classifier>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Preponderous-Software</groupId>

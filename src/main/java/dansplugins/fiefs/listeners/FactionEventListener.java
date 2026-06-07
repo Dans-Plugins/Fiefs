@@ -28,7 +28,7 @@ public class FactionEventListener implements Listener {
     @EventHandler()
     public void handle(FactionRenameEvent event) {
         com.dansplugins.factionsystem.faction.MfFaction faction = 
-            medievalFactions.getServices().getFactionService().getFaction(event.getFactionId());
+            medievalFactions.getServices().getFactionService().getFactionByFactionId(event.getFactionId());
         if (faction == null) {
             return;
         }
@@ -39,10 +39,8 @@ public class FactionEventListener implements Listener {
             // Check if any fief member is in the renamed faction
             boolean belongsToFaction = false;
             for (UUID memberUUID : fief.getMembers()) {
-                com.dansplugins.factionsystem.player.MfPlayerId playerId = 
-                    new com.dansplugins.factionsystem.player.MfPlayerId(memberUUID.toString());
-                com.dansplugins.factionsystem.faction.MfFaction memberFaction = 
-                    medievalFactions.getServices().getFactionService().getFaction(playerId);
+                com.dansplugins.factionsystem.faction.MfFaction memberFaction =
+                    medievalFactions.getServices().getFactionService().getFactionByPlayerId(memberUUID.toString());
                 if (memberFaction != null && memberFaction.getId().equals(event.getFactionId())) {
                     belongsToFaction = true;
                     break;
@@ -93,7 +91,7 @@ public class FactionEventListener implements Listener {
     @EventHandler()
     public void handle(FactionLeaveEvent event) {
         try {
-            UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+            UUID playerUUID = UUID.fromString(event.getPlayerId());
             Fief fief = persistentData.getFief(playerUUID);
             if (fief != null) {
                 fief.removeMember(playerUUID);
@@ -101,14 +99,14 @@ public class FactionEventListener implements Listener {
                 // TODO: inform fief members that the player left the faction
             }
         } catch (IllegalArgumentException e) {
-            medievalFactions.getLogger().warning("Invalid player UUID format in FactionLeaveEvent: " + event.getPlayerId().getValue());
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionLeaveEvent: " + event.getPlayerId());
         }
     }
 
     @EventHandler()
     public void handle(FactionDisbandEvent event) {
         com.dansplugins.factionsystem.faction.MfFaction faction = 
-            medievalFactions.getServices().getFactionService().getFaction(event.getFactionId());
+            medievalFactions.getServices().getFactionService().getFactionByFactionId(event.getFactionId());
         if (faction == null) {
             return;
         }
@@ -128,7 +126,7 @@ public class FactionEventListener implements Listener {
     @EventHandler()
     public void handle(FactionKickEvent event) {
         try {
-            UUID playerUUID = UUID.fromString(event.getPlayerId().getValue());
+            UUID playerUUID = UUID.fromString(event.getPlayerId());
             Fief fief = persistentData.getFief(playerUUID);
             if (fief != null) {
                 fief.removeMember(playerUUID);
@@ -136,7 +134,7 @@ public class FactionEventListener implements Listener {
 
             // TODO: inform fief members that the player was kicked from the faction
         } catch (IllegalArgumentException e) {
-            medievalFactions.getLogger().warning("Invalid player UUID format in FactionKickEvent: " + event.getPlayerId().getValue());
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionKickEvent: " + event.getPlayerId());
         }
     }
 }

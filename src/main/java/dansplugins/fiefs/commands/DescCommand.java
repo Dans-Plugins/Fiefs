@@ -40,13 +40,13 @@ public class DescCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return false;
         }
 
-        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
@@ -59,7 +59,7 @@ public class DescCommand extends AbstractPluginCommand {
         }
 
         ArgumentParser argumentParser = new ArgumentParser();
-        ArrayList<String> singleQuoteArgs = argumentParser.getArgumentsInsideDoubleQuotes(args);
+        ArrayList<String> singleQuoteArgs = new ArrayList<>(argumentParser.getArgumentsInsideDoubleQuotes(args));
 
         if (singleQuoteArgs.size() == 0) {
             player.sendMessage(ChatColor.RED + "New description must be between double quotes.");

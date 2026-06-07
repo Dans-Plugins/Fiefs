@@ -34,13 +34,13 @@ public class LeaveCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return false;
         }
 
-        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;

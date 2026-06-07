@@ -41,13 +41,13 @@ public class ChunkService {
         }
         
         // Verify the MF claim belongs to the player's faction
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return false;
         }
         
-        MfFaction playerFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction playerFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
         if (playerFaction == null || !mfClaim.getFactionId().equals(playerFaction.getId())) {
             player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
             return false;

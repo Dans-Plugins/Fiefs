@@ -42,13 +42,13 @@ public class InviteCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(player);
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
         if (mfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load your player data.");
             return false;
         }
 
-        MfFaction playersFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(mfPlayer.getId());
+        MfFaction playersFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
         if (playersFaction == null) {
             player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
@@ -85,13 +85,13 @@ public class InviteCommand extends AbstractPluginCommand {
             return false;
         }
 
-        MfPlayer targetMfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayer(targetUUID);
+        MfPlayer targetMfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByPlayerId(targetUUID.toString());
         if (targetMfPlayer == null) {
             player.sendMessage(ChatColor.RED + "Could not load that player's data.");
             return false;
         }
 
-        MfFaction targetsFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFaction(targetMfPlayer.getId());
+        MfFaction targetsFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(targetMfPlayer.getId());
         if (targetsFaction == null || !targetsFaction.getName().equalsIgnoreCase(playersFaction.getName())) {
             player.sendMessage(ChatColor.RED + "'" + targetName + "' is not in your faction.");
             return false;

@@ -45,7 +45,7 @@ public class ConfigCommand extends AbstractPluginCommand {
             String value = "";
             if (option.equalsIgnoreCase("denyUsageMessage") || option.equalsIgnoreCase("denyCreationMessage")) {
                 ArgumentParser argumentParser = new ArgumentParser();
-                ArrayList<String> singleQuoteArgs = argumentParser.getArgumentsInsideDoubleQuotes(args);
+                ArrayList<String> singleQuoteArgs = new ArrayList<>(argumentParser.getArgumentsInsideDoubleQuotes(args));
                 if (singleQuoteArgs.size() == 0) {
                     sender.sendMessage(ChatColor.RED + "New message must be in between double quotes.");
                     return false;
