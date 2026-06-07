@@ -6,9 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.11.0]
+
 ### Added
-- In-repository documentation: USER_GUIDE.md, COMMANDS.md, CONFIG.md, CHANGELOG.md
-- CONTRIBUTING.md with contributor guidelines
-- GitHub Actions CI workflow (build.yml)
-- GitHub Actions release workflow (release.yml)
-- GitHub Copilot instructions (.github/copilot-instructions.md)
+- Fief creation, disbanding, and management integrated with Medieval Factions
+- Territory claiming for fiefs within faction land
+- Member invite, join, leave, kick, and transfer commands
+- Fief flags and config management

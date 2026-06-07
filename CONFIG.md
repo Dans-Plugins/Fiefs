@@ -1,39 +1,10 @@
-# Configuration Guide
+# Fiefs Configuration
 
-Fiefs stores its configuration in `plugins/Fiefs/config.yml`. Options can also be viewed with `/fi config show` and changed in-game using `/fi config set <option> <value>` (requires op).
+Configuration can be viewed and changed in-game with `/fi config`. A `config.yml` is generated in `plugins/Fiefs/` on first run.
 
-## version
-
-**Type:** string
-**Default:** Current plugin version
-**Description:** The plugin version that last wrote the config file. This is set automatically and should not be changed manually.
-
-## debugMode
-
-**Type:** boolean
-**Default:** `false`
-**Description:** Enables debug logging for the plugin. Useful for troubleshooting issues.
-
-```yaml
-debugMode: false
-```
-
-## limitLand
-
-**Type:** boolean
-**Default:** `true`
-**Description:** When enabled, limits the amount of land a fief can claim.
-
-```yaml
-limitLand: true
-```
-
-## enableTerritoryAlerts
-
-**Type:** boolean
-**Default:** `true`
-**Description:** When enabled, players receive alerts when entering or leaving fief territory.
-
-```yaml
-enableTerritoryAlerts: true
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `version` | String | *(plugin version)* | Plugin version. Do not edit manually. |
+| `debugMode` | Boolean | `false` | Enables verbose debug logging to the console. |
+| `limitLand` | Boolean | `true` | Whether fiefs are restricted to land already claimed by their faction. |
+| `enableTerritoryAlerts` | Boolean | `true` | Whether players receive a message when entering or leaving fief territory. |

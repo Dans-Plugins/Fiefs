@@ -1,69 +1,49 @@
-# User Guide
+# Fiefs User Guide
 
-## Prerequisites
+## What is Fiefs?
 
-- A Minecraft server running Spigot or Paper (1.13+)
-- [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions) installed and running
+Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Factions servers. Faction members can create fiefs — named sub-groups within their faction — and claim chunks of faction land for those fiefs.
 
-## First Steps
+## Requirements
 
-1. Install the Fiefs plugin by placing the JAR in your server's `plugins/` folder.
-2. Restart your server.
-3. Ensure Medieval Factions is installed and working — Fiefs depends on it.
-4. Join a faction in Medieval Factions before using any Fiefs commands.
+- [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions) must be installed.
 
-## Common Scenarios
+## Installation
 
-### Creating a Fief
+1. Download the latest `Fiefs-<version>.jar` from the [Releases](https://github.com/Dans-Plugins/Fiefs/releases) page.
+2. Place the JAR (and the Medieval Factions JAR) in your server's `plugins/` folder.
+3. Restart the server.
 
-1. Join a faction using Medieval Factions.
-2. Run `/fi create <name>` to create a new fief within your faction.
+## Getting Started
 
-### Claiming Land
-
-1. Stand in the chunk you want to claim.
-2. Run `/fi claim` to claim the chunk for your fief.
-3. Use `/fi checkclaim` to verify chunk ownership.
-
-### Inviting and Managing Members
-
-1. Run `/fi invite <player>` to invite a player to your fief.
-2. The invited player joins with `/fi join <fief-name>`.
-3. View members with `/fi members`.
-4. Remove a member with `/fi kick <player>`.
-
-### Viewing Fief Information
-
-- `/fi info` — View information about your fief or another fief.
-- `/fi list` — List all fiefs in your faction.
-
-### Configuring Fief Flags
-
-- `/fi flags` — View and modify your fief's flags (e.g. land protection).
-
-### Leaving or Disbanding
-
-- `/fi leave` — Leave your current fief.
-- `/fi disband` — Disband a fief you own.
+1. Create a fief within your faction: `/fi create`
+2. Invite members: `/fi invite <player>`
+3. Claim faction land for your fief: stand in a faction-owned chunk and run `/fi claim`
+4. Check fief ownership of a chunk: `/fi checkclaim`
+5. View all fiefs in your faction: `/fi list`
 
 ## Permissions
 
 | Permission | Default | Description |
-|---|---|---|
-| `fiefs.help` | `true` | View the help command |
-| `fiefs.list` | `true` | List fiefs in your faction |
-| `fiefs.create` | `true` | Create a fief |
-| `fiefs.disband` | `true` | Disband your fief |
-| `fiefs.claim` | `true` | Claim a chunk for your fief |
-| `fiefs.unclaim` | `true` | Unclaim a chunk |
-| `fiefs.checkclaim` | `true` | Check which fief owns a chunk |
-| `fiefs.info` | `true` | View fief information |
-| `fiefs.invite` | `true` | Invite a player to your fief |
-| `fiefs.join` | `true` | Join a fief |
-| `fiefs.leave` | `true` | Leave your fief |
-| `fiefs.members` | `true` | View fief members |
-| `fiefs.desc` | `true` | Change your fief's description |
-| `fiefs.kick` | `true` | Kick a member from your fief |
-| `fiefs.transfer` | `true` | Transfer fief ownership |
-| `fiefs.flags` | `true` | View and modify your fief's flags |
-| `fiefs.config` | `op` | View and modify plugin configuration |
+|------------|---------|-------------|
+| `fiefs.help` | `true` | View the help menu. |
+| `fiefs.list` | `true` | List fiefs. |
+| `fiefs.create` | `true` | Create a fief. |
+| `fiefs.disband` | `true` | Disband a fief. |
+| `fiefs.info` | `true` | View fief information. |
+| `fiefs.members` | `true` | View fief members. |
+| `fiefs.join` | `true` | Join a fief. |
+| `fiefs.leave` | `true` | Leave a fief. |
+| `fiefs.invite` | `true` | Invite a player to a fief. |
+| `fiefs.kick` | `true` | Kick a player from a fief. |
+| `fiefs.transfer` | `true` | Transfer fief ownership. |
+| `fiefs.desc` | `true` | Set a fief description. |
+| `fiefs.claim` | `true` | Claim a chunk for a fief. |
+| `fiefs.unclaim` | `true` | Unclaim a chunk from a fief. |
+| `fiefs.checkclaim` | `true` | Check which fief owns a chunk. |
+| `fiefs.flags` | `op` | View and alter fief flags. |
+| `fiefs.config` | `op` | View and alter plugin config options. |
+
+## Support
+
+Ask questions in the [Discord server](https://discord.gg/xXtuAQ2) or open a [GitHub issue](https://github.com/Dans-Plugins/Fiefs/issues).

@@ -15,6 +15,7 @@ Thank you for your interest in contributing to Fiefs! This guide will help you g
 - Git installed on your local machine
 - A Java IDE or text editor
 - A basic understanding of Java
+- [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions) (required dependency)
 
 ## Getting Started
 
@@ -38,27 +39,20 @@ Issues are grouped into [milestones](https://github.com/Dans-Plugins/Fiefs/miles
 ## Making Changes
 
 1. Make sure an issue exists for the work. If not, create one.
-2. Switch to `develop`: `git checkout develop`
+2. Switch to `main`: `git checkout main`
 3. Create a branch: `git checkout -b <branch-name>`
 4. Make your changes.
 5. Test your changes.
 6. Commit: `git commit -m "Description of changes"`
 7. Push: `git push origin <branch-name>`
-8. Open a pull request against `develop`, link the related issue with `#<number>`.
+8. Open a pull request against `main`, link the related issue with `#<number>`.
 9. Address review feedback.
-
-### Language Files
-
-Update `src/main/resources/lang/` for any user-facing string changes.
 
 ## Testing
 
-Run the tests with:
+    mvn clean package
 
-Linux / macOS: `mvn clean test`
-Windows: `mvn clean test`
-
-For manual testing, start a local Spigot server and install the built JAR from the `target/` directory.
+Place the Fiefs JAR and Medieval Factions JAR in your test server's `plugins/` folder.
 
 ## Questions
 
