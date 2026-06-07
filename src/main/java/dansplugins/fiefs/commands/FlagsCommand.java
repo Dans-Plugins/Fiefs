@@ -34,7 +34,7 @@ public class FlagsCommand extends AbstractPluginCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
