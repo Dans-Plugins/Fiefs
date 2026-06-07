@@ -61,14 +61,14 @@ public class TransferCommand extends AbstractPluginCommand {
         }
 
         if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to invite others.");
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to transfer it.");
             return false;
         }
 
         String targetName = args[0];
 
         if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(ChatColor.RED + "You can't transfer your faction to yourself.");
+            player.sendMessage(ChatColor.RED + "You can't transfer your fief to yourself.");
             return false;
         }
 
@@ -85,7 +85,7 @@ public class TransferCommand extends AbstractPluginCommand {
         }
 
         playersFief.setOwnerUUID(targetUUID);
-        player.sendMessage(ChatColor.GREEN + "Transfered.");
+        player.sendMessage(ChatColor.GREEN + "Transferred.");
 
         // TODO: inform fief members about transfer of power
 
