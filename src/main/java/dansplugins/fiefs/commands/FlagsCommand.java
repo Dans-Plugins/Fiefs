@@ -59,7 +59,7 @@ public class FlagsCommand extends AbstractPluginCommand {
         }
 
         if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to kick members.");
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to change its flags.");
             return false;
         }
 
