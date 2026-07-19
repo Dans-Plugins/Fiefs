@@ -1,7 +1,6 @@
 package dansplugins.fiefs.commands;
 
 import com.dansplugins.factionsystem.faction.MfFaction;
-import com.dansplugins.factionsystem.player.MfPlayer;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -39,15 +38,8 @@ public class InfoCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
-        if (mfPlayer == null) {
-            player.sendMessage(ChatColor.RED + "Could not load your player data.");
-            return false;
-        }
-
-        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
+        MfFaction faction = medievalFactionsIntegrator.getFactionForPlayer(player);
         if (faction == null) {
-            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
