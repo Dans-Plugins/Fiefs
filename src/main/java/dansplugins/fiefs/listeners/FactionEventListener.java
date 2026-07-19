@@ -1,53 +1,80 @@
 package dansplugins.fiefs.listeners;
 
-import dansplugins.factionsystem.events.*;
+import com.dansplugins.factionsystem.MedievalFactions;
+import com.dansplugins.factionsystem.event.faction.*;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
-import dansplugins.fiefs.services.ChunkService;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author Daniel McCoy Stephenson
  */
 public class FactionEventListener implements Listener {
     private final PersistentData persistentData;
-    private final ChunkService chunkService;
+    private final MedievalFactions medievalFactions;
 
-    public FactionEventListener(PersistentData persistentData, ChunkService chunkService) {
+    public FactionEventListener(PersistentData persistentData, MedievalFactions medievalFactions) {
         this.persistentData = persistentData;
-        this.chunkService = chunkService;
+        this.medievalFactions = medievalFactions;
     }
 
-    @EventHandler()
-    public void handle(FactionRenameEvent event) {
-        String oldName = event.getCurrentName();
-        String newName = event.getProposedName();
-        for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(oldName)) {
-                fief.setFactionName(newName);
-            }
-        }
-    }
+    // Note: faction renames need no handling — fiefs store the faction id, which is stable across renames.
 
     @EventHandler()
     public void handle(FactionUnclaimEvent event) {
-        ClaimedChunk claimedChunk = chunkService.getClaimedChunk(event.getChunk());
-        if (claimedChunk != null) {
-            persistentData.removeChunk(claimedChunk);
+        World world = Bukkit.getWorld(event.getClaim().getWorldId());
+        if (world == null) {
+            // World not loaded or unknown, cannot process unclaim
+            return;
+        }
+        
+        String worldName = world.getName();
+        int chunkX = event.getClaim().getX();
+        int chunkZ = event.getClaim().getZ();
+        
+        // Remove claim by matching world name and coordinates without loading the chunk
+        ClaimedChunk toRemove = null;
+        for (ClaimedChunk claimedChunk : persistentData.getClaimedChunks()) {
+            String claimWorld = claimedChunk.getWorld();
+            if (claimWorld != null && claimWorld.equals(worldName)) {
+                // Guard against stale ClaimedChunk entries where the underlying chunk is null
+                if (claimedChunk.getChunk() == null) {
+                    continue;
+                }
+                double[] coords = claimedChunk.getCoordinates();
+                int claimX = (int)coords[0];
+                int claimZ = (int)coords[1];
+                if (claimX == chunkX && claimZ == chunkZ) {
+                    toRemove = claimedChunk;
+                    break;
+                }
+            }
+        }
+        
+        if (toRemove != null) {
+            persistentData.removeChunk(toRemove);
         }
     }
 
     @EventHandler()
     public void handle(FactionLeaveEvent event) {
-        Fief fief = persistentData.getFief(event.getOfflinePlayer().getName());
-        if (fief != null) {
-            fief.removeMember(event.getOfflinePlayer().getUniqueId());
+        try {
+            UUID playerUUID = UUID.fromString(event.getPlayerId());
+            Fief fief = persistentData.getFief(playerUUID);
+            if (fief != null) {
+                fief.removeMember(playerUUID);
 
-            // TODO: inform fief members that the player left the faction
+                // TODO: inform fief members that the player left the faction
+            }
+        } catch (IllegalArgumentException e) {
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionLeaveEvent: " + event.getPlayerId());
         }
     }
 
@@ -55,7 +82,7 @@ public class FactionEventListener implements Listener {
     public void handle(FactionDisbandEvent event) {
         ArrayList<Fief> toRemove = new ArrayList<>();
         for (Fief fief : persistentData.getFiefs()) {
-            if (fief.getFactionName().equalsIgnoreCase(event.getFaction().getName())) {
+            if (fief.getFactionId().equals(event.getFactionId())) {
                 toRemove.add(fief);
             }
         }
@@ -68,11 +95,16 @@ public class FactionEventListener implements Listener {
 
     @EventHandler()
     public void handle(FactionKickEvent event) {
-        Fief fief = persistentData.getFief(event.getOfflinePlayer().getName());
-        if (fief != null) {
-            fief.removeMember(event.getOfflinePlayer().getUniqueId());
-        }
+        try {
+            UUID playerUUID = UUID.fromString(event.getPlayerId());
+            Fief fief = persistentData.getFief(playerUUID);
+            if (fief != null) {
+                fief.removeMember(playerUUID);
+            }
 
-        // TODO: inform fief members that the player was kicked from the faction
+            // TODO: inform fief members that the player was kicked from the faction
+        } catch (IllegalArgumentException e) {
+            medievalFactions.getLogger().warning("Invalid player UUID format in FactionKickEvent: " + event.getPlayerId());
+        }
     }
 }

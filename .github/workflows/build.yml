@@ -21,6 +21,17 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          # Generates ~/.m2/settings.xml with a server whose id matches the
+          # `dansplugins` repository in pom.xml, reading credentials from the
+          # env vars below (set from repository secrets).
+          server-id: dansplugins
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
 
       - name: Build with Maven
         run: mvn clean package
+        env:
+          # Add these as repository secrets (Settings -> Secrets and variables
+          # -> Actions), using the `fiefs-ci` account on repo.dansplugins.com.
+          MAVEN_USERNAME: ${{ secrets.DANSPLUGINS_REPO_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DANSPLUGINS_REPO_PASSWORD }}

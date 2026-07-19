@@ -1,6 +1,6 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -35,15 +35,14 @@ public class TransferCommand extends AbstractPluginCommand {
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
         Player player = (Player) sender;
 
-        MF_Faction playersFaction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfFaction playersFaction = medievalFactionsIntegrator.getFactionForPlayer(player);
         if (playersFaction == null) {
-            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
@@ -54,14 +53,14 @@ public class TransferCommand extends AbstractPluginCommand {
         }
 
         if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to invite others.");
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to transfer it.");
             return false;
         }
 
         String targetName = args[0];
 
         if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(ChatColor.RED + "You can't transfer your faction to yourself.");
+            player.sendMessage(ChatColor.RED + "You can't transfer your fief to yourself.");
             return false;
         }
 
@@ -78,7 +77,7 @@ public class TransferCommand extends AbstractPluginCommand {
         }
 
         playersFief.setOwnerUUID(targetUUID);
-        player.sendMessage(ChatColor.GREEN + "Transfered.");
+        player.sendMessage(ChatColor.GREEN + "Transferred.");
 
         // TODO: inform fief members about transfer of power
 

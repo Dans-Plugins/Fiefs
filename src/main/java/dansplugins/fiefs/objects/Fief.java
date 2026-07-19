@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,16 +26,16 @@ public class Fief {
     private String name;
     private String description = "Default Description";
     private UUID ownerUUID;
-    private String factionName;
+    private String factionId;
     private ArrayList<UUID> members = new ArrayList<>();
     private final FiefFlags flags;
     private final ArrayList<UUID> invitedPlayers = new ArrayList<>();
 
-    public Fief(MedievalFactionsIntegrator medievalFactionsIntegrator, String name, UUID ownerUUID, String factionName, Logger logger) {
+    public Fief(MedievalFactionsIntegrator medievalFactionsIntegrator, String name, UUID ownerUUID, String factionId, Logger logger) {
         this.medievalFactionsIntegrator = medievalFactionsIntegrator;
         this.name = name;
         this.ownerUUID = ownerUUID;
-        this.factionName = factionName;
+        this.factionId = factionId;
         members.add(ownerUUID);
         flags = new FiefFlags(logger);
         flags.initializeFlagValues();
@@ -69,12 +71,8 @@ public class Fief {
         this.ownerUUID = ownerUUID;
     }
 
-    public String getFactionName() {
-        return factionName;
-    }
-
-    public void setFactionName(String factionName) {
-        this.factionName = factionName;
+    public String getFactionId() {
+        return factionId;
     }
 
     public void addMember(UUID playerUUID) {
@@ -91,6 +89,10 @@ public class Fief {
 
     public boolean isMember(UUID playerUUID) {
         return members.contains(playerUUID);
+    }
+
+    public List<UUID> getMembers() {
+        return Collections.unmodifiableList(new ArrayList<>(members));
     }
 
     public void invitePlayer(UUID playerUUID) {
@@ -110,12 +112,14 @@ public class Fief {
     }
 
     public int getCumulativePowerLevel() {
-        int cumulativePowerLevel = 0;
+        double cumulativePowerLevel = 0.0;
         for (UUID memberUUID : members) {
-            double memberPowerLevel = medievalFactionsIntegrator.getAPI().getPower(memberUUID);
+            com.dansplugins.factionsystem.player.MfPlayer mfPlayer =
+                medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByPlayerId(memberUUID.toString());
+            double memberPowerLevel = mfPlayer != null ? mfPlayer.getPower() : 0.0;
             cumulativePowerLevel += memberPowerLevel;
         }
-        return cumulativePowerLevel;
+        return (int) Math.round(cumulativePowerLevel);
     }
 
     public int getNumMembers() {
@@ -138,7 +142,7 @@ public class Fief {
     public boolean equals(Fief fief) {
         return fief.getOwnerUUID().equals(this.getOwnerUUID())
                 && fief.getName().equals(this.getName())
-                && fief.getFactionName().equals(this.getFactionName());
+                && fief.getFactionId().equals(this.getFactionId());
     }
 
     public Map<String, String> save() {
@@ -148,7 +152,7 @@ public class Fief {
         saveMap.put("name", gson.toJson(name));
         saveMap.put("description", gson.toJson(description));
         saveMap.put("ownerUUID", gson.toJson(ownerUUID));
-        saveMap.put("factionName", gson.toJson(factionName));
+        saveMap.put("factionId", gson.toJson(factionId));
         saveMap.put("members", gson.toJson(members));
 
         saveMap.put("integerFlagValues", gson.toJson(flags.getIntegerValues()));
@@ -171,7 +175,7 @@ public class Fief {
         name = gson.fromJson(data.get("name"), String.class);
         description = gson.fromJson(data.get("description"), String.class);
         ownerUUID = UUID.fromString(gson.fromJson(data.get("ownerUUID"), String.class));
-        factionName = gson.fromJson(data.get("factionName"), String.class);
+        factionId = gson.fromJson(data.get("factionId"), String.class);
 
         members = gson.fromJson(data.get("members"), arrayListTypeUUID);
 

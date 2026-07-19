@@ -1,6 +1,6 @@
 package dansplugins.fiefs.data;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
 import dansplugins.fiefs.objects.Fief;
@@ -55,24 +55,24 @@ public class PersistentData {
         return null;
     }
 
-    public ArrayList<Fief> getFiefsOfFaction(MF_Faction faction) {
+    public ArrayList<Fief> getFiefsOfFaction(MfFaction faction) {
+        return getFiefsOfFaction(faction.getId());
+    }
+
+    public ArrayList<Fief> getFiefsOfFaction(String factionId) {
         ArrayList<Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
-            if (fief.getFactionName().equalsIgnoreCase(faction.getName())) {
+            if (fief.getFactionId().equals(factionId)) {
                 toReturn.add(fief);
             }
         }
         return toReturn;
     }
 
-    public ArrayList<Fief> getFiefsOfFaction(String factionName) {
-        ArrayList<Fief> toReturn = new ArrayList<>();
-        for (Fief fief : fiefs) {
-            if (fief.getFactionName().equalsIgnoreCase(factionName)) {
-                toReturn.add(fief);
-            }
-        }
-        return toReturn;
+    // Fiefs store the faction id; resolve it to the current faction name for display.
+    public String getFactionNameOfFief(Fief fief) {
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByFactionId(fief.getFactionId());
+        return faction != null ? faction.getName() : "Unknown";
     }
 
     public boolean isNameTaken(String name) {
@@ -93,12 +93,22 @@ public class PersistentData {
     }
 
     public boolean removeFief(Fief fiefToRemove) {
+        // Unclaim all of the fief's land so the chunks aren't orphaned when the
+        // fief is disbanded (via /fi disband or when its faction disbands). #133
+        claimedChunks.removeIf(chunk -> chunk.getFief().equalsIgnoreCase(fiefToRemove.getName()));
         return fiefs.remove(fiefToRemove);
     }
 
     public void sendListOfFiefsToPlayer(Player player) {
 
-        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        com.dansplugins.factionsystem.player.MfPlayer mfPlayer = 
+            medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
+        if (mfPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Could not load your player data.");
+            return;
+        }
+
+        MfFaction faction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
 
         if (faction == null) {
             player.sendMessage(ChatColor.RED + "You are not in a faction.");
@@ -163,7 +173,7 @@ public class PersistentData {
 
         player.sendMessage(ChatColor.AQUA + "=== " + playersFief.getName() + " Fief Info ===");
         player.sendMessage(ChatColor.AQUA + "Name: " + playersFief.getName());
-        player.sendMessage(ChatColor.AQUA + "Faction: " + playersFief.getFactionName());
+        player.sendMessage(ChatColor.AQUA + "Faction: " + getFactionNameOfFief(playersFief));
         player.sendMessage(ChatColor.AQUA + "Owner: " + uuidChecker.findPlayerNameBasedOnUUID(playersFief.getOwnerUUID()));
         player.sendMessage(ChatColor.AQUA + "Members: " + playersFief.getNumMembers());
         player.sendMessage(ChatColor.AQUA + "Power Level: " + cumulativePowerLevel);

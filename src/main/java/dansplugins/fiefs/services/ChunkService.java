@@ -1,5 +1,8 @@
 package dansplugins.fiefs.services;
 
+import com.dansplugins.factionsystem.claim.MfClaimedChunk;
+import com.dansplugins.factionsystem.faction.MfFaction;
+import com.dansplugins.factionsystem.player.MfPlayer;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.ClaimedChunk;
@@ -30,7 +33,22 @@ public class ChunkService {
     }
 
     public boolean attemptToClaimChunk(Chunk chunk, Fief fief, Player player) {
-        if (!medievalFactionsIntegrator.getAPI().isChunkClaimed(chunk)) {
+        MfClaimedChunk mfClaim = medievalFactionsIntegrator.getAPI().getServices().getClaimService().getClaim(chunk);
+        
+        if (mfClaim == null) {
+            player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
+            return false;
+        }
+        
+        // Verify the MF claim belongs to the player's faction
+        MfPlayer mfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByBukkitPlayer(player);
+        if (mfPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Could not load your player data.");
+            return false;
+        }
+        
+        MfFaction playerFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(mfPlayer.getId());
+        if (playerFaction == null || !mfClaim.getFactionId().equals(playerFaction.getId())) {
             player.sendMessage(ChatColor.RED + "You can't claim land that your faction hasn't claimed.");
             return false;
         }
@@ -46,7 +64,7 @@ public class ChunkService {
             return false;
         }
 
-        ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionName(), fief.getName());
+        ClaimedChunk newClaimedChunk = new ClaimedChunk(chunk, fief.getFactionId(), fief.getName());
         persistentData.addChunk(newClaimedChunk);
         player.sendMessage(ChatColor.GREEN + "Claimed.");
         return true;

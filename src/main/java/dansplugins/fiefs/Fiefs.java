@@ -1,11 +1,13 @@
 package dansplugins.fiefs;
 
-import dansplugins.factionsystem.eventhandlers.JoinHandler;
 import dansplugins.fiefs.bstats.Metrics;
 import dansplugins.fiefs.commands.*;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.externalapi.FiefsAPI;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.listeners.FactionEventListener;
+import dansplugins.fiefs.listeners.InteractionListener;
+import dansplugins.fiefs.listeners.MoveListener;
 import dansplugins.fiefs.services.ChunkService;
 import dansplugins.fiefs.services.ConfigService;
 import dansplugins.fiefs.services.StorageService;
@@ -145,7 +147,9 @@ public final class Fiefs extends PonderBukkitPlugin {
     private void registerEventHandlers() {
         EventHandlerRegistry eventHandlerRegistry = new EventHandlerRegistry();
         ArrayList<Listener> listeners = new ArrayList<>(Arrays.asList(
-                new JoinHandler()
+                new MoveListener(configService, chunkService, medievalFactionsIntegrator),
+                new InteractionListener(chunkService, persistentData, logger, this),
+                new FactionEventListener(persistentData, medievalFactionsIntegrator.getAPI())
         ));
         eventHandlerRegistry.registerEventHandlers(listeners, this);
     }

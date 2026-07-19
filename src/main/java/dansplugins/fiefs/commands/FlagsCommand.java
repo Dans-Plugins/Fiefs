@@ -1,6 +1,6 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -33,15 +33,14 @@ public class FlagsCommand extends AbstractPluginCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
         Player player = (Player) sender;
 
-        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfFaction faction = medievalFactionsIntegrator.getFactionForPlayer(player);
         if (faction == null) {
-            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
@@ -52,7 +51,7 @@ public class FlagsCommand extends AbstractPluginCommand {
         }
 
         if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
-            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to kick members.");
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to change its flags.");
             return false;
         }
 

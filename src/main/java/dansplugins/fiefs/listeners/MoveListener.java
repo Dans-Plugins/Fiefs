@@ -58,7 +58,7 @@ public class MoveListener implements Listener {
 
         // if moving into unclaimed land
         if (fromChunk != null && toChunk == null) {
-            if (medievalFactionsIntegrator.getAPI().isChunkClaimed(event.getTo().getChunk())) {
+            if (medievalFactionsIntegrator.getAPI().getServices().getClaimService().getClaim(event.getTo().getChunk()) != null) {
                 player.sendMessage(ChatColor.AQUA + "Leaving " + fromChunk.getFief());
             }
         }

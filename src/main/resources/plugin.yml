@@ -32,13 +32,15 @@ permissions:
     default: true
   fiefs.leave:
     default: true
-  fief.members:
+  fiefs.members:
     default: true
-  fief.desc:
+  fiefs.desc:
     default: true
-  fief.kick:
+  fiefs.kick:
     default: true
-  fief.transfer:
+  fiefs.transfer:
+    default: true
+  fiefs.flags:
     default: true
   fiefs.config:
     default: op

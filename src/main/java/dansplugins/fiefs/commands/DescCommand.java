@@ -1,6 +1,6 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -39,9 +39,8 @@ public class DescCommand extends AbstractPluginCommand {
 
         Player player = (Player) sender;
 
-        MF_Faction faction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfFaction faction = medievalFactionsIntegrator.getFactionForPlayer(player);
         if (faction == null) {
-            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
@@ -52,7 +51,7 @@ public class DescCommand extends AbstractPluginCommand {
         }
 
         ArgumentParser argumentParser = new ArgumentParser();
-        ArrayList<String> singleQuoteArgs = argumentParser.getArgumentsInsideDoubleQuotes(args);
+        ArrayList<String> singleQuoteArgs = new ArrayList<>(argumentParser.getArgumentsInsideDoubleQuotes(args));
 
         if (singleQuoteArgs.size() == 0) {
             player.sendMessage(ChatColor.RED + "New description must be between double quotes.");

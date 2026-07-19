@@ -29,8 +29,8 @@ public class FiefsAPI {
         return new FI_Fief(persistentData.getFief(playerUUID));
     }
 
-    public ArrayList<FI_Fief> getFiefsOfFaction(String factionName) {
-        ArrayList<Fief> fiefs = persistentData.getFiefsOfFaction(factionName);
+    public ArrayList<FI_Fief> getFiefsOfFaction(String factionId) {
+        ArrayList<Fief> fiefs = persistentData.getFiefsOfFaction(factionId);
         ArrayList<FI_Fief> toReturn = new ArrayList<>();
         for (Fief fief : fiefs) {
             toReturn.add(new FI_Fief(fief));

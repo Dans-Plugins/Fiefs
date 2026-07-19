@@ -1,6 +1,7 @@
 package dansplugins.fiefs.commands;
 
-import dansplugins.factionsystem.externalapi.MF_Faction;
+import com.dansplugins.factionsystem.faction.MfFaction;
+import com.dansplugins.factionsystem.player.MfPlayer;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
@@ -35,15 +36,14 @@ public class InviteCommand extends AbstractPluginCommand {
 
     public boolean execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
         Player player = (Player) sender;
 
-        MF_Faction playersFaction = medievalFactionsIntegrator.getAPI().getFaction(player);
+        MfFaction playersFaction = medievalFactionsIntegrator.getFactionForPlayer(player);
         if (playersFaction == null) {
-            player.sendMessage(ChatColor.RED + "You must be in a faction to use this command.");
             return false;
         }
 
@@ -78,9 +78,15 @@ public class InviteCommand extends AbstractPluginCommand {
             return false;
         }
 
-        MF_Faction targetsFaction = medievalFactionsIntegrator.getAPI().getFaction(targetUUID);
+        MfPlayer targetMfPlayer = medievalFactionsIntegrator.getAPI().getServices().getPlayerService().getPlayerByPlayerId(targetUUID.toString());
+        if (targetMfPlayer == null) {
+            player.sendMessage(ChatColor.RED + "Could not load that player's data.");
+            return false;
+        }
+
+        MfFaction targetsFaction = medievalFactionsIntegrator.getAPI().getServices().getFactionService().getFactionByPlayerId(targetMfPlayer.getId());
         if (targetsFaction == null || !targetsFaction.getName().equalsIgnoreCase(playersFaction.getName())) {
-            player.sendMessage(ChatColor.RED + "'" + targetName + "'is not in your faction.");
+            player.sendMessage(ChatColor.RED + "'" + targetName + "' is not in your faction.");
             return false;
         }
 

@@ -29,18 +29,22 @@ public class CheckClaimCommand extends AbstractPluginCommand {
     @Override
     public boolean execute(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
         Player player = (Player) sender;
 
-        Fief playersFief = persistentData.getFief(player);
-
         Chunk chunk = player.getLocation().getChunk();
         ClaimedChunk claimedChunk = chunkService.getClaimedChunk(chunk);
         if (claimedChunk != null) {
-            player.sendMessage(ChatColor.AQUA + "This land is claimed by " + playersFief.getName() + " and is located in " + playersFief.getFactionName());
+            Fief owningFief = persistentData.getFief(claimedChunk.getFief());
+            if (owningFief != null) {
+                player.sendMessage(ChatColor.AQUA + "This land is claimed by " + owningFief.getName() + " and is located in " + persistentData.getFactionNameOfFief(owningFief));
+            }
+            else {
+                player.sendMessage(ChatColor.AQUA + "This land is claimed by " + claimedChunk.getFief() + ".");
+            }
         }
         else {
             player.sendMessage(ChatColor.GREEN + "This land is currently not claimed by a fief.");
