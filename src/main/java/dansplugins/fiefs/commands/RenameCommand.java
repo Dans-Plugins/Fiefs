@@ -1,0 +1,78 @@
+package dansplugins.fiefs.commands;
+
+import com.dansplugins.factionsystem.faction.MfFaction;
+import dansplugins.fiefs.data.PersistentData;
+import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
+import dansplugins.fiefs.objects.Fief;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
+import preponderous.ponder.misc.ArgumentParser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * @author Daniel McCoy Stephenson
+ */
+public class RenameCommand extends AbstractPluginCommand {
+    private final MedievalFactionsIntegrator medievalFactionsIntegrator;
+    private final PersistentData persistentData;
+
+    public RenameCommand(MedievalFactionsIntegrator medievalFactionsIntegrator, PersistentData persistentData) {
+        super(new ArrayList<>(Arrays.asList("rename")), new ArrayList<>(Arrays.asList("fiefs.rename")));
+        this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+        this.persistentData = persistentData;
+    }
+
+    @Override
+    public boolean execute(CommandSender commandSender) {
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs rename \"new name\"");
+        return false;
+    }
+
+    public boolean execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
+            return false;
+        }
+
+        Player player = (Player) sender;
+
+        MfFaction faction = medievalFactionsIntegrator.getFactionForPlayer(player);
+        if (faction == null) {
+            return false;
+        }
+
+        Fief playersFief = persistentData.getFief(player);
+        if (playersFief == null) {
+            player.sendMessage(ChatColor.RED + "You must be in a fief to use this command.");
+            return false;
+        }
+
+        if (!playersFief.getOwnerUUID().equals(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "You must be the owner of your fief to rename it.");
+            return false;
+        }
+
+        ArgumentParser argumentParser = new ArgumentParser();
+        ArrayList<String> singleQuoteArgs = new ArrayList<>(argumentParser.getArgumentsInsideDoubleQuotes(args));
+
+        if (singleQuoteArgs.size() == 0) {
+            player.sendMessage(ChatColor.RED + "You must put the new name of your fief in between double quotes.");
+            return false;
+        }
+
+        String newName = singleQuoteArgs.get(0);
+
+        if (persistentData.isNameTaken(newName)) {
+            player.sendMessage(ChatColor.RED + "That name is taken.");
+            return false;
+        }
+
+        playersFief.setName(newName);
+        player.sendMessage(ChatColor.GREEN + "Fief renamed.");
+        return true;
+    }
+}

@@ -38,6 +38,7 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 | `fiefs.kick` | `true` | Kick a player from a fief. |
 | `fiefs.transfer` | `true` | Transfer fief ownership. |
 | `fiefs.desc` | `true` | Set a fief description. |
+| `fiefs.rename` | `true` | Rename a fief. |
 | `fiefs.claim` | `true` | Claim a chunk for a fief. |
 | `fiefs.unclaim` | `true` | Unclaim a chunk from a fief. |
 | `fiefs.checkclaim` | `true` | Check which fief owns a chunk. |

@@ -67,6 +67,7 @@ public class HelpCommand extends AbstractPluginCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi claim - Claim a chunk of land for your fief.");
         sender.sendMessage(ChatColor.AQUA + "/fi unclaim - Unclaim a chunk of land for your fief.");
         sender.sendMessage(ChatColor.AQUA + "/fi desc - Alter the description of your fief.");
+        sender.sendMessage(ChatColor.AQUA + "/fi rename - Rename your fief.");
         sender.sendMessage(ChatColor.AQUA + "/fi kick - Kick a player from your fief.");
         sender.sendMessage(ChatColor.AQUA + "/fi transfer - Transfer your fief to another player.");
         sender.sendMessage(ChatColor.AQUA + "/fi flags - View and alter your fief's configuration.");
