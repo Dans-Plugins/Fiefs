@@ -16,6 +16,7 @@ All commands use `/fi` or `/fiefs` as the base. Fiefs requires Medieval Factions
 | `/fi kick` | Kick a player from your fief. | `fiefs.kick` |
 | `/fi transfer` | Transfer ownership of your fief to another player. | `fiefs.transfer` |
 | `/fi desc` | Set a description for your fief. | `fiefs.desc` |
+| `/fi rename` | Rename your fief. | `fiefs.rename` |
 | `/fi claim` | Claim a chunk of faction land for your fief. | `fiefs.claim` |
 | `/fi unclaim` | Unclaim a chunk of land from your fief. | `fiefs.unclaim` |
 | `/fi checkclaim` | Check which fief owns the chunk you are standing in. | `fiefs.checkclaim` |

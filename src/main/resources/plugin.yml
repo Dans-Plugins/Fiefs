@@ -40,6 +40,8 @@ permissions:
     default: true
   fiefs.transfer:
     default: true
+  fiefs.rename:
+    default: true
   fiefs.flags:
     default: true
   fiefs.config:
