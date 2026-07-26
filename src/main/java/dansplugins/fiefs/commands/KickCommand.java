@@ -85,7 +85,9 @@ public class KickCommand extends AbstractPluginCommand {
             return false;
         }
 
-        Fief targetsFief = persistentData.getFief(targetName);
+        // Look the target's fief up by their UUID — the String overload matches on fief name,
+        // which is never the player's name. #144
+        Fief targetsFief = persistentData.getFief(targetUUID);
         if (targetsFief == null || !targetsFief.getName().equalsIgnoreCase(playersFief.getName())) {
             player.sendMessage(ChatColor.RED + "That player is not in your fief.");
             return false;
