@@ -16,7 +16,7 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 
 ## Getting Started
 
-1. Create a fief within your faction: `/fi create`
+1. Create a fief within your faction: `/fi create "Fief Name"`
 2. Invite members: `/fi invite <player>`
 3. Claim faction land for your fief: stand in a faction-owned chunk and run `/fi claim`
 4. Check fief ownership of a chunk: `/fi checkclaim`
@@ -42,7 +42,7 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 | `fiefs.claim` | `true` | Claim a chunk for a fief. |
 | `fiefs.unclaim` | `true` | Unclaim a chunk from a fief. |
 | `fiefs.checkclaim` | `true` | Check which fief owns a chunk. |
-| `fiefs.flags` | `op` | View and alter fief flags. |
+| `fiefs.flags` | `true` | View and alter fief flags. |
 | `fiefs.config` | `op` | View and alter plugin config options. |
 
 ## Support
