@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   was looked up by fief name using the player's name instead of by their UUID
 - `/fi invite` no longer invites a player who already belongs to another fief; the "already in a
   fief" check was looking the target up by fief name and never matched
+- `/fi desc`'s no-argument usage message now shows double quotes, matching the double-quote parsing
+  the command actually requires
 
 ## [0.11.0]
 
