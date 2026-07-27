@@ -28,7 +28,7 @@ public class DescCommand extends AbstractPluginCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs desc 'new description'");
+        commandSender.sendMessage(ChatColor.RED + "Usage: /fiefs desc \"new description\"");
         return false;
     }
 
