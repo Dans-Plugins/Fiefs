@@ -22,3 +22,4 @@ All commands use `/fi` or `/fiefs` as the base. Fiefs requires Medieval Factions
 | `/fi checkclaim` | Check which fief owns the chunk you are standing in. | `fiefs.checkclaim` |
 | `/fi flags` | View and alter your fief's configuration flags. | `fiefs.flags` |
 | `/fi config` | View and alter plugin config options. | `fiefs.config` |
+| `/fi whois <player>` | Check which fief a player is a member of. | `fiefs.whois` |

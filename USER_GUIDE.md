@@ -44,6 +44,7 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 | `fiefs.checkclaim` | `true` | Check which fief owns a chunk. |
 | `fiefs.flags` | `true` | View and alter fief flags. |
 | `fiefs.config` | `op` | View and alter plugin config options. |
+| `fiefs.whois` | `true` | Check which fief a player is a member of. |
 
 ## Support
 

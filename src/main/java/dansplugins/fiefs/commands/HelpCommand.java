@@ -72,6 +72,7 @@ public class HelpCommand extends AbstractPluginCommand {
         sender.sendMessage(ChatColor.AQUA + "/fi transfer - Transfer your fief to another player.");
         sender.sendMessage(ChatColor.AQUA + "/fi flags - View and alter your fief's configuration.");
         sender.sendMessage(ChatColor.AQUA + "/fi config - View and alter this plugin's config options.");
+        sender.sendMessage(ChatColor.AQUA + "/fi whois - Check which fief a player is a member of.");
     }
 
 }

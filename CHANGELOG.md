@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - `/fi rename "new name"` command allowing fief owners to rename their fief (`fiefs.rename`)
+- `/fi whois <player>` command allowing players to check which fief a given player is a member of (`fiefs.whois`)
 
 ### Fixed
 - `/fi kick` refused to kick any member with "That player is not in your fief." — the target's fief
