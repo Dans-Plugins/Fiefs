@@ -176,7 +176,8 @@ public final class Fiefs extends PonderBukkitPlugin {
                 new MembersCommand(medievalFactionsIntegrator, persistentData),
                 new RenameCommand(medievalFactionsIntegrator, persistentData),
                 new TransferCommand(medievalFactionsIntegrator, persistentData),
-                new UnclaimCommand(medievalFactionsIntegrator, persistentData, chunkService)
+                new UnclaimCommand(medievalFactionsIntegrator, persistentData, chunkService),
+                new WhoisCommand(persistentData)
         ));
         commandService.initialize(commands, "That command wasn't found.");
     }
