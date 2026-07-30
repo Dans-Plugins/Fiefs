@@ -43,8 +43,8 @@ public class Fief {
 
     public Fief(Map<String, String> fiefData, MedievalFactionsIntegrator medievalFactionsIntegrator, Logger logger) {
         this.medievalFactionsIntegrator = medievalFactionsIntegrator;
+        flags = new FiefFlags(logger); // must be assigned before load(), which populates it
         this.load(fiefData);
-        flags = new FiefFlags(logger);
     }
 
     public String getName() {
