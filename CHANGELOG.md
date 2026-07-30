@@ -13,8 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Fiefs saved to `fiefs.json` failed to load on startup, throwing a `NullPointerException` during
   plugin enable — a fief's flags were read before they were initialized. Servers with existing fief
-  data could not start the plugin, and the failed load left in-memory data empty so the next save
-  wrote an empty `fiefs.json` over it
+  data could not start the plugin, and because the failed load left in-memory data empty, a
+  subsequent save could write an empty `fiefs.json` over it
 - `/fi kick` refused to kick any member with "That player is not in your fief." — the target's fief
   was looked up by fief name using the player's name instead of by their UUID
 - `/fi invite` no longer invites a player who already belongs to another fief; the "already in a
