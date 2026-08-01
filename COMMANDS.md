@@ -4,6 +4,7 @@ All commands use `/fi` or `/fiefs` as the base. Fiefs requires Medieval Factions
 
 | Command | Description | Permission |
 |---------|-------------|------------|
+| `/fi` | View plugin version and info. | `fiefs.default` |
 | `/fi help {1\|2}` | View command list (2 pages). | `fiefs.help` |
 | `/fi list` | List the fiefs in your faction. | `fiefs.list` |
 | `/fi create` | Create a new fief in your faction. | `fiefs.create` |
