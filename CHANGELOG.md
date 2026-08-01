@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `/fi whois <player>` command allowing players to check which fief a given player is a member of (`fiefs.whois`)
 
 ### Fixed
+- `fiefs.default`, the permission node `DefaultCommand` (bare `/fi`) declares, was missing from
+  `plugin.yml` and undocumented; it is now registered with `default: true` and listed alongside
+  every other command's permission node
 - Fiefs saved to `fiefs.json` failed to load on startup, throwing a `NullPointerException` during
   plugin enable — a fief's flags were read before they were initialized. Servers with existing fief
   data could not start the plugin, and because the failed load left in-memory data empty, a

@@ -10,6 +10,8 @@ commands:
   fi:
 
 permissions:
+  fiefs.default:
+    default: true
   fiefs.help:
     default: true
   fiefs.list:

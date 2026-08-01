@@ -26,6 +26,7 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 
 | Permission | Default | Description |
 |------------|---------|-------------|
+| `fiefs.default` | `true` | View plugin version and info (bare `/fi`). |
 | `fiefs.help` | `true` | View the help menu. |
 | `fiefs.list` | `true` | List fiefs. |
 | `fiefs.create` | `true` | Create a fief. |
