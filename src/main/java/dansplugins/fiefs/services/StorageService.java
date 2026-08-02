@@ -35,6 +35,10 @@ public class StorageService {
     private final static Type LIST_MAP_TYPE = new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();;
 
+    // Set false whenever a load fails to fully parse, so save() doesn't overwrite
+    // fiefs.json/claimedChunks.json with the empty or partial in-memory state (#153).
+    private boolean loadCompletedCleanly = true;
+
     public StorageService(ConfigService configService, Fiefs fiefs, PersistentData persistentData, Logger logger, MedievalFactionsIntegrator medievalFactionsIntegrator) {
         this.configService = configService;
         this.fiefs = fiefs;
@@ -44,6 +48,11 @@ public class StorageService {
     }
 
     public void save() {
+        if (!loadCompletedCleanly) {
+            System.out.println("ERROR: skipping save because the last load did not complete cleanly. " +
+                    "Fix " + FIEFS_FILE_NAME + "/" + CLAIMED_CHUNKS_FILE_NAME + " and restart to try again.");
+            return;
+        }
         saveFiefs();
         saveClaimedChunks();
         if (configService.hasBeenAltered()) {
@@ -52,8 +61,17 @@ public class StorageService {
     }
 
     public void load() {
+        loadCompletedCleanly = true;
         loadFiefs();
         loadClaimedChunks();
+    }
+
+    /**
+     * For tests: whether both load() calls this session parsed their files fully,
+     * without needing to reach into the private flag directly.
+     */
+    boolean isLoadCompletedCleanly() {
+        return loadCompletedCleanly;
     }
 
     private void saveFiefs() {
@@ -91,23 +109,54 @@ public class StorageService {
     }
 
     private void loadFiefs() {
+        applyFiefs(FILE_PATH + FIEFS_FILE_NAME);
+    }
+
+    private void loadClaimedChunks() {
+        applyClaimedChunks(FILE_PATH + CLAIMED_CHUNKS_FILE_NAME);
+    }
+
+    // Package-private so tests can exercise the parse-then-swap behavior directly.
+    // Reading the file and constructing every entry happen inside the same try block, so a
+    // malformed JSON file (not just a malformed entry, e.g. bad UUID) is caught the same way.
+    void applyFiefs(String filename) {
+        ArrayList<Fief> loaded = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> data = loadDataFromFilename(filename);
+            for (Map<String, String> fiefData : data) {
+                loaded.add(new Fief(fiefData, medievalFactionsIntegrator, logger));
+            }
+        } catch (RuntimeException e) {
+            // Parse only into a local list first, so a bad entry can't leave persistentData
+            // partially cleared/repopulated (#153): either every entry loads, or none do.
+            loadCompletedCleanly = false;
+            System.out.println("ERROR: failed to load " + FIEFS_FILE_NAME + " cleanly, leaving existing " +
+                    "in-memory fief data untouched: " + e);
+            return;
+        }
+
         persistentData.clearFiefs();
-
-        ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + FIEFS_FILE_NAME);
-
-        for (Map<String, String> fiefData : data){
-            Fief fief = new Fief(fiefData, medievalFactionsIntegrator, logger);
+        for (Fief fief : loaded) {
             persistentData.addFief(fief);
         }
     }
 
-    private void loadClaimedChunks() {
+    void applyClaimedChunks(String filename) {
+        ArrayList<ClaimedChunk> loaded = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String, String>> data = loadDataFromFilename(filename);
+            for (Map<String, String> claimedChunkData : data) {
+                loaded.add(new ClaimedChunk(claimedChunkData));
+            }
+        } catch (RuntimeException e) {
+            loadCompletedCleanly = false;
+            System.out.println("ERROR: failed to load " + CLAIMED_CHUNKS_FILE_NAME + " cleanly, leaving existing " +
+                    "in-memory claimed chunk data untouched: " + e);
+            return;
+        }
+
         persistentData.clearClaimedChunks();
-
-        ArrayList<HashMap<String, String>> data = loadDataFromFilename(FILE_PATH + CLAIMED_CHUNKS_FILE_NAME);
-
-        for (Map<String, String> claimedChunkData : data){
-            ClaimedChunk claimedChunk = new ClaimedChunk(claimedChunkData);
+        for (ClaimedChunk claimedChunk : loaded) {
             persistentData.addChunk(claimedChunk);
         }
     }
