@@ -24,6 +24,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   fief" check was looking the target up by fief name and never matched
 - `/fi desc`'s no-argument usage message now shows double quotes, matching the double-quote parsing
   the command actually requires
+- A load failure partway through `fiefs.json` or `claimedChunks.json` (a malformed entry or invalid
+  JSON) no longer leaves in-memory fief/claim data empty; the file is now parsed fully before
+  replacing the existing in-memory data, and saving is skipped until the file is fixed and the
+  server restarted, so a bad load can no longer overwrite good data on disk
 
 ## [0.11.0]
 
