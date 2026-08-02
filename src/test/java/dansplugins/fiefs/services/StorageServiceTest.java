@@ -173,7 +173,7 @@ class StorageServiceTest {
     }
 
     @Test
-    void applyClaimedChunks_emptyFileLeavesPersistentDataEmptyAndClean() {
+    void applyClaimedChunks_missingFileLeavesPersistentDataEmptyAndClean() {
         PersistentData persistentData = new PersistentData(null);
         StorageService storageService = newStorageService(persistentData);
 
