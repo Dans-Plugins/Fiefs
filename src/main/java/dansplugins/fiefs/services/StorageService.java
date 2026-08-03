@@ -97,7 +97,9 @@ public class StorageService {
     private void writeOutFiles(List<Map<String, String>> saveData, String fileName) {
         try {
             File parentFolder = new File(FILE_PATH);
-            parentFolder.mkdir();
+            // mkdirs(), not mkdir(): mkdir() only creates the leaf, so it fails silently when
+            // "./plugins/" itself is absent and the createNewFile() below then throws (#159).
+            parentFolder.mkdirs();
             File file = new File(FILE_PATH + fileName);
             file.createNewFile();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
@@ -165,7 +167,15 @@ public class StorageService {
         try{
             Gson gson = new GsonBuilder().setPrettyPrinting().create();;
             JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
-            return gson.fromJson(reader, LIST_MAP_TYPE);
+            ArrayList<HashMap<String, String>> data = gson.fromJson(reader, LIST_MAP_TYPE);
+            // Gson yields null for a zero-byte file, which a crash mid-save can leave behind
+            // (FileOutputStream truncates before writing). An empty file is no data, not corrupt
+            // data, so treat it like a missing file rather than failing the load and blocking
+            // every subsequent save for the session (#160).
+            if (data == null) {
+                return new ArrayList<>();
+            }
+            return data;
         } catch (FileNotFoundException e) {
             // Fail silently because this can actually happen in normal use
         }

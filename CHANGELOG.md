@@ -28,6 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   JSON) no longer leaves in-memory fief/claim data empty; the file is now parsed fully before
   replacing the existing in-memory data, and saving is skipped until the file is fixed and the
   server restarted, so a bad load can no longer overwrite good data on disk
+- A zero-byte `fiefs.json` or `claimedChunks.json` — which a crash or kill during the shutdown save
+  can leave behind — was treated as a corrupt file, which disabled saving for the whole session and
+  silently discarded every fief created or changed during it. An empty save file now loads as "no
+  data", the same as a missing one, and leaves saving enabled
+- The `./plugins/Fiefs/` save directory is now created with `mkdirs()` rather than `mkdir()`, so the
+  save no longer fails silently in environments where `./plugins/` does not already exist
 
 ## [0.11.0]
 
