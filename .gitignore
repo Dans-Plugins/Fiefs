@@ -1,1 +1,4 @@
 target/
+# StorageServiceTest writes real save files under ./plugins/Fiefs/ and cleans them up
+# best-effort; a failing test can leave the directory behind, so never commit it.
+plugins/

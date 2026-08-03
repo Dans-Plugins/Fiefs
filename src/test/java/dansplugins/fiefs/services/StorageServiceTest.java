@@ -36,9 +36,10 @@ class StorageServiceTest {
 
     private static final Logger NULL_LOGGER = new Logger(null);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    // Bukkit always creates the top-level "plugins/" folder before onEnable() runs (it's
-    // where the server loads plugin jars from), so StorageService's single-level mkdir() of
-    // "plugins/Fiefs/" only ever needs to create the leaf. Recreate that guarantee here.
+    // In a real Bukkit deployment "plugins/" always exists before onEnable() runs (it's where the
+    // server loads plugin jars from), but StorageService must not depend on that: since #159 it
+    // creates the whole path with mkdirs(), so these tests deliberately start with no "plugins/"
+    // at all and delete it again afterwards.
     private static final Path PLUGINS_TOP_LEVEL_DIR = Path.of("./plugins/");
     private static final Path PLUGINS_DIR = Path.of("./plugins/Fiefs/");
 
@@ -135,6 +136,58 @@ class StorageServiceTest {
         assertFalse(storageService.isLoadCompletedCleanly());
     }
 
+    /**
+     * Regression guard for #160: a crash between {@code FileOutputStream}'s truncate and the write
+     * completing leaves a zero-byte save file. Gson parses that to {@code null}, which used to NPE
+     * inside the load and set {@code loadCompletedCleanly} false — silently disabling every save
+     * for the rest of the session. An empty file is no data, so it must load like a missing one.
+     */
+    @Test
+    void applyFiefs_emptyFileLeavesPersistentDataEmptyButCountsAsClean() throws IOException {
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+        tempFile = Files.createTempFile("fiefs-storage-test", ".json");
+        assertEquals(0, Files.size(tempFile), "test expects a zero-byte file");
+
+        storageService.applyFiefs(tempFile.toString());
+
+        assertEquals(0, persistentData.getFiefs().size());
+        assertTrue(storageService.isLoadCompletedCleanly());
+    }
+
+    @Test
+    void applyClaimedChunks_emptyFileLeavesPersistentDataEmptyButCountsAsClean() throws IOException {
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+        tempFile = Files.createTempFile("fiefs-storage-test", ".json");
+        assertEquals(0, Files.size(tempFile), "test expects a zero-byte file");
+
+        storageService.applyClaimedChunks(tempFile.toString());
+
+        assertEquals(0, persistentData.getNumChunks());
+        assertTrue(storageService.isLoadCompletedCleanly());
+    }
+
+    /**
+     * The other half of #160: an empty file must not just load cleanly, it must leave saving
+     * enabled, so the fiefs created during that session actually reach disk at shutdown.
+     */
+    @Test
+    void save_stillWritesAfterLoadingAnEmptyFile() throws IOException {
+        assumeFalse(Files.exists(PLUGINS_TOP_LEVEL_DIR), "test expects no pre-existing ./plugins/ directory");
+
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+        tempFile = Files.createTempFile("fiefs-storage-test", ".json");
+        storageService.applyFiefs(tempFile.toString());
+        persistentData.addFief(newFief("CreatedAfterEmptyLoad"));
+
+        storageService.save();
+
+        assertTrue(Files.exists(PLUGINS_DIR.resolve("fiefs.json")),
+                "an empty save file must not disable saving for the session");
+    }
+
     @Test
     void applyFiefs_malformedJsonDoesNotClearPersistentData() throws IOException {
         PersistentData persistentData = new PersistentData(null);
@@ -206,10 +259,16 @@ class StorageServiceTest {
         assertFalse(Files.exists(PLUGINS_DIR), "save() must not write ./plugins/Fiefs/ after an incomplete load");
     }
 
+    /**
+     * Doubles as the regression guard for #159: no {@code ./plugins/} directory is created up
+     * front, so this only passes if {@code writeOutFiles()} builds the full path with
+     * {@code mkdirs()}. With the old single-level {@code mkdir()} the directory creation failed
+     * silently, {@code createNewFile()} threw {@code IOException: No such file or directory}, and
+     * the save was swallowed — leaving no {@code fiefs.json} behind.
+     */
     @Test
     void save_writesNormallyWhenLoadCompletedCleanly() throws IOException {
-        assumeFalse(Files.exists(PLUGINS_DIR), "test expects no pre-existing ./plugins/Fiefs/ directory");
-        Files.createDirectories(PLUGINS_TOP_LEVEL_DIR);
+        assumeFalse(Files.exists(PLUGINS_TOP_LEVEL_DIR), "test expects no pre-existing ./plugins/ directory");
 
         PersistentData persistentData = new PersistentData(null);
         persistentData.addFief(newFief("Testopia"));
