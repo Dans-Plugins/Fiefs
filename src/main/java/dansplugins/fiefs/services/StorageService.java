@@ -164,6 +164,14 @@ public class StorageService {
     }
 
     private ArrayList<HashMap<String, String>> loadDataFromFilename(String filename) {
+        // FileNotFoundException covers more than "missing": per the FileInputStream(String)
+        // contract it's also thrown when the path is a directory or otherwise can't be opened
+        // for reading (e.g. no read permission). Checking existence first lets the catch below
+        // tell "nothing to load" apart from "data is there but unreadable" (#162), instead of
+        // treating both as an empty, cleanly-loaded file.
+        if (!new File(filename).exists()) {
+            return new ArrayList<>();
+        }
         try{
             Gson gson = new GsonBuilder().setPrettyPrinting().create();;
             JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
@@ -177,8 +185,10 @@ public class StorageService {
             }
             return data;
         } catch (FileNotFoundException e) {
-            // Fail silently because this can actually happen in normal use
+            // The file exists but couldn't be opened for reading. Surface this as an unclean
+            // load (caught by applyFiefs()/applyClaimedChunks() as a RuntimeException) instead
+            // of silently returning an empty list, so save() doesn't overwrite real on-disk data.
+            throw new UncheckedIOException(e);
         }
-        return new ArrayList<>();
     }
 }
