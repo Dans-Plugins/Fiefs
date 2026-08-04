@@ -34,6 +34,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   data", the same as a missing one, and leaves saving enabled
 - The `./plugins/Fiefs/` save directory is now created with `mkdirs()` rather than `mkdir()`, so the
   save no longer fails silently in environments where `./plugins/` does not already exist
+- An existing `fiefs.json` or `claimedChunks.json` that cannot be opened for reading (for example
+  after a permission or ownership change on the server's data directory) was previously treated the
+  same as a missing file, loading as "no fiefs/claims" and leaving saving enabled — so the next save
+  could overwrite real data with an empty file. It is now treated as a failed load, matching the
+  existing handling for a malformed file, and saving is skipped until the file is fixed
 
 ## [0.11.0]
 

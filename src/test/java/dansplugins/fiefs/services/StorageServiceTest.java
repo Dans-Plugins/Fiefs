@@ -109,6 +109,28 @@ class StorageServiceTest {
     }
 
     /**
+     * Regression guard for #162: a path that exists but can't be opened for reading must not be
+     * treated the same as a genuinely missing file, or the next save() overwrites the real
+     * on-disk data with an empty list. A directory is used to trigger this deterministically:
+     * per the {@code FileInputStream(String)} contract it throws {@code FileNotFoundException}
+     * for "does not exist, is a directory, or otherwise can't be opened" alike, and unlike a
+     * chmod-based unreadable file, a directory can't be opened as a byte stream even by a
+     * process running as root, so this doesn't need a privilege-dependent skip.
+     */
+    @Test
+    void applyFiefs_pathThatCannotBeOpenedForReadingIsTreatedAsUncleanRatherThanEmpty() throws IOException {
+        tempFile = Files.createTempDirectory("fiefs-storage-test-dir");
+
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+
+        storageService.applyFiefs(tempFile.toString());
+
+        assertEquals(0, persistentData.getFiefs().size());
+        assertFalse(storageService.isLoadCompletedCleanly());
+    }
+
+    /**
      * Regression guard for #153: previously, {@code loadFiefs()} cleared persistentData
      * before parsing, so a bad entry (e.g. the unguarded {@code UUID.fromString(...)} in
      * {@code Fief.load()}) left the in-memory state permanently empty instead of intact.
