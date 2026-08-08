@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Characterization tests for the Dans-Plugins/Fiefs#153 fix: a load that fails to parse
@@ -42,6 +43,7 @@ class StorageServiceTest {
     // at all and delete it again afterwards.
     private static final Path PLUGINS_TOP_LEVEL_DIR = Path.of("./plugins/");
     private static final Path PLUGINS_DIR = Path.of("./plugins/Fiefs/");
+    private static final Path PROC_SELF_FD = Path.of("/proc/self/fd");
 
     private Path tempFile;
 
@@ -245,6 +247,66 @@ class StorageServiceTest {
 
         assertEquals(0, persistentData.getNumChunks());
         assertFalse(storageService.isLoadCompletedCleanly());
+    }
+
+    /**
+     * Regression guard for #164: the reader chain opened by {@code loadDataFromFilename()} used to
+     * be left for the garbage collector's cleaner to close, so the descriptor stayed open after the
+     * load returned — on Windows that keeps the file locked against the next save. The open
+     * descriptors are read from {@code /proc/self/fd}, so this only runs where procfs is available.
+     */
+    @Test
+    void applyFiefs_closesTheFileAfterLoadingIt() throws IOException {
+        assumeTrue(Files.isDirectory(PROC_SELF_FD), "test needs /proc/self/fd to observe open descriptors");
+
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+        List<Map<String, String>> data = new ArrayList<>();
+        data.add(newFief("Testopia").save());
+        Path file = writeJson(data);
+
+        storageService.applyFiefs(file.toString());
+
+        assertTrue(storageService.isLoadCompletedCleanly(), "test expects a clean load");
+        assertFalse(openDescriptorsFor(file), "the save file must not be left open after the load");
+    }
+
+    /**
+     * The same guard for the claimed-chunks path, which reaches {@code loadDataFromFilename()}
+     * through {@link StorageService#applyClaimedChunks(String)}. An empty file is used so the
+     * Bukkit-coupled {@link dansplugins.fiefs.objects.ClaimedChunk} constructor is never reached;
+     * the descriptor must be released either way.
+     */
+    @Test
+    void applyClaimedChunks_closesTheFileAfterLoadingIt() throws IOException {
+        assumeTrue(Files.isDirectory(PROC_SELF_FD), "test needs /proc/self/fd to observe open descriptors");
+
+        PersistentData persistentData = new PersistentData(null);
+        StorageService storageService = newStorageService(persistentData);
+        Path file = writeJson(new ArrayList<Map<String, String>>());
+
+        storageService.applyClaimedChunks(file.toString());
+
+        assertTrue(storageService.isLoadCompletedCleanly(), "test expects a clean load");
+        assertFalse(openDescriptorsFor(file), "the save file must not be left open after the load");
+    }
+
+    /**
+     * Whether this JVM still holds any descriptor pointing at the given file. Broken or vanished
+     * symlinks under /proc/self/fd are ignored: the directory is read concurrently with the JVM's
+     * own file activity, so entries can disappear between listing and resolving them.
+     */
+    private static boolean openDescriptorsFor(Path file) throws IOException {
+        Path target = file.toRealPath();
+        try (Stream<Path> descriptors = Files.list(PROC_SELF_FD)) {
+            return descriptors.anyMatch(descriptor -> {
+                try {
+                    return Files.readSymbolicLink(descriptor).equals(target);
+                } catch (IOException ignored) {
+                    return false;
+                }
+            });
+        }
     }
 
     @Test

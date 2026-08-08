@@ -39,6 +39,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   same as a missing file, loading as "no fiefs/claims" and leaving saving enabled — so the next save
   could overwrite real data with an empty file. It is now treated as a failed load, matching the
   existing handling for a malformed file, and saving is skipped until the file is fixed
+- `fiefs.json` and `claimedChunks.json` are now closed as soon as they have been read or written.
+  The load left its reader open for the garbage collector to clean up, which on Windows kept the
+  file locked long enough for a later save to fail, and a save that threw part-way through left its
+  file open and unflushed
 
 ## [0.11.0]
 
