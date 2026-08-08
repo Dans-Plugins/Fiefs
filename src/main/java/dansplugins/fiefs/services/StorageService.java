@@ -182,7 +182,7 @@ public class StorageService {
         // chain around it fails to construct.
         try (FileInputStream fileInputStream = new FileInputStream(filename);
              JsonReader reader = new JsonReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8))) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();;
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             ArrayList<HashMap<String, String>> data = gson.fromJson(reader, LIST_MAP_TYPE);
             // Gson yields null for a zero-byte file, which a crash mid-save can leave behind
             // (FileOutputStream truncates before writing). An empty file is no data, not corrupt
