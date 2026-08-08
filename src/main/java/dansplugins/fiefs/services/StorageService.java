@@ -102,9 +102,12 @@ public class StorageService {
             parentFolder.mkdirs();
             File file = new File(FILE_PATH + fileName);
             file.createNewFile();
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-            outputStreamWriter.write(gson.toJson(saveData));
-            outputStreamWriter.close();
+            // try-with-resources, not a trailing close(): with close() as the last statement of the
+            // try block it was skipped whenever the write threw, leaving the file both open and
+            // unflushed while the catch below only logged (#164).
+            try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+                outputStreamWriter.write(gson.toJson(saveData));
+            }
         } catch(IOException e) {
             System.out.println("ERROR: " + e.toString());
         }
@@ -172,9 +175,14 @@ public class StorageService {
         if (!new File(filename).exists()) {
             return new ArrayList<>();
         }
-        try{
+        // try-with-resources on the stream itself as well as the reader wrapping it: the reader
+        // was previously never closed at all, leaving the descriptor open until the garbage
+        // collector got around to it, which on Windows keeps the file locked against the next
+        // save (#164). Listing the FileInputStream separately also releases it if the reader
+        // chain around it fails to construct.
+        try (FileInputStream fileInputStream = new FileInputStream(filename);
+             JsonReader reader = new JsonReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8))) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();;
-            JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
             ArrayList<HashMap<String, String>> data = gson.fromJson(reader, LIST_MAP_TYPE);
             // Gson yields null for a zero-byte file, which a crash mid-save can leave behind
             // (FileOutputStream truncates before writing). An empty file is no data, not corrupt
@@ -188,6 +196,11 @@ public class StorageService {
             // The file exists but couldn't be opened for reading. Surface this as an unclean
             // load (caught by applyFiefs()/applyClaimedChunks() as a RuntimeException) instead
             // of silently returning an empty list, so save() doesn't overwrite real on-disk data.
+            throw new UncheckedIOException(e);
+        } catch (IOException e) {
+            // Only reachable from closing the reader, since every read failure surfaces from Gson
+            // as a JsonIOException. Treated as an unclean load for the same reason as above: the
+            // file could not be read end-to-end, so its contents must not be overwritten.
             throw new UncheckedIOException(e);
         }
     }
