@@ -6,7 +6,7 @@
 
     <groupId>dansplugins</groupId>
     <artifactId>Fiefs</artifactId>
-    <version>0.11.0-SNAPSHOT</version>
+    <version>0.12.0-SNAPSHOT-8-8-2026</version>
     <packaging>jar</packaging>
 
     <name>Fiefs</name>
