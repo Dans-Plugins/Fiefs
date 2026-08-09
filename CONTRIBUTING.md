@@ -82,8 +82,9 @@ EOF
 
 ### Pull requests
 
-- Pull requests are squash-merged and the branch is deleted afterwards. Some older entries in the
-  history are merge commits; squashing is what current work follows.
+- Pull requests are squash-merged. The history also contains merge commits — the most recent being
+  the 0.12.0 release pull request — so squashing describes what new work should follow rather than
+  every entry in the log.
 - Close the issue from the pull request body with `Closes #<number>`. A bare `#<number>` links the
   issue but does not close it.
 - Check each `Closes #<number>` against the issue it names before the pull request is opened, rather
