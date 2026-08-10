@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -146,6 +147,6 @@ class FiefsAPITest {
         persistentData.addFief(newFief("Testopia", UUID.randomUUID(), "faction-1"));
         FiefsAPI api = new FiefsAPI(persistentData);
 
-        assertTrue(api.getFief("Testopia") != api.getFief("Testopia"));
+        assertNotSame(api.getFief("Testopia"), api.getFief("Testopia"));
     }
 }

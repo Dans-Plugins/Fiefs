@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -111,6 +110,6 @@ class FI_FiefTest {
         unprotectedFief.getFlags().getBooleanValues().put("claimedLandProtected", false);
 
         assertEquals(true, new FI_Fief(protectedFief).getFlag("claimedLandProtected"));
-        assertFalse((Boolean) new FI_Fief(unprotectedFief).getFlag("claimedLandProtected"));
+        assertEquals(false, new FI_Fief(unprotectedFief).getFlag("claimedLandProtected"));
     }
 }
