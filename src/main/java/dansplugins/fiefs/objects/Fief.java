@@ -146,7 +146,7 @@ public class Fief {
     }
 
     public Map<String, String> save() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         Map<String, String> saveMap = new HashMap<>();
         saveMap.put("name", gson.toJson(name));
