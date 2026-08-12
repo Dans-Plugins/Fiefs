@@ -33,7 +33,7 @@ public class StorageService {
     private final static String FIEFS_FILE_NAME = "fiefs.json";
     private final static String CLAIMED_CHUNKS_FILE_NAME = "claimedChunks.json";
     private final static Type LIST_MAP_TYPE = new TypeToken<ArrayList<HashMap<String, String>>>(){}.getType();
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     // Set false whenever a load fails to fully parse, so save() doesn't overwrite
     // fiefs.json/claimedChunks.json with the empty or partial in-memory state (#153).
@@ -182,7 +182,6 @@ public class StorageService {
         // chain around it fails to construct.
         try (FileInputStream fileInputStream = new FileInputStream(filename);
              JsonReader reader = new JsonReader(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8))) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();;
             ArrayList<HashMap<String, String>> data = gson.fromJson(reader, LIST_MAP_TYPE);
             // Gson yields null for a zero-byte file, which a crash mid-save can leave behind
             // (FileOutputStream truncates before writing). An empty file is no data, not corrupt
