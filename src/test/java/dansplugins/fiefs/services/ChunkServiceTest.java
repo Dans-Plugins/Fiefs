@@ -54,16 +54,9 @@ class ChunkServiceTest {
     void getClaimedChunk_returnsTheClaimAtThoseCoordinates() {
         ClaimedChunk claimedChunk = claim(BukkitTestDoubles.chunk("world", 1, 2), "Testopia");
 
+        // The lookup is made with a distinct Chunk instance describing the same location, since
+        // Bukkit hands out different Chunk objects for one location and identity is not usable.
         assertSame(claimedChunk, chunkService.getClaimedChunk(BukkitTestDoubles.chunk("world", 1, 2)));
-    }
-
-    @Test
-    void getClaimedChunk_matchesOnCoordinatesAndWorldRatherThanChunkIdentity() {
-        claim(BukkitTestDoubles.chunk("world", 1, 2), "Testopia");
-
-        // A distinct Chunk instance describing the same location still matches: Bukkit hands out
-        // different Chunk objects for the same location across reloads, so identity is not usable.
-        assertNotNull(chunkService.getClaimedChunk(BukkitTestDoubles.chunk("world", 1, 2)));
     }
 
     @Test
