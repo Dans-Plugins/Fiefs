@@ -1,7 +1,9 @@
 package dansplugins.fiefs.testsupport;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationHandler;
@@ -56,6 +58,51 @@ public final class BukkitTestDoubles {
      */
     public static Player messageCapturingPlayer(List<String> sentMessages) {
         return proxy(Player.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
+     * A player standing in the given chunk, appending every message sent to it to
+     * {@code sentMessages}. Answers {@code sendMessage(String)} and {@code getLocation()},
+     * the latter returning a location whose {@code getChunk()} resolves to {@code chunk}.
+     */
+    public static Player playerInChunk(Chunk chunk, List<String> sentMessages) {
+        World world = proxy(World.class, (method, args) -> {
+            if (method.getName().equals("getChunkAt")) {
+                return chunk;
+            }
+            throw unsupported(method);
+        });
+
+        // Location holds its world through a weak reference, so the strong reference the
+        // handler below closes over is what keeps the proxy above alive for the test's duration.
+        Location location = new Location(world, 0, 64, 0);
+
+        return proxy(Player.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            if (method.getName().equals("getLocation") && (args == null || args.length == 0)) {
+                return location;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
+     * A non-player command sender — the console, for the purposes of the commands that refuse
+     * to run for one — appending every message sent to it to {@code sentMessages}.
+     */
+    public static CommandSender messageCapturingConsole(List<String> sentMessages) {
+        return proxy(CommandSender.class, (method, args) -> {
             if (method.getName().equals("sendMessage") && args != null && args.length == 1
                     && args[0] instanceof String) {
                 sentMessages.add((String) args[0]);
