@@ -57,6 +57,7 @@ class HelpCommandTest {
         boolean result = helpCommand.execute(sender, new String[]{"one"});
 
         assertFalse(result);
+        assertEquals(1, messages.size());
         assertTrue(anyMessageContains(USAGE));
     }
 

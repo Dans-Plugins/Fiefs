@@ -74,14 +74,13 @@ public final class BukkitTestDoubles {
      */
     public static Player playerInChunk(Chunk chunk, List<String> sentMessages) {
         World world = proxy(World.class, (method, args) -> {
-            if (method.getName().equals("getChunkAt")) {
+            if (method.getName().equals("getChunkAt") && args != null && args.length == 1
+                    && args[0] instanceof Location) {
                 return chunk;
             }
             throw unsupported(method);
         });
 
-        // Location holds its world through a weak reference, so the strong reference the
-        // handler below closes over is what keeps the proxy above alive for the test's duration.
         Location location = new Location(world, 0, 64, 0);
 
         return proxy(Player.class, (method, args) -> {
@@ -92,6 +91,13 @@ public final class BukkitTestDoubles {
             }
             if (method.getName().equals("getLocation") && (args == null || args.length == 0)) {
                 return location;
+            }
+            // Answering getWorld() is also what keeps the world above reachable: a Location
+            // holds its world through a weak reference, and this handler is the only strong
+            // reference to it once the factory returns. Without it a collected world turns
+            // getLocation().getChunk() into an intermittent "World unloaded" failure.
+            if (method.getName().equals("getWorld") && (args == null || args.length == 0)) {
+                return world;
             }
             throw unsupported(method);
         });
