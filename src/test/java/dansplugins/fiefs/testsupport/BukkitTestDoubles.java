@@ -19,6 +19,10 @@ import java.util.List;
  * answer only the methods actually called by the code under test. Any other call throws
  * {@link UnsupportedOperationException} rather than returning a silent null, so a test that
  * starts exercising a new part of the Bukkit surface fails loudly instead of misreporting.
+ *
+ * <p>The proxy plumbing at the bottom is package-private rather than private so that
+ * {@link FakeBukkitServer}, which doubles the server singleton itself, builds its proxies the
+ * same way.
  */
 public final class BukkitTestDoubles {
 
@@ -123,7 +127,7 @@ public final class BukkitTestDoubles {
      * {@code hashCode} and {@code toString} are dispatched to the invocation handler like any
      * other method, so they are handled here rather than in each double.
      */
-    private static <T> T proxy(Class<T> type, Answer answer) {
+    static <T> T proxy(Class<T> type, Answer answer) {
         InvocationHandler handler = (proxyInstance, method, args) -> {
             switch (method.getName()) {
                 case "equals":
@@ -139,14 +143,14 @@ public final class BukkitTestDoubles {
         return type.cast(Proxy.newProxyInstance(type.getClassLoader(), new Class<?>[]{type}, handler));
     }
 
-    private static UnsupportedOperationException unsupported(Method method) {
+    static UnsupportedOperationException unsupported(Method method) {
         return new UnsupportedOperationException(
                 "This test double does not answer " + method.getDeclaringClass().getSimpleName()
                         + "." + method.getName() + "(...)");
     }
 
     @FunctionalInterface
-    private interface Answer {
+    interface Answer {
         Object answer(Method method, Object[] args);
     }
 }
