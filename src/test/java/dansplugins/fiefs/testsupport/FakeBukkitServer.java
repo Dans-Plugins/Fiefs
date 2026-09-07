@@ -19,6 +19,11 @@ import java.util.UUID;
  * cleared between tests. Call {@link #install()} from a {@code @BeforeEach} — it is idempotent —
  * and register whichever players the test needs.
  *
+ * <p>The registry is static because the server it backs is, so tests that use it cannot run
+ * concurrently with one another: turning on Surefire's {@code parallel} option would let one
+ * test's registration or reset land in the middle of another's. Surefire runs tests serially by
+ * default, and this is the constraint to weigh before changing that.
+ *
  * <p>Only the methods the code under test reaches are answered; anything else throws, so a test
  * that starts touching a new part of the server surface fails loudly rather than reading a null.
  */
