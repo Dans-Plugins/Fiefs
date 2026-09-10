@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * persisted state, so the point of the tests below is to pin exactly how much they delete.
  *
  * <p>The events come from {@link MedievalFactionsEvents}, which builds them without a running
- * server or faction service. The listener is
- * given a null {@code MedievalFactions}, which it only dereferences to log a malformed player id
- * in the {@code FactionLeaveEvent} and {@code FactionKickEvent} catch blocks; that pair of
- * branches is therefore the one thing here left unexercised, since the plugin instance behind
- * {@code getLogger()} cannot be stood up outside a server. The integrator is null for the same
- * reason, and none of the lookups these handlers make reach it.
+ * server or faction service. The listener is given a null {@code MedievalFactions}, which it only
+ * dereferences to log a malformed player id in the {@code FactionLeaveEvent} and
+ * {@code FactionKickEvent} catch blocks; that pair of branches is therefore the one thing here
+ * left unexercised, since the plugin instance behind {@code getLogger()} cannot be stood up
+ * outside a server. The integrator is null for the same reason, and none of the lookups these
+ * handlers make reach it.
  */
 class FactionEventListenerTest {
 
