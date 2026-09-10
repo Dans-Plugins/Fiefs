@@ -31,16 +31,24 @@ public final class BukkitTestDoubles {
     }
 
     /**
-     * A chunk at the given coordinates in a world of the given name.
-     * Answers {@code getX()}, {@code getZ()} and {@code getWorld()}.
+     * A world of the given name. Answers {@code getName()} only, which is all the code under
+     * test asks of a world it did not create itself — fief claims are matched by world name.
      */
-    public static Chunk chunk(String worldName, int x, int z) {
-        World world = proxy(World.class, (method, args) -> {
+    public static World world(String worldName) {
+        return proxy(World.class, (method, args) -> {
             if (method.getName().equals("getName")) {
                 return worldName;
             }
             throw unsupported(method);
         });
+    }
+
+    /**
+     * A chunk at the given coordinates in a world of the given name.
+     * Answers {@code getX()}, {@code getZ()} and {@code getWorld()}.
+     */
+    public static Chunk chunk(String worldName, int x, int z) {
+        World world = world(worldName);
 
         return proxy(Chunk.class, (method, args) -> {
             switch (method.getName()) {
