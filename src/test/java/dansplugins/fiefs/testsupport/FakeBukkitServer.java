@@ -12,7 +12,9 @@ import java.util.UUID;
 
 /**
  * A stand-in for the Bukkit server singleton, holding the offline-player cache that
- * {@code dansplugins.fiefs.utils.UUIDChecker} reads through the static {@link Bukkit} accessors.
+ * {@code dansplugins.fiefs.utils.UUIDChecker} reads through the static {@link Bukkit} accessors,
+ * and the loaded-world registry that {@code dansplugins.fiefs.listeners.FactionEventListener}
+ * reads the same way when it resolves the world id on a Medieval Factions unclaim event.
  *
  * <p>{@link Bukkit#setServer(Server)} refuses to replace a server once one is set, and Surefire
  * runs the whole suite in one JVM, so the double is installed once per JVM and its registry is
@@ -30,6 +32,7 @@ import java.util.UUID;
 public final class FakeBukkitServer {
 
     private static final Map<UUID, String> namesByUuid = new LinkedHashMap<>();
+    private static final Map<UUID, String> worldNamesByUuid = new LinkedHashMap<>();
 
     private FakeBukkitServer() {
         // static methods only
@@ -37,13 +40,14 @@ public final class FakeBukkitServer {
 
     /**
      * Installs the double as the Bukkit server if no server is set yet, and empties the
-     * offline-player registry so the calling test starts from a known state.
+     * offline-player and world registries so the calling test starts from a known state.
      */
     public static void install() {
         if (Bukkit.getServer() == null) {
             Bukkit.setServer(server());
         }
         namesByUuid.clear();
+        worldNamesByUuid.clear();
     }
 
     /**
@@ -61,6 +65,17 @@ public final class FakeBukkitServer {
         namesByUuid.put(uuid, name);
     }
 
+    /**
+     * Registers a loaded world under a freshly generated id and returns it. An id that was
+     * never registered models a world the server cannot resolve — one that is unloaded or
+     * unknown — for which Bukkit answers null.
+     */
+    public static UUID registerWorld(String name) {
+        UUID uuid = UUID.randomUUID();
+        worldNamesByUuid.put(uuid, name);
+        return uuid;
+    }
+
     private static Server server() {
         return BukkitTestDoubles.proxy(Server.class, (method, args) -> {
             switch (method.getName()) {
@@ -72,6 +87,12 @@ public final class FakeBukkitServer {
                         // Bukkit answers an unknown UUID with an OfflinePlayer whose name is
                         // null rather than with null, so the double does the same.
                         return offlinePlayer(uuid, namesByUuid.get(uuid));
+                    }
+                    throw BukkitTestDoubles.unsupported(method);
+                case "getWorld":
+                    if (args != null && args.length == 1 && args[0] instanceof UUID) {
+                        String worldName = worldNamesByUuid.get(args[0]);
+                        return worldName == null ? null : BukkitTestDoubles.world(worldName);
                     }
                     throw BukkitTestDoubles.unsupported(method);
                 // Bukkit.setServer() announces the server it was handed, so these four are
