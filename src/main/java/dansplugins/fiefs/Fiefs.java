@@ -11,6 +11,7 @@ import dansplugins.fiefs.listeners.MoveListener;
 import dansplugins.fiefs.services.ChunkService;
 import dansplugins.fiefs.services.ConfigService;
 import dansplugins.fiefs.services.StorageService;
+import dansplugins.fiefs.trace.TraceClient;
 import dansplugins.fiefs.utils.Logger;
 import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
@@ -25,6 +26,7 @@ import preponderous.ponder.minecraft.bukkit.tools.EventHandlerRegistry;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author Daniel McCoy Stephenson
@@ -41,12 +43,17 @@ public final class Fiefs extends PonderBukkitPlugin {
     private final Scheduler scheduler = new Scheduler(logger, this, storageService);
     private final ChunkService chunkService = new ChunkService(persistentData, medievalFactionsIntegrator);
 
+    // A no-op until the config has been read, so a command arriving before
+    // onEnable() finishes has something safe to report to.
+    private TraceClient trace = TraceClient.disabled();
+
     /**
      * This runs when the server starts.
      */
     @Override
     public void onEnable() {
         initializeConfig();
+        initializeUsageReporting();
 
         if (!medievalFactionsIntegrator.isMedievalFactionsAPIAvailable()) {
             logger.log("Fiefs cannot enable.");
@@ -65,6 +72,7 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     @Override
     public void onDisable() {
+        trace.close();
         storageService.save();
     }
 
@@ -78,6 +86,7 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
         if (args.length == 0) {
             DefaultCommand defaultCommand = new DefaultCommand(this);
             return defaultCommand.execute(sender);
@@ -125,6 +134,8 @@ public final class Fiefs extends PonderBukkitPlugin {
 
     private void initializeConfig() {
         if (!(new File("./plugins/Fiefs/config.yml").exists())) {
+            // write the bundled config.yml first so its comments reach the disk copy
+            saveDefaultConfig();
             configService.saveMissingConfigDefaultsIfNotPresent();
         }
         else {
@@ -134,6 +145,18 @@ public final class Fiefs extends PonderBukkitPlugin {
             }
             reloadConfig();
         }
+    }
+
+    /**
+     * Builds the usage reporting client from the config: one event now, one per command. See config.yml.
+     */
+    private void initializeUsageReporting() {
+        trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName())
+                .key(configService.getUsageReportingKey())
+                .enabled(configService.isUsageReportingEnabled())
+                .logger(getLogger())
+                .build();
+        trace.report("startup", null, Collections.singletonMap("version", getDescription().getVersion()));
     }
 
     private void handlebStatsIntegration() {
