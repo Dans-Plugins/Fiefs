@@ -16,6 +16,11 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @author Daniel McCoy Stephenson
  */
 public class ConfigService {
+    private static final String USAGE_REPORTING_ENABLED_KEY = "usage-reporting.enabled";
+    private static final String USAGE_REPORTING_ENDPOINT_KEY = "usage-reporting.endpoint";
+    private static final String USAGE_REPORTING_KEY_KEY = "usage-reporting.key";
+    private static final String DEFAULT_USAGE_REPORTING_ENDPOINT = "https://trace.danielstephenson.dev";
+
     private final Fiefs fiefs;
 
     private boolean altered = false;
@@ -43,6 +48,8 @@ public class ConfigService {
         if (!getConfig().isSet("enableTerritoryAlerts")) {
             getConfig().set("enableTerritoryAlerts", true);
         }
+        // usage-reporting.* is not set here: it lives in the bundled config.yml, which Bukkit
+        // registers as this file's defaults, and copyDefaults(true) below writes it out with the rest
         getConfig().options().copyDefaults(true);
         fiefs.saveConfig();
     }
@@ -59,7 +66,8 @@ public class ConfigService {
                 sender.sendMessage(ChatColor.GREEN + "Integer set.");
             } else if (option.equalsIgnoreCase("debugMode")
                     || option.equalsIgnoreCase("limitLand")
-                    || option.equalsIgnoreCase("enableTerritoryAlerts")) {
+                    || option.equalsIgnoreCase("enableTerritoryAlerts")
+                    || option.equalsIgnoreCase(USAGE_REPORTING_ENABLED_KEY)) {
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + "Boolean set.");
             } else if (option.equalsIgnoreCase("c")) { // no doubles yet
@@ -83,7 +91,8 @@ public class ConfigService {
         sender.sendMessage(ChatColor.AQUA + "version: " + getConfig().getString("version")
                 + ", debugMode: " + getBoolean("debugMode")
                 + ", limitLand: " + getBoolean("limitLand")
-                + ", enableTerritoryAlerts: " + getBoolean("enableTerritoryAlerts"));
+                + ", enableTerritoryAlerts: " + getBoolean("enableTerritoryAlerts")
+                + ", usage-reporting.enabled: " + isUsageReportingEnabled());
     }
 
     public boolean hasBeenAltered() {
@@ -108,5 +117,27 @@ public class ConfigService {
 
     public String getString(String option) {
         return getConfig().getString(option);
+    }
+
+    // The one-argument getters, deliberately. The usage-reporting block only reaches
+    // plugins/Fiefs/config.yml when that file is first written or when the plugin version
+    // changes, so a server running a build from before usage reporting has no usage-reporting
+    // block on disk. Bukkit registers the jar's config.yml as the defaults for that file, and
+    // the one-argument getters fall through to them -- but the two-argument getters return
+    // their explicit fallback instead, which for the key would be "" and would turn reporting
+    // off on every existing installation. Verified against YamlConfiguration, not assumed.
+
+    public boolean isUsageReportingEnabled() {
+        return getConfig().getBoolean(USAGE_REPORTING_ENABLED_KEY);
+    }
+
+    public String getUsageReportingEndpoint() {
+        String endpoint = getConfig().getString(USAGE_REPORTING_ENDPOINT_KEY);
+        return endpoint == null ? DEFAULT_USAGE_REPORTING_ENDPOINT : endpoint;
+    }
+
+    public String getUsageReportingKey() {
+        String key = getConfig().getString(USAGE_REPORTING_KEY_KEY);
+        return key == null ? "" : key;
     }
 }
