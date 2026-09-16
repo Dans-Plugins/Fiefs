@@ -139,8 +139,11 @@ public final class Fiefs extends PonderBukkitPlugin {
             configService.saveMissingConfigDefaultsIfNotPresent();
         }
         else {
-            // pre load compatibility checks
-            if (isVersionMismatched()) {
+            // pre load compatibility checks. A config.yml from before usage reporting has no
+            // usage-reporting block on disk; writing the defaults out puts the switch where
+            // the operator can see it, rather than only in the jar. See
+            // UsageReportingDefaultsTest for the isSet()/copyDefaults semantics this relies on.
+            if (isVersionMismatched() || !getConfig().isSet("usage-reporting")) {
                 configService.saveMissingConfigDefaultsIfNotPresent();
             }
             reloadConfig();
@@ -154,9 +157,24 @@ public final class Fiefs extends PonderBukkitPlugin {
         trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName())
                 .key(configService.getUsageReportingKey())
                 .enabled(configService.isUsageReportingEnabled())
+                .serverWideConfig(getDataFolder().getParentFile())
                 .logger(getLogger())
                 .build();
+        logUsageReportingStatus();
         trace.report("startup", null, Collections.singletonMap("version", getDescription().getVersion()));
+    }
+
+    /** Says on every start whether usage reporting is on, and why not when it is off. */
+    private void logUsageReportingStatus() {
+        if (trace.isEnabled()) {
+            getLogger().info("Usage reporting is on: " + getName() + " sends its name, version and command names to "
+                    + configService.getUsageReportingEndpoint() + " - nothing about players or the server. "
+                    + "Turn it off with usage-reporting.enabled: false in this plugin's config.yml, "
+                    + "or for every plugin with enabled: false in plugins/trace/config.yml. "
+                    + "Details: https://github.com/Stephenson-Software/trace#usage-reporting");
+        } else {
+            getLogger().info("Usage reporting is off (" + trace.disabledReason() + ").");
+        }
     }
 
     private void handlebStatsIntegration() {

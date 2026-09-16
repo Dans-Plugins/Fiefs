@@ -5,11 +5,20 @@
 # predates a new option still gets its default.
 
 # Usage reporting. When the plugin is enabled, and each time one of its
-# commands is used, a small event (plugin name, event name, plugin version)
-# is sent to the author's trace server so it is known which plugins are
-# actually in use. Nothing about players or the server is included. Sending
-# happens off the main thread, never blocks a tick, and is dropped silently
-# if the server cannot be reached. Set enabled to false to turn it off.
+# commands is used, a small event (plugin name, event name, plugin version
+# or command name) is sent to the author's trace server so it is known which
+# plugins are actually in use. Nothing about players or the server is
+# included. Sending happens off the main thread, never blocks a tick, and is
+# dropped silently if the server cannot be reached. The plugin says on every
+# start whether reporting is on.
+#
+# To turn it off for this plugin, set enabled to false below (or run
+# /fi config set usage-reporting.enabled false). To turn it off for every
+# plugin on this server that reports to trace, set enabled to false in
+# plugins/trace/config.yml (the first such plugin to start writes that file;
+# plugins never turn it back on). The environment variables
+# TRACE_USAGE_REPORTING=off and DO_NOT_TRACK=1 turn it off as well.
+# Details: https://github.com/Stephenson-Software/trace#usage-reporting
 usage-reporting:
   enabled: true
   endpoint: https://trace.danielstephenson.dev
