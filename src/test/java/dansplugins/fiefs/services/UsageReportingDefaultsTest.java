@@ -75,4 +75,45 @@ class UsageReportingDefaultsTest {
 
         assertFalse(onDisk.getBoolean("usage-reporting.enabled"));
     }
+
+    // The block-on-disk write Fiefs.initializeConfig() triggers: isSet() must not count the
+    // defaults, or the write would never happen; copyDefaults(true) + save (what
+    // ConfigService.saveMissingConfigDefaultsIfNotPresent does) must be what puts the block
+    // into the file.
+
+    @Test
+    void anOlderConfigDoesNotCountTheDefaultsAsTheBlockBeingOnDisk() {
+        YamlConfiguration onDisk = new YamlConfiguration();
+        onDisk.set("version", "v0.11.0");
+        onDisk.set("debugMode", false);
+        onDisk.setDefaults(bundled);
+
+        assertFalse(onDisk.isSet("usage-reporting"), "the on-enable write would never trigger");
+    }
+
+    @Test
+    void aConfigThatHasTheBlockIsRecognisedAsSuch() {
+        YamlConfiguration onDisk = new YamlConfiguration();
+        onDisk.set("usage-reporting.enabled", false);
+        onDisk.setDefaults(bundled);
+
+        assertTrue(onDisk.isSet("usage-reporting"), "a file that has the block is left alone");
+    }
+
+    @Test
+    void copyingTheDefaultsWritesTheBlockWithTheBundledValues() throws Exception {
+        YamlConfiguration onDisk = new YamlConfiguration();
+        onDisk.set("version", "v0.11.0");
+        onDisk.setDefaults(bundled);
+        onDisk.options().copyDefaults(true);
+
+        YamlConfiguration written = new YamlConfiguration();
+        written.loadFromString(onDisk.saveToString());
+
+        assertTrue(written.isSet("usage-reporting"));
+        assertEquals(true, written.get("usage-reporting.enabled", null));
+        assertEquals(bundled.getString("usage-reporting.endpoint"), written.get("usage-reporting.endpoint", null));
+        assertEquals(bundled.getString("usage-reporting.key"), written.get("usage-reporting.key", null));
+        assertEquals("v0.11.0", written.getString("version"), "the existing keys survive the write");
+    }
 }

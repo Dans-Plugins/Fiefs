@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Usage reporting is now disclosed on every start: the console says whether it is on, what is sent and where, and how to turn it off, or why it is off. A server-wide switch is added — `enabled: false` in `plugins/trace/config.yml` (written by the first reporting plugin to start) turns reporting off for every plugin that reports to trace — as are the environment variables `TRACE_USAGE_REPORTING=off` and `DO_NOT_TRACK=1`. The `usage-reporting` block is now written into `plugins/Fiefs/config.yml` the first time the plugin starts without it, rather than on the next version change, so the opt-out is visible on upgraded servers too. What is sent is unchanged. Details: https://github.com/Stephenson-Software/trace#usage-reporting
+
 ### Added
 
 - The plugin now reports usage events — `startup` on enable, `command` on each of its commands — to the author's trace server so it is known which plugins are in use. Events carry the plugin name, the event name, and the plugin version or command name; nothing about players or the server. Reporting runs off the main thread, never delays a tick, drops silently when the server is unreachable, and is turned off with `usage-reporting.enabled: false` in `config.yml` (or `/fi config set usage-reporting.enabled false`). A bundled `config.yml` carries the plugin's key, so reporting is active out of the box unless turned off — including on servers upgraded from a version before the `usage-reporting` block existed: the plugin reads the bundled defaults for any key the on-disk file lacks
