@@ -8,7 +8,7 @@ Fiefs is a Minecraft plugin that allows faction members to create fiefs (sub-fac
 
 ### First Time Installation
 
-1. Download the plugin from the [releases page](https://github.com/Dans-Plugins/Fiefs/releases).
+1. Download the plugin from [SpigotMC](https://www.spigotmc.org/resources/fiefs-early-access.98559/) or the [releases page](https://github.com/Dans-Plugins/Fiefs/releases).
 2. Place the jar in the `plugins` folder of your server.
 3. Restart your server.
 
