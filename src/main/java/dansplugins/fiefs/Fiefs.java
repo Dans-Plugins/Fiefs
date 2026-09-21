@@ -55,6 +55,8 @@ public final class Fiefs extends PonderBukkitPlugin {
         initializeConfig();
         initializeUsageReporting();
 
+        // after the config is read: the integrator logs, and the logger reads the config
+        medievalFactionsIntegrator.initialize();
         if (!medievalFactionsIntegrator.isMedievalFactionsAPIAvailable()) {
             logger.log("Fiefs cannot enable.");
             return;

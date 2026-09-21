@@ -14,9 +14,26 @@ import org.bukkit.plugin.Plugin;
  */
 public class MedievalFactionsIntegrator {
 
+    private final Logger logger;
+
     private MedievalFactions medievalFactions = null;
 
+    /**
+     * Only stores the logger. The Medieval Factions lookup happens in {@link #initialize()},
+     * because this object is built while the main class is still being constructed: the
+     * logger reads the config through the plugin, and the config service does not exist yet
+     * at that point. Logging here threw a NullPointerException on any server that had
+     * Medieval Factions installed, and the plugin never loaded (#188).
+     */
     public MedievalFactionsIntegrator(Logger logger) {
+        this.logger = logger;
+    }
+
+    /**
+     * Looks Medieval Factions up through the plugin manager and keeps hold of it. Call from
+     * {@code onEnable()}, once the config has been read, and before anything that needs the API.
+     */
+    public void initialize() {
         if (isMedievalFactionsPresent()) {
             logger.log("[DEBUG] Medieval Factions was found successfully!");
             try {
