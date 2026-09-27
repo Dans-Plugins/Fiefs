@@ -3,6 +3,8 @@ package dansplugins.fiefs.testsupport;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,8 +15,10 @@ import java.util.UUID;
 /**
  * A stand-in for the Bukkit server singleton, holding the offline-player cache that
  * {@code dansplugins.fiefs.utils.UUIDChecker} reads through the static {@link Bukkit} accessors,
- * and the loaded-world registry that {@code dansplugins.fiefs.listeners.FactionEventListener}
- * reads the same way when it resolves the world id on a Medieval Factions unclaim event.
+ * the loaded-world registry that {@code dansplugins.fiefs.listeners.FactionEventListener}
+ * reads the same way when it resolves the world id on a Medieval Factions unclaim event, and
+ * the plugin registry that {@code dansplugins.fiefs.integrators.MedievalFactionsIntegrator}
+ * looks Medieval Factions up in through the plugin manager.
  *
  * <p>{@link Bukkit#setServer(Server)} refuses to replace a server once one is set, and Surefire
  * runs the whole suite in one JVM, so the double is installed once per JVM and its registry is
@@ -33,6 +37,7 @@ public final class FakeBukkitServer {
 
     private static final Map<UUID, String> namesByUuid = new LinkedHashMap<>();
     private static final Map<UUID, String> worldNamesByUuid = new LinkedHashMap<>();
+    private static final Map<String, Plugin> pluginsByName = new LinkedHashMap<>();
 
     private FakeBukkitServer() {
         // static methods only
@@ -48,6 +53,24 @@ public final class FakeBukkitServer {
         }
         namesByUuid.clear();
         worldNamesByUuid.clear();
+        pluginsByName.clear();
+    }
+
+    /**
+     * Registers a loaded plugin under the given name, so that
+     * {@code getPluginManager().getPlugin(name)} finds it, and returns it. The plugin answers
+     * {@code getName()} only; it is not an instance of any real plugin class, which is what a
+     * test wants when it needs a plugin to be present without standing the real one up.
+     */
+    public static Plugin registerPlugin(String name) {
+        Plugin plugin = BukkitTestDoubles.proxy(Plugin.class, (method, args) -> {
+            if (method.getName().equals("getName")) {
+                return name;
+            }
+            throw BukkitTestDoubles.unsupported(method);
+        });
+        pluginsByName.put(name, plugin);
+        return plugin;
     }
 
     /**
@@ -95,6 +118,8 @@ public final class FakeBukkitServer {
                         return worldName == null ? null : BukkitTestDoubles.world(worldName);
                     }
                     throw BukkitTestDoubles.unsupported(method);
+                case "getPluginManager":
+                    return pluginManager();
                 // Bukkit.setServer() announces the server it was handed, so these four are
                 // answered for that call alone.
                 case "getLogger":
@@ -107,6 +132,20 @@ public final class FakeBukkitServer {
                 default:
                     throw BukkitTestDoubles.unsupported(method);
             }
+        });
+    }
+
+    /**
+     * Answers {@code getPlugin(String)} from the plugin registry — null for a name that was
+     * never registered, which is what Bukkit answers for a plugin that is not installed.
+     */
+    private static PluginManager pluginManager() {
+        return BukkitTestDoubles.proxy(PluginManager.class, (method, args) -> {
+            if (method.getName().equals("getPlugin") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                return pluginsByName.get(args[0]);
+            }
+            throw BukkitTestDoubles.unsupported(method);
         });
     }
 
