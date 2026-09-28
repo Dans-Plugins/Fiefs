@@ -18,8 +18,10 @@ public class HelpCommand extends AbstractPluginCommand {
     }
 
     @Override
+    /** `/fi help` with no page: the first page (it printed nothing before). */
     public boolean execute(CommandSender commandSender) {
-        return false;
+        sendPageOne(commandSender);
+        return true;
     }
 
     public boolean execute(CommandSender sender, String[] args) {
