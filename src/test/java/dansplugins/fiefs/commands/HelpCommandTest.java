@@ -43,6 +43,20 @@ class HelpCommandTest {
         assertTrue(anyMessageContains(USAGE));
     }
 
+    /**
+     * `/fi help` with no page reaches {@link HelpCommand#execute(CommandSender)}, the no-argument
+     * entry the command service calls, not {@code execute(sender, new String[]{})}. It printed
+     * nothing; it now shows the first page.
+     */
+    @Test
+    void execute_asCalledForHelpWithoutAPage_sendsPageOne() {
+        boolean result = helpCommand.execute(sender);
+
+        assertTrue(result);
+        assertTrue(anyMessageContains("Fiefs Commands Page 1/"));
+        assertTrue(anyMessageContains("/fi help - View a list of helpful commands."));
+    }
+
     @Test
     void execute_withAnUnrecognizedPage_sendsTheUsageMessage() {
         boolean result = helpCommand.execute(sender, new String[]{"3"});
@@ -93,11 +107,4 @@ class HelpCommandTest {
         assertTrue(anyMessageContains("Page 1/2"));
     }
 
-    @Test
-    void execute_senderOnlyOverload_sendsNothingAndReportsFailure() {
-        boolean result = helpCommand.execute(sender);
-
-        assertFalse(result);
-        assertTrue(messages.isEmpty());
-    }
 }
