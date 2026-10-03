@@ -139,7 +139,7 @@ class ConfigCommandTest {
     }
 
     @Test
-    void execute_set_takesOnlyTheFirstWordOfAnOrdinaryValue() {
+    void execute_set_takesOnlyTheFirstWordOfTheValue() {
         boolean result = configCommand.execute(sender, new String[]{"set", "someOption", "two", "words"});
 
         assertTrue(result);
@@ -147,9 +147,8 @@ class ConfigCommandTest {
     }
 
     @Test
-    void execute_set_keepsTheQuotesAroundAQuotedValueForAnOrdinaryOption() {
-        // Only the two message options go through the double-quote parser; every other option
-        // receives the third argument verbatim, quote characters included
+    void execute_set_keepsTheQuotesAroundAQuotedValue() {
+        // Every option receives the third argument verbatim, quote characters included
         boolean result = configCommand.execute(sender, new String[]{"set", "someOption", "\"quoted\""});
 
         assertTrue(result);
@@ -157,37 +156,25 @@ class ConfigCommandTest {
     }
 
     @Test
-    void execute_setAMessageOption_takesTheTextBetweenDoubleQuotes() {
-        // denyUsageMessage and denyCreationMessage are special-cased here but are not config options
-        // anywhere else in the plugin: ConfigService never writes a default for either, so on a real
-        // server the service answers "That config option wasn't found." This pins only the parsing.
+    void execute_set_treatsTheFormerMessageOptionNamesLikeAnyOtherOption() {
+        // denyUsageMessage and denyCreationMessage used to go through a double-quote parser, but
+        // neither is a config option, so they now reach the service the same way as everything else
         boolean result = configCommand.execute(sender,
                 new String[]{"set", "denyUsageMessage", "\"You", "may", "not.\""});
 
         assertTrue(result);
         RecordedCall call = configService.calls.get(0);
         assertEquals("denyUsageMessage", call.option);
-        assertEquals("You may not.", call.value);
+        assertEquals("\"You", call.value);
     }
 
     @Test
-    void execute_setAMessageOption_matchesItsNameCaseInsensitively() {
-        boolean result = configCommand.execute(sender,
-                new String[]{"set", "DENYCREATIONMESSAGE", "\"No", "fiefs", "here.\""});
+    void execute_set_doesNotAskForDoubleQuotesForTheFormerMessageOptionNames() {
+        boolean result = configCommand.execute(sender, new String[]{"set", "denyCreationMessage", "unquoted"});
 
         assertTrue(result);
-        RecordedCall call = configService.calls.get(0);
-        assertEquals("DENYCREATIONMESSAGE", call.option);
-        assertEquals("No fiefs here.", call.value);
-    }
-
-    @Test
-    void execute_setAMessageOptionWithoutDoubleQuotes_asksForThemAndSetsNothing() {
-        boolean result = configCommand.execute(sender, new String[]{"set", "denyUsageMessage", "unquoted"});
-
-        assertFalse(result);
-        assertTrue(lastMessage().contains("New message must be in between double quotes."));
-        assertTrue(configService.calls.isEmpty());
+        assertTrue(messages.isEmpty());
+        assertEquals("unquoted", configService.calls.get(0).value);
     }
 
     /** One call {@link ConfigCommand} made on the service, with the arguments it passed. */

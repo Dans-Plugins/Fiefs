@@ -4,7 +4,6 @@ import dansplugins.fiefs.services.ConfigService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
-import preponderous.ponder.misc.ArgumentParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,19 +41,7 @@ public class ConfigCommand extends AbstractPluginCommand {
             }
             String option = args[1];
 
-            String value = "";
-            if (option.equalsIgnoreCase("denyUsageMessage") || option.equalsIgnoreCase("denyCreationMessage")) {
-                ArgumentParser argumentParser = new ArgumentParser();
-                ArrayList<String> singleQuoteArgs = new ArrayList<>(argumentParser.getArgumentsInsideDoubleQuotes(args));
-                if (singleQuoteArgs.size() == 0) {
-                    sender.sendMessage(ChatColor.RED + "New message must be in between double quotes.");
-                    return false;
-                }
-                value = singleQuoteArgs.get(0);
-            }
-            else {
-                value = args[2];
-            }
+            String value = args[2];
 
             configService.setConfigOption(option, value, sender);
             return true;
