@@ -139,7 +139,7 @@ class ConfigCommandTest {
     }
 
     @Test
-    void execute_set_takesOnlyTheFirstWordOfAnOrdinaryValue() {
+    void execute_set_takesOnlyTheFirstWordOfTheValue() {
         boolean result = configCommand.execute(sender, new String[]{"set", "someOption", "two", "words"});
 
         assertTrue(result);
@@ -147,7 +147,7 @@ class ConfigCommandTest {
     }
 
     @Test
-    void execute_set_keepsTheQuotesAroundAQuotedValueForAnOrdinaryOption() {
+    void execute_set_keepsTheQuotesAroundAQuotedValue() {
         // Every option receives the third argument verbatim, quote characters included
         boolean result = configCommand.execute(sender, new String[]{"set", "someOption", "\"quoted\""});
 
