@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- `/fi info` with no argument now shows your own fief, as the help text says. Ponder sends a bare `/fi info` to the command's sender-only `execute`, which returned `false` without a word, so the command printed nothing for owners and members alike (#207). It now takes the same path as `/fi info` given no fief name. Run from the console, `/fi info` now says "Only players can use this command." instead of also printing nothing.
 - The plugin failed to load on any server that had Medieval Factions installed: the Medieval Factions lookup ran while the main class was still being constructed, and the debug line it logged on finding the plugin read the config through a config service that did not exist yet, throwing a `NullPointerException` out of the main class's constructor. Spigot reported `Could not load 'plugins/Fiefs-0.12.0.jar'` and the plugin was never enabled. The lookup now runs from `onEnable()`, after the config has been read
 - The `Dev Release` workflow now retries publishing the `dev` prerelease before giving up. The release and its tag have to be deleted and recreated for the tag to move to the new commit, and a transient API failure inside that window previously left the repository with no `dev` release at all until the workflow was re-run by hand. Each attempt now starts from a clean slate, and an exhausted retry fails loudly.
 
