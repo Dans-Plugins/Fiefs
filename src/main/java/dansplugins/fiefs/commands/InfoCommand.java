@@ -25,14 +25,20 @@ public class InfoCommand extends AbstractPluginCommand {
         this.persistentData = persistentData;
     }
 
+    /**
+     * {@code /fi info} with no argument. Ponder routes a bare subcommand here rather than to
+     * {@link #execute(CommandSender, String[])}, so this shows the sender's own fief, as the
+     * help text promises; it used to return {@code false} without a word (#207).
+     */
     @Override
     public boolean execute(CommandSender commandSender) {
-        return false;
+        return execute(commandSender, new String[0]);
     }
 
     public boolean execute(CommandSender sender, String[] args) {
 
         if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return false;
         }
 
