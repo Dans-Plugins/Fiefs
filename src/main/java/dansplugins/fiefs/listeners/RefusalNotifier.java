@@ -22,7 +22,9 @@ public class RefusalNotifier {
     private final Map<Player, Long> lastNotified = new WeakHashMap<>();
 
     public RefusalNotifier() {
-        this(System::currentTimeMillis);
+        // Monotonic: a wall clock corrected backwards would otherwise suppress every message until it
+        // caught up again.
+        this(() -> System.nanoTime() / 1_000_000L);
     }
 
     RefusalNotifier(LongSupplier clock) {
