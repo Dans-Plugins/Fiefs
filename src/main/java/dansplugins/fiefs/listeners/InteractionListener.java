@@ -28,6 +28,7 @@ public class InteractionListener implements Listener {
     private final PersistentData persistentData;
     private final Logger logger;
     private final Fiefs fiefs;
+    private final RefusalNotifier refusalNotifier = new RefusalNotifier();
 
     public InteractionListener(ChunkService chunkService, PersistentData persistentData, Logger logger, Fiefs fiefs) {
         this.chunkService = chunkService;
@@ -54,6 +55,7 @@ public class InteractionListener implements Listener {
         if (shouldEventBeCancelled(claimedChunk, player)) {
             logger.log("Cancelling Block Break event.");
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -75,6 +77,7 @@ public class InteractionListener implements Listener {
         if (shouldEventBeCancelled(claimedChunk, player)) {
             logger.log("Cancelling Block Place event.");
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -96,6 +99,7 @@ public class InteractionListener implements Listener {
         if (shouldEventBeCancelled(claimedChunk, player)) {
             logger.log("Cancelling Player Interact event.");
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -126,6 +130,7 @@ public class InteractionListener implements Listener {
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);
+                refusalNotifier.notifyRefused(player, claimedChunk.getFief());
             }
         }
     }
@@ -145,6 +150,7 @@ public class InteractionListener implements Listener {
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -160,6 +166,7 @@ public class InteractionListener implements Listener {
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -175,6 +182,7 @@ public class InteractionListener implements Listener {
 
         if (shouldEventBeCancelled(claimedChunk, player)) {
             event.setCancelled(true);
+            refusalNotifier.notifyRefused(player, claimedChunk.getFief());
         }
     }
 
@@ -196,6 +204,7 @@ public class InteractionListener implements Listener {
 
             if (shouldEventBeCancelled(claimedChunk, player)) {
                 event.setCancelled(true);
+                refusalNotifier.notifyRefused(player, claimedChunk.getFief());
             }
         }
     }
