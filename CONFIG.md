@@ -28,7 +28,7 @@ To turn it off for this plugin, set `usage-reporting.enabled` to `false`, in `co
 reports to trace, set `enabled: false` in `plugins/trace/config.yml`, which the first such plugin to
 start writes; plugins never turn it back on. The environment variables `TRACE_USAGE_REPORTING=off`
 and `DO_NOT_TRACK=1` turn it off as well. Details:
-https://github.com/Stephenson-Software/trace#usage-reporting
+https://danielstephenson.dev/usage-reporting
 
 A `config.yml` written by a version before usage reporting existed has no `usage-reporting` block;
 the plugin writes the block, with the bundled values, the first time it starts without it, so the
