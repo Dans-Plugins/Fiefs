@@ -22,6 +22,14 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 4. Check fief ownership of a chunk: `/fi checkclaim`
 5. View all fiefs in your faction: `/fi list`
 
+## Fief Flags
+
+A fief's owner views and changes its flags with `/fi flags show` and `/fi flags set <flag> <value>`.
+
+| Flag | Default | Effect |
+|------|---------|--------|
+| `claimedLandProtected` | `true` | When `true`, only members of the fief can build, break blocks, open containers and doors, and use item frames and armour stands in the land the fief has claimed; other members of the faction, in another fief or in none, are refused. When `false`, the fief's land is open to every member of the faction (Medieval Factions' own protection still keeps other factions out). Only the flag of the fief that holds the land counts. |
+
 ## Permissions
 
 | Permission | Default | Description |
