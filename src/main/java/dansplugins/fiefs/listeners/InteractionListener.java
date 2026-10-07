@@ -214,19 +214,22 @@ public class InteractionListener implements Listener {
             logger.log("Claimed chunk was null.");
             return false;
         }
-        Fief chunkHolder = persistentData.getFief(claimedChunk.getFief());
-        Fief playersFief = persistentData.getFief(player);
+        return refuses(persistentData.getFief(claimedChunk.getFief()), persistentData.getFief(player));
+    }
 
-        if (playersFief == null) {
-            return true;
+    /**
+     * Whether a player in {@code playersFief} (null when in no fief) is refused on land held by
+     * {@code chunkHolder}. The fief that holds the land decides whether it is protected
+     * ({@code claimedLandProtected}); the acting player's own fief has no say over another fief's land.
+     */
+    static boolean refuses(Fief chunkHolder, Fief playersFief) {
+        if (chunkHolder == null) {
+            return false;
         }
-
-        boolean claimedLandProtected = (boolean) playersFief.getFlags().getFlag("claimedLandProtected");
-
+        boolean claimedLandProtected = (boolean) chunkHolder.getFlags().getFlag("claimedLandProtected");
         if (!claimedLandProtected) {
             return false;
         }
-
-        return !chunkHolder.equals(playersFief);
+        return playersFief == null || !chunkHolder.equals(playersFief);
     }
 }
