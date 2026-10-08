@@ -71,7 +71,7 @@ public class RenameCommand extends AbstractPluginCommand {
             return false;
         }
 
-        playersFief.setName(newName);
+        persistentData.renameFief(playersFief, newName);
         player.sendMessage(ChatColor.GREEN + "Fief renamed.");
         return true;
     }
