@@ -47,11 +47,6 @@ public class InteractionListener implements Listener {
             return;
         }
 
-        Fief playersFief = persistentData.getFief(player);
-        if (playersFief == null) {
-            return;
-        }
-
         if (shouldEventBeCancelled(claimedChunk, player)) {
             logger.log("Cancelling Block Break event.");
             event.setCancelled(true);
@@ -66,11 +61,6 @@ public class InteractionListener implements Listener {
         Block clickedBlock = event.getBlock();
         ClaimedChunk claimedChunk = chunkService.getClaimedChunk(clickedBlock.getChunk());
         if (claimedChunk == null) {
-            return;
-        }
-
-        Fief playersFief = persistentData.getFief(player);
-        if (playersFief == null) {
             return;
         }
 
