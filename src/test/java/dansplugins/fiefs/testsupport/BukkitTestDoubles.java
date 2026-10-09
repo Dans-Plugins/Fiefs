@@ -3,6 +3,7 @@ package dansplugins.fiefs.testsupport;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,6 +11,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Test doubles for the handful of Bukkit interfaces the chunk-claim code touches.
@@ -74,6 +76,35 @@ public final class BukkitTestDoubles {
                     && args[0] instanceof String) {
                 sentMessages.add((String) args[0]);
                 return null;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
+     * A player with the given UUID, appending every message sent to it to {@code sentMessages}.
+     * Answers {@code sendMessage(String)} and {@code getUniqueId()}, which is how fief membership
+     * is looked up.
+     */
+    public static Player playerWithId(UUID uuid, List<String> sentMessages) {
+        return proxy(Player.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            if (method.getName().equals("getUniqueId")) {
+                return uuid;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /** A block in the given chunk. Answers {@code getChunk()} only. */
+    public static Block blockIn(Chunk chunk) {
+        return proxy(Block.class, (method, args) -> {
+            if (method.getName().equals("getChunk")) {
+                return chunk;
             }
             throw unsupported(method);
         });
