@@ -22,6 +22,13 @@ Fiefs is a Spigot plugin that adds a sub-faction territory system to Medieval Fa
 4. Check fief ownership of a chunk: `/fi checkclaim`
 5. View all fiefs in your faction: `/fi list`
 
+## Who Can Do What
+
+- Inviting players, kicking members, setting flags, renaming, transferring and disbanding a fief are for its owner only; another member is told so.
+- Any member of a fief can claim faction land for it, unclaim its land and change its description. Claiming needs land the faction has claimed that no fief holds yet; unclaiming works only on land the player's own fief holds.
+- A player in no fief cannot claim or unclaim land for a fief.
+- Faction land that no fief has claimed is governed by Medieval Factions alone: every member of the faction can use it, whatever their fief.
+
 ## Fief Flags
 
 A fief's owner views and changes its flags with `/fi flags show` and `/fi flags set <flag> <value>`.
