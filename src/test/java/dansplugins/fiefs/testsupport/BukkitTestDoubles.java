@@ -100,6 +100,25 @@ public final class BukkitTestDoubles {
         });
     }
 
+    /**
+     * A world in which every location resolves to the given chunk. Answers
+     * {@code getChunkAt(Location)} only, which is what {@code Location.getChunk()} calls.
+     *
+     * <p>A {@link Location} holds its world through a weak reference, so a caller building
+     * locations in this world must keep its own strong reference to it for as long as those
+     * locations are used; otherwise {@code getChunk()} can fail intermittently with
+     * "World unloaded".
+     */
+    public static World worldContaining(Chunk chunk) {
+        return proxy(World.class, (method, args) -> {
+            if (method.getName().equals("getChunkAt") && args != null && args.length == 1
+                    && args[0] instanceof Location) {
+                return chunk;
+            }
+            throw unsupported(method);
+        });
+    }
+
     /** A block in the given chunk. Answers {@code getChunk()} only. */
     public static Block blockIn(Chunk chunk) {
         return proxy(Block.class, (method, args) -> {
@@ -116,13 +135,7 @@ public final class BukkitTestDoubles {
      * the latter returning a location whose {@code getChunk()} resolves to {@code chunk}.
      */
     public static Player playerInChunk(Chunk chunk, List<String> sentMessages) {
-        World world = proxy(World.class, (method, args) -> {
-            if (method.getName().equals("getChunkAt") && args != null && args.length == 1
-                    && args[0] instanceof Location) {
-                return chunk;
-            }
-            throw unsupported(method);
-        });
+        World world = worldContaining(chunk);
 
         Location location = new Location(world, 0, 64, 0);
 
