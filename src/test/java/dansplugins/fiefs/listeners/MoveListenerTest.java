@@ -102,7 +102,7 @@ class MoveListenerTest {
     }
 
     @Test
-    void fiefNamesOnNeighbouringChunksAreComparedCaseInsensitively() {
+    void movingBetweenChunksWhoseHoldersDifferOnlyInCase_saysNothing() {
         Chunk lowerCaseNorthLand = BukkitTestDoubles.chunk("world", 3, 0);
         persistentData.addChunk(new ClaimedChunk(lowerCaseNorthLand, "faction-1", "north"));
 
