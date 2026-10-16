@@ -31,7 +31,7 @@ public class InviteCommand extends AbstractPluginCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        return false;
+        return execute(commandSender, new String[0]);
     }
 
     public boolean execute(CommandSender sender, String[] args) {
