@@ -6,33 +6,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Changed
-
-- The usage-reporting "Details" link (startup notice, `config.yml` and the docs) now points at https://danielstephenson.dev/usage-reporting, a public page; the previous link led to a private repository and returned 404 for everyone. The vendored trace client is now 0.6.1, which carries the same link in the `plugins/trace/config.yml` header it writes. Details: https://github.com/Stephenson-Software/trace-client-java/releases/tag/0.6.1.
-- `/fi config set` no longer special-cases `denyUsageMessage` and `denyCreationMessage`. Neither was ever a config option, so setting one could not succeed; it now gets the same "That config option wasn't found." reply as any other unknown option, instead of first demanding the value be in double quotes.
-- The vendored trace client is now 0.4.0, and every usage event now carries the plugin version, `command` events included; before, only `startup` did.
-- Usage reporting is now disclosed on every start: the console says whether it is on, what is sent and where, and how to turn it off, or why it is off. A server-wide switch is added — `enabled: false` in `plugins/trace/config.yml` (written by the first reporting plugin to start) turns reporting off for every plugin that reports to trace — as are the environment variables `TRACE_USAGE_REPORTING=off` and `DO_NOT_TRACK=1`. The `usage-reporting` block is now written into `plugins/Fiefs/config.yml` the first time the plugin starts without it, rather than on the next version change, so the opt-out is visible on upgraded servers too. What is sent is unchanged. Details: https://danielstephenson.dev/usage-reporting
-- The vendored trace client is now 0.3.0. `plugins/trace/config.yml` can now carry a `tags:` block whose entries are added to every usage event the plugin sends, so a test server can mark its own events (the release gates write `ci: "true"`) and be left out of the figures for real installations. Nothing changes for a server whose `plugins/trace/config.yml` has no `tags:` block.
-
-### Added
-
-- The plugin now reports usage events — `startup` on enable, `command` on each of its commands — to the author's trace server so it is known which plugins are in use. Events carry the plugin name, the event name, and the plugin version or command name; nothing about players or the server. Reporting runs off the main thread, never delays a tick, drops silently when the server is unreachable, and is turned off with `usage-reporting.enabled: false` in `config.yml` (or `/fi config set usage-reporting.enabled false`). A bundled `config.yml` carries the plugin's key, so reporting is active out of the box unless turned off — including on servers upgraded from a version before the `usage-reporting` block existed: the plugin reads the bundled defaults for any key the on-disk file lacks
-
 ### Fixed
 - `/fi invite`, `/fi flags` and `/fi config` typed with no arguments now answer instead of printing nothing. Ponder sends a bare subcommand to the command's sender-only `execute`, and these three returned `false` without a word — the same fault fixed for `/fi info` under #207. Each now takes the same path as when given no arguments: `/fi config` lists its sub-commands, `/fi flags` lists its sub-commands to a fief owner, `/fi invite` gives a fief owner its usage line, and anyone the command refuses (not in a faction, not in a fief, not the owner, or the console for `invite` and `flags`) is told why.
+
+## [1.0.0] – 2026-10-15
+
+### Fixed
 - Breaking or placing a block on protected fief land is now refused by the break and place handlers themselves for a player in no fief, whether or not they are in the faction. Before, those handlers let such a player through and the refusal came only from the interact handler cancelling the click that usually precedes a break or place; a break or place raised without that click (by another plugin, or a future Minecraft version) would have gone through. What players see does not change (#211).
 - Renaming a fief keeps its land. Claimed chunks name the fief that holds them, and `/fi rename` renamed only the fief, so its land was left pointing at a fief that no longer existed: unprotected, and inherited by any fief that later took the old name. The chunks are now renamed with the fief.
 - A fief's `claimedLandProtected` flag now protects that fief's own land. It was read from the fief of the player acting, so a fief that turned its flag off let its members into every other fief's land in the faction, and a fief that turned its own flag off still kept others out. The flag is now taken from the fief that holds the chunk. (GHSA-qhmm-cc6j-295j)
 
-- When fief protection refuses an action — breaking or placing a block, opening a container, using a door or button, emptying or filling a bucket, using an item frame or armour stand, or breaking a painting or item frame — the player is now told: `This land belongs to the fief <name>. Only its members may do that here.` Before, the action simply did not happen and nothing said why (#209). The message is sent at most once every two seconds per player, so a held mouse button or a pressure plate does not flood chat. A player who is also refused by Medieval Factions (for example an enemy faction's member) now sees both messages.
+## [0.13.1] – 2026-10-07
 
+### Changed
+- The usage-reporting "Details" link (startup notice, `config.yml` and the docs) now points at https://danielstephenson.dev/usage-reporting, a public page; the previous link led to a private repository and returned 404 for everyone. The vendored trace client is now 0.6.1, which carries the same link in the `plugins/trace/config.yml` header it writes. Details: https://github.com/Stephenson-Software/trace-client-java/releases/tag/0.6.1.
+
+## [0.13.0] – 2026-10-06
+
+### Changed
+- `/fi config set` no longer special-cases `denyUsageMessage` and `denyCreationMessage`. Neither was ever a config option, so setting one could not succeed; it now gets the same "That config option wasn't found." reply as any other unknown option, instead of first demanding the value be in double quotes.
+
+### Fixed
+- When fief protection refuses an action — breaking or placing a block, opening a container, using a door or button, emptying or filling a bucket, using an item frame or armour stand, or breaking a painting or item frame — the player is now told: `This land belongs to the fief <name>. Only its members may do that here.` Before, the action simply did not happen and nothing said why (#209). The message is sent at most once every two seconds per player, so a held mouse button or a pressure plate does not flood chat. A player who is also refused by Medieval Factions (for example an enemy faction's member) now sees both messages.
 - `/fi info` with no argument now shows your own fief, as the help text says. Ponder sends a bare `/fi info` to the command's sender-only `execute`, which returned `false` without a word, so the command printed nothing for owners and members alike (#207). It now takes the same path as `/fi info` given no fief name. Run from the console, `/fi info` now says "Only players can use this command." instead of also printing nothing.
+
+## [0.12.1] – 2026-10-02
+
+### Changed
+- The vendored trace client is now 0.4.0, and every usage event now carries the plugin version, `command` events included; before, only `startup` did.
+- The vendored trace client is now 0.3.0. `plugins/trace/config.yml` can now carry a `tags:` block whose entries are added to every usage event the plugin sends, so a test server can mark its own events (the release gates write `ci: "true"`) and be left out of the figures for real installations. Nothing changes for a server whose `plugins/trace/config.yml` has no `tags:` block.
+
+### Fixed
 - The plugin failed to load on any server that had Medieval Factions installed: the Medieval Factions lookup ran while the main class was still being constructed, and the debug line it logged on finding the plugin read the config through a config service that did not exist yet, throwing a `NullPointerException` out of the main class's constructor. Spigot reported `Could not load 'plugins/Fiefs-0.12.0.jar'` and the plugin was never enabled. The lookup now runs from `onEnable()`, after the config has been read
-- The `Dev Release` workflow now retries publishing the `dev` prerelease before giving up. The release and its tag have to be deleted and recreated for the tag to move to the new commit, and a transient API failure inside that window previously left the repository with no `dev` release at all until the workflow was re-run by hand. Each attempt now starts from a clean slate, and an exhausted retry fails loudly.
+
+## [0.12.0] – 2026-09-19
+
+### Changed
+- Usage reporting is now disclosed on every start: the console says whether it is on, what is sent and where, and how to turn it off, or why it is off. A server-wide switch is added — `enabled: false` in `plugins/trace/config.yml` (written by the first reporting plugin to start) turns reporting off for every plugin that reports to trace — as are the environment variables `TRACE_USAGE_REPORTING=off` and `DO_NOT_TRACK=1`. The `usage-reporting` block is now written into `plugins/Fiefs/config.yml` the first time the plugin starts without it, rather than on the next version change, so the opt-out is visible on upgraded servers too. What is sent is unchanged. Details: https://danielstephenson.dev/usage-reporting
 
 ### Added
-
+- The plugin now reports usage events — `startup` on enable, `command` on each of its commands — to the author's trace server so it is known which plugins are in use. Events carry the plugin name, the event name, and the plugin version or command name; nothing about players or the server. Reporting runs off the main thread, never delays a tick, drops silently when the server is unreachable, and is turned off with `usage-reporting.enabled: false` in `config.yml` (or `/fi config set usage-reporting.enabled false`). A bundled `config.yml` carries the plugin's key, so reporting is active out of the box unless turned off — including on servers upgraded from a version before the `usage-reporting` block existed: the plugin reads the bundled defaults for any key the on-disk file lacks
 - A `Dev Release` workflow, which republishes a rolling `dev` prerelease of `main` on every non-documentation push. This is what Dan's Plugin Manager's experimental channel installs from: `/dpm get fiefs --experimental` reads `releases/tags/dev`, so without it there is nothing for that command to download. The prerelease is unreleased, unreviewed code and is marked as such.
+
+### Fixed
+- The `Dev Release` workflow now retries publishing the `dev` prerelease before giving up. The release and its tag have to be deleted and recreated for the tag to move to the new commit, and a transient API failure inside that window previously left the repository with no `dev` release at all until the workflow was re-run by hand. Each attempt now starts from a clean slate, and an exhausted retry fails loudly.
 
 ## [0.12.0-SNAPSHOT-8-8-2026] – 2026-08-08
 
