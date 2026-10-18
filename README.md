@@ -1,5 +1,9 @@
 # Fiefs
 
+![Creating and claiming the fief Millbrook inside the faction Riverhold, then /fi info and /fi checkclaim](docs/images/fief-commands.png)
+
+*Real in-game output from Fiefs 1.0.0 on a local throwaway Paper 1.21.11 test server: the commands were typed by a scripted bot client, and the chat it received is drawn as Minecraft-style chat (typed commands appear in the input bars; grey lines say what happened between commands).*
+
 ## Description
 
 Fiefs is a Minecraft plugin that allows faction members to create fiefs (sub-factions) within [Medieval Factions](https://github.com/Dans-Plugins/Medieval-Factions). Fiefs function as sub-factions, allowing for more granular organization within a faction.
