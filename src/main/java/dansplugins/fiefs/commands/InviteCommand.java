@@ -102,7 +102,7 @@ public class InviteCommand extends AbstractPluginCommand {
 
         Player target = Bukkit.getServer().getPlayer(targetUUID);
         if (target != null) {
-            target.sendMessage(ChatColor.AQUA + "You have been invited to " + playersFief.getName() + ". Type /fiefs join (fiefName) to join.");
+            target.sendMessage(ChatColor.AQUA + "You have been invited to " + playersFief.getName() + ". Type /fi join \"" + playersFief.getName() + "\" to join.");
         }
         player.sendMessage(ChatColor.GREEN + "Invited.");
         return true;
