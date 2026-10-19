@@ -61,6 +61,7 @@ public class DescCommand extends AbstractPluginCommand {
         String newDescription = singleQuoteArgs.get(0);
 
         playersFief.setDescription(newDescription);
+        player.sendMessage(ChatColor.GREEN + "Description set.");
         return true;
     }
 

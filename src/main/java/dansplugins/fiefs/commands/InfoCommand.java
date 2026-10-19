@@ -4,6 +4,7 @@ import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.utils.FiefNameArgument;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public class InfoCommand extends AbstractPluginCommand {
         }
 
         if (args.length > 0) {
-            String fiefName = args[0];
+            String fiefName = FiefNameArgument.parse(args);
             Fief fief = persistentData.getFief(fiefName);
             if (fief == null) {
                 player.sendMessage(ChatColor.RED + "That fief wasn't found.");

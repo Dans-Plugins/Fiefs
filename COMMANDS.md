@@ -24,3 +24,5 @@ All commands use `/fi` or `/fiefs` as the base. Fiefs requires Medieval Factions
 | `/fi flags` | View and alter your fief's configuration flags. | `fiefs.flags` |
 | `/fi config` | View and alter plugin config options. | `fiefs.config` |
 | `/fi whois <player>` | Check which fief a player is a member of. | `fiefs.whois` |
+
+`/fi create`, `/fi rename` and `/fi desc` take their text in double quotes, for example `/fi create "South Reach"`. `/fi join`, `/fi info` and `/fi members` take a fief name with or without double quotes: `/fi join "South Reach"` and `/fi join South Reach` both work.

@@ -4,6 +4,7 @@ import com.dansplugins.factionsystem.faction.MfFaction;
 import dansplugins.fiefs.data.PersistentData;
 import dansplugins.fiefs.integrators.MedievalFactionsIntegrator;
 import dansplugins.fiefs.objects.Fief;
+import dansplugins.fiefs.utils.FiefNameArgument;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public class JoinCommand extends AbstractPluginCommand {
             return false;
         }
 
-        String fiefName = args[0];
+        String fiefName = FiefNameArgument.parse(args);
 
         Fief targetFief = persistentData.getFief(fiefName);
 
