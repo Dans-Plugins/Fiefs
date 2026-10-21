@@ -8,6 +8,7 @@ import dansplugins.fiefs.testsupport.BukkitTestDoubles;
 import dansplugins.fiefs.testsupport.MedievalFactionsFactions;
 import dansplugins.fiefs.utils.Logger;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +49,16 @@ class DescCommandTest {
         Fief fief = new Fief(null, "North", ownerId, "faction-1", NULL_LOGGER);
         persistentData.addFief(fief);
         return fief;
+    }
+
+    @Test
+    void execute_fromTheConsole_saysOnlyPlayersCanUseIt() {
+        CommandSender console = BukkitTestDoubles.messageCapturingConsole(messages);
+
+        boolean result = descCommand.execute(console, new String[]{"\"A quiet village\""});
+
+        assertFalse(result);
+        assertEquals(Collections.singletonList(ChatColor.RED + "Only players can use this command."), messages);
     }
 
     @Test

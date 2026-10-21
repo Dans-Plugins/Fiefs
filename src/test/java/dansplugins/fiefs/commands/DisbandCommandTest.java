@@ -70,13 +70,13 @@ class DisbandCommandTest {
     }
 
     @Test
-    void execute_fromTheConsole_refusesWithoutAMessage() {
+    void execute_fromTheConsole_saysOnlyPlayersCanUseIt() {
         CommandSender console = BukkitTestDoubles.messageCapturingConsole(messages);
 
         boolean result = disbandCommand.execute(console);
 
         assertFalse(result);
-        assertTrue(messages.isEmpty());
+        assertEquals(Collections.singletonList(ChatColor.RED + "Only players can use this command."), messages);
         assertTrue(factionLookups.isEmpty());
     }
 
