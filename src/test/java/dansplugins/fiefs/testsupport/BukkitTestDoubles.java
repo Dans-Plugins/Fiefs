@@ -101,6 +101,28 @@ public final class BukkitTestDoubles {
     }
 
     /**
+     * A player with the given UUID and name, appending every message sent to it to
+     * {@code sentMessages}. Answers {@code sendMessage(String)}, {@code getUniqueId()} and
+     * {@code getName()}, for the commands that compare a typed name against the sender's own.
+     */
+    public static Player namedPlayer(UUID uuid, String name, List<String> sentMessages) {
+        return proxy(Player.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            if (method.getName().equals("getUniqueId")) {
+                return uuid;
+            }
+            if (method.getName().equals("getName")) {
+                return name;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
      * A world in which every location resolves to the given chunk. Answers
      * {@code getChunkAt(Location)} only, which is what {@code Location.getChunk()} calls.
      *
