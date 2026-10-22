@@ -89,6 +89,7 @@ class TransferCommandTest {
 
         assertFalse(result);
         assertEquals(Collections.singletonList(ChatColor.RED + "Usage: /fiefs transfer (playerName)"), messages);
+        assertTrue(factionLookups.isEmpty());
     }
 
     @Test
