@@ -182,6 +182,37 @@ public final class BukkitTestDoubles {
     }
 
     /**
+     * A player with the given UUID standing in the given chunk, appending every message sent to
+     * it to {@code sentMessages}. Answers what {@link #playerInChunk} answers plus
+     * {@code getUniqueId()}, for the commands that look up the sender's fief before reading
+     * where they stand.
+     */
+    public static Player playerWithIdInChunk(UUID uuid, Chunk chunk, List<String> sentMessages) {
+        World world = worldContaining(chunk);
+
+        Location location = new Location(world, 0, 64, 0);
+
+        return proxy(Player.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            if (method.getName().equals("getUniqueId")) {
+                return uuid;
+            }
+            if (method.getName().equals("getLocation") && (args == null || args.length == 0)) {
+                return location;
+            }
+            // Keeps the world strongly reachable; see playerInChunk.
+            if (method.getName().equals("getWorld") && (args == null || args.length == 0)) {
+                return world;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
      * A non-player command sender — the console, for the purposes of the commands that refuse
      * to run for one — appending every message sent to it to {@code sentMessages}.
      */
