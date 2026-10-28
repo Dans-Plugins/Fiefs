@@ -2,6 +2,8 @@
 
 Configuration can be viewed and changed in-game with `/fi config`. A `config.yml` is generated in `plugins/Fiefs/` on first run.
 
+`/fi config set (option) (value)` finds the option whatever its case, so `debugmode` sets `debugMode`. A Boolean option takes only `true` or `false`, in any case; any other value is refused with "Value must be true or false." and the option is left as it was.
+
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `version` | String | *(plugin version)* | Plugin version. Do not edit manually. |

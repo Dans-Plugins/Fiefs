@@ -54,7 +54,8 @@ public class ConfigService {
         fiefs.saveConfig();
     }
 
-    public void setConfigOption(String option, String value, CommandSender sender) {
+    public void setConfigOption(String typedOption, String value, CommandSender sender) {
+        String option = resolveOption(typedOption);
 
         if (getConfig().isSet(option)) {
 
@@ -68,6 +69,10 @@ public class ConfigService {
                     || option.equalsIgnoreCase("limitLand")
                     || option.equalsIgnoreCase("enableTerritoryAlerts")
                     || option.equalsIgnoreCase(USAGE_REPORTING_ENABLED_KEY)) {
+                if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
+                    sender.sendMessage(ChatColor.RED + "Value must be true or false.");
+                    return;
+                }
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + "Boolean set.");
             } else if (option.equalsIgnoreCase("c")) { // no doubles yet
@@ -84,6 +89,21 @@ public class ConfigService {
         } else {
             sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
         }
+    }
+
+    // YAML keys are case-sensitive, so the option as typed is matched against the keys the config
+    // holds and stored under the key's own spelling. An exact match wins; an option no key matches
+    // is returned as typed and gets the "not found" reply.
+    private String resolveOption(String typedOption) {
+        if (getConfig().isSet(typedOption)) {
+            return typedOption;
+        }
+        for (String key : getConfig().getKeys(true)) {
+            if (key.equalsIgnoreCase(typedOption)) {
+                return key;
+            }
+        }
+        return typedOption;
     }
 
     public void sendConfigList(CommandSender sender) {
