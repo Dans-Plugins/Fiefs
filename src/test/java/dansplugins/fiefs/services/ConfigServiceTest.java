@@ -74,14 +74,35 @@ class ConfigServiceTest {
     }
 
     @Test
-    void setConfigOption_findsTheOptionCaseSensitively() {
-        // ConfigCommand passes the option through as typed, and the lookup here does not fold case
+    void setConfigOption_findsTheOptionCaseInsensitively_andStoresItUnderItsOwnKey() {
+        // ConfigCommand passes the option through as typed
         config.set("debugMode", false);
 
-        configService.setConfigOption("DEBUGMODE", "true", sender);
+        setUpToTheSave("DEBUGMODE", "true");
 
-        assertTrue(lastMessage().contains("That config option wasn't found."));
-        assertFalse(config.getBoolean("debugMode"));
+        assertEquals(Boolean.TRUE, config.get("debugMode"));
+        assertFalse(config.isSet("DEBUGMODE"));
+        assertTrue(lastMessage().contains("Boolean set."));
+    }
+
+    @Test
+    void setConfigOption_findsANestedOptionCaseInsensitively() {
+        config.set("usage-reporting.enabled", true);
+
+        setUpToTheSave("Usage-Reporting.Enabled", "false");
+
+        assertEquals(Boolean.FALSE, config.get("usage-reporting.enabled"));
+        assertFalse(config.isSet("Usage-Reporting.Enabled"));
+    }
+
+    @Test
+    void setConfigOption_versionTypedInAnotherCase_isStillRefused() {
+        config.set("version", "v1.0.0");
+
+        configService.setConfigOption("VERSION", "v9.9.9", sender);
+
+        assertTrue(lastMessage().contains("Cannot set version."));
+        assertEquals("v1.0.0", config.getString("version"));
     }
 
     @Test
@@ -107,14 +128,28 @@ class ConfigServiceTest {
     }
 
     @Test
-    void setConfigOption_aBooleanOption_takesAnythingButTrueAsFalse() {
-        // Boolean.parseBoolean: no error for a typo, the option is just turned off
+    void setConfigOption_aBooleanOption_refusesAValueOtherThanTrueOrFalse_andLeavesItAsItWas() {
         config.set("enableTerritoryAlerts", true);
+        config.set("limitLand", false);
 
-        setUpToTheSave("enableTerritoryAlerts", "yes");
+        configService.setConfigOption("enableTerritoryAlerts", "no", sender);
+        configService.setConfigOption("limitLand", "yes", sender);
 
-        assertEquals(Boolean.FALSE, config.get("enableTerritoryAlerts"));
-        assertTrue(lastMessage().contains("Boolean set."));
+        assertEquals(2, messages.size());
+        assertTrue(messages.get(0).contains("Value must be true or false."));
+        assertTrue(messages.get(1).contains("Value must be true or false."));
+        assertEquals(Boolean.TRUE, config.get("enableTerritoryAlerts"));
+        assertEquals(Boolean.FALSE, config.get("limitLand"));
+        assertFalse(configService.hasBeenAltered());
+    }
+
+    @Test
+    void setConfigOption_aBooleanOption_acceptsFalseInAnyCase() {
+        config.set("limitLand", true);
+
+        setUpToTheSave("limitLand", "False");
+
+        assertEquals(Boolean.FALSE, config.get("limitLand"));
     }
 
     @Test
