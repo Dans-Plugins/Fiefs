@@ -8,7 +8,7 @@ Configuration can be viewed and changed in-game with `/fi config`. A `config.yml
 |--------|------|---------|-------------|
 | `version` | String | *(plugin version)* | Plugin version. Do not edit manually. |
 | `debugMode` | Boolean | `false` | Enables verbose debug logging to the console. |
-| `limitLand` | Boolean | `true` | Whether fiefs are restricted to land already claimed by their faction. |
+| `limitLand` | Boolean | `true` | Currently has no effect: nothing reads it. `/fi claim` always requires land that the player's own faction has claimed, whatever this is set to. |
 | `enableTerritoryAlerts` | Boolean | `true` | Whether players receive a message when entering or leaving fief territory. |
 | `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. |
 | `usage-reporting.endpoint` | String | `https://trace.danielstephenson.dev` | The trace server events are sent to. |
@@ -21,7 +21,10 @@ author's [trace](https://github.com/Stephenson-Software/trace-client-java) serve
 plugins are actually in use. An event carries the plugin's name, the event name (`startup` or
 `command`), the plugin version, and for a command the command name, plus a random server ID (the
 `server-id` line in `plugins/trace/config.yml`, which identifies no person, account or IP address;
-deleting the line gets a new one) — nothing about players or the world. Sending happens off the main
+deleting the line gets a new one) — nothing about players or the world. Repeats are coalesced: the
+first report of an event is sent at once, and identical reports in the next 60 seconds are counted
+and sent as one event carrying the count, so a command run in a loop costs one report a minute
+(`startup` is never held back). Sending happens off the main
 thread, never delays a tick, and is dropped silently if the
 server cannot be reached. The plugin says on every start whether reporting is on.
 
