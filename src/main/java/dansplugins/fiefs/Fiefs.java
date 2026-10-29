@@ -16,6 +16,7 @@ import dansplugins.fiefs.utils.Logger;
 import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import preponderous.ponder.minecraft.bukkit.PonderMC;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
@@ -88,7 +89,10 @@ public final class Fiefs extends PonderBukkitPlugin {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
+        // Console, command-block and plugin-dispatched commands are not counted.
+        if (sender instanceof Player) {
+            trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
+        }
         if (args.length == 0) {
             DefaultCommand defaultCommand = new DefaultCommand(this);
             return defaultCommand.execute(sender);
