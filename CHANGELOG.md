@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.1.0] – 2026-10-29
+
+### Changed
+- Usage reporting now coalesces repeated events. The vendored trace client is now 0.7.0: the first report of an event is sent at once, and identical reports in the next 60 seconds are counted and sent as one event tagged `coalesced` with the count, so a command run in a loop (for example by another plugin) costs one report a minute instead of one per run. `startup` is never held back. Details: https://github.com/Stephenson-Software/trace-client-java/releases/tag/0.7.0.
+
+### Fixed
+- `/fi config set` no longer turns a Boolean option off when given a value other than `true`. `/fi config set limitLand yes` stored `false` and replied `Boolean set.`; a Boolean option now takes only `true` or `false` (in any case), and any other value is refused with "Value must be true or false." and leaves the option unchanged. The option name is now also found whatever its case, so `/fi config set debugmode true` sets `debugMode` instead of answering "That config option wasn't found." (#245).
+
+## [1.0.1] – 2026-10-25
+
 ### Fixed
 - `/fi join`, `/fi info` and `/fi members` now find a fief whether its name is typed in double quotes or not, and a name of several words works either way. Before, they read only the first word as typed, so `/fi join "Millbrook"` answered "That fief wasn't found." and a fief named with a space could not be joined at all. The invitation now names the command to type, for example `Type /fi join "Millbrook" to join.` (#237).
 - `/fi desc "text"` now answers `Description set.` The description was being set, but nothing was said, so it looked as if the command had done nothing (#237).
 - `/fi invite`, `/fi flags` and `/fi config` typed with no arguments now answer instead of printing nothing. Ponder sends a bare subcommand to the command's sender-only `execute`, and these three returned `false` without a word — the same fault fixed for `/fi info` under #207. Each now takes the same path as when given no arguments: `/fi config` lists its sub-commands, `/fi flags` lists its sub-commands to a fief owner, `/fi invite` gives a fief owner its usage line, and anyone the command refuses (not in a faction, not in a fief, not the owner, or the console for `invite` and `flags`) is told why.
-- `/fi config set` no longer turns a Boolean option off when given a value other than `true`. `/fi config set limitLand yes` stored `false` and replied `Boolean set.`; a Boolean option now takes only `true` or `false` (in any case), and any other value is refused with "Value must be true or false." and leaves the option unchanged. The option name is now also found whatever its case, so `/fi config set debugmode true` sets `debugMode` instead of answering "That config option wasn't found." (#245).
 - Run from the console, `/fi create`, `/fi desc`, `/fi disband`, `/fi kick`, `/fi list` and `/fi members` now say "Only players can use this command." instead of printing nothing, as the other player-only subcommands already did (#240).
 
 ## [1.0.0] – 2026-10-15
