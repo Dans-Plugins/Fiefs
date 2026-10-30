@@ -5,8 +5,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,8 @@ import java.util.UUID;
  * the loaded-world registry that {@code dansplugins.fiefs.listeners.FactionEventListener}
  * reads the same way when it resolves the world id on a Medieval Factions unclaim event, and
  * the plugin registry that {@code dansplugins.fiefs.integrators.MedievalFactionsIntegrator}
- * looks Medieval Factions up in through the plugin manager.
+ * looks Medieval Factions up in through the plugin manager, and the repeating tasks that
+ * {@code dansplugins.fiefs.utils.Scheduler} hands to the Bukkit scheduler.
  *
  * <p>{@link Bukkit#setServer(Server)} refuses to replace a server once one is set, and Surefire
  * runs the whole suite in one JVM, so the double is installed once per JVM and its registry is
@@ -38,6 +41,25 @@ public final class FakeBukkitServer {
     private static final Map<UUID, String> namesByUuid = new LinkedHashMap<>();
     private static final Map<UUID, String> worldNamesByUuid = new LinkedHashMap<>();
     private static final Map<String, Plugin> pluginsByName = new LinkedHashMap<>();
+    private static final List<RepeatingTask> repeatingTasks = new ArrayList<>();
+
+    /**
+     * A task handed to {@code scheduleSyncRepeatingTask(Plugin, Runnable, long, long)}. The
+     * double never runs it; a test calls {@code task.run()} itself to exercise the callback.
+     */
+    public static final class RepeatingTask {
+        public final Plugin plugin;
+        public final Runnable task;
+        public final long delayTicks;
+        public final long periodTicks;
+
+        private RepeatingTask(Plugin plugin, Runnable task, long delayTicks, long periodTicks) {
+            this.plugin = plugin;
+            this.task = task;
+            this.delayTicks = delayTicks;
+            this.periodTicks = periodTicks;
+        }
+    }
 
     private FakeBukkitServer() {
         // static methods only
@@ -45,7 +67,8 @@ public final class FakeBukkitServer {
 
     /**
      * Installs the double as the Bukkit server if no server is set yet, and empties the
-     * offline-player and world registries so the calling test starts from a known state.
+     * offline-player, world, plugin and scheduled-task registries so the calling test starts
+     * from a known state.
      */
     public static void install() {
         if (Bukkit.getServer() == null) {
@@ -54,6 +77,12 @@ public final class FakeBukkitServer {
         namesByUuid.clear();
         worldNamesByUuid.clear();
         pluginsByName.clear();
+        repeatingTasks.clear();
+    }
+
+    /** The repeating tasks scheduled since the last {@link #install()}, in scheduling order. */
+    public static List<RepeatingTask> scheduledRepeatingTasks() {
+        return Collections.unmodifiableList(new ArrayList<>(repeatingTasks));
     }
 
     /**
@@ -120,6 +149,8 @@ public final class FakeBukkitServer {
                     throw BukkitTestDoubles.unsupported(method);
                 case "getPluginManager":
                     return pluginManager();
+                case "getScheduler":
+                    return scheduler();
                 // Bukkit.setServer() announces the server it was handed, so these four are
                 // answered for that call alone.
                 case "getLogger":
@@ -144,6 +175,22 @@ public final class FakeBukkitServer {
             if (method.getName().equals("getPlugin") && args != null && args.length == 1
                     && args[0] instanceof String) {
                 return pluginsByName.get(args[0]);
+            }
+            throw BukkitTestDoubles.unsupported(method);
+        });
+    }
+
+    /**
+     * Answers {@code scheduleSyncRepeatingTask(Plugin, Runnable, long, long)} by recording the
+     * task and returning its index as the task id. Nothing is ever run on a timer.
+     */
+    private static BukkitScheduler scheduler() {
+        return BukkitTestDoubles.proxy(BukkitScheduler.class, (method, args) -> {
+            if (method.getName().equals("scheduleSyncRepeatingTask") && args != null
+                    && args.length == 4 && args[1] instanceof Runnable) {
+                repeatingTasks.add(new RepeatingTask((Plugin) args[0], (Runnable) args[1],
+                        (Long) args[2], (Long) args[3]));
+                return repeatingTasks.size() - 1;
             }
             throw BukkitTestDoubles.unsupported(method);
         });
