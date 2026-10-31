@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Usage reporting now counts a `command` event only when a player runs the command; console, command-block and plugin-dispatched commands are no longer reported.
+- `COMMANDS.md` now shows the arguments each command takes. Only `/fi help` and `/fi whois` had them; the table listed `/fi create`, `/fi invite`, `/fi flags`, `/fi config` and the other argument-taking commands by name alone.
 
 ## [1.1.0] – 2026-10-29
 
