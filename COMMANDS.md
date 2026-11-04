@@ -2,12 +2,12 @@
 
 All commands use `/fi` or `/fiefs` as the base. Fiefs requires Medieval Factions to be installed.
 
-In the syntax below, `<value>` is required, `[value]` is optional, and `{a|b}` means one of the listed forms.
+In the syntax below, `<value>` is required, `[value]` is optional, `a|b` means one of the listed values, and `{a|b}` means one of the listed forms.
 
 | Command | Description | Permission |
 |---------|-------------|------------|
 | `/fi` | View plugin version and info. | `fiefs.default` |
-| `/fi help {1\|2}` | View command list (2 pages). | `fiefs.help` |
+| `/fi help [1\|2]` | View command list (2 pages; page 1 if none is given). | `fiefs.help` |
 | `/fi list` | List the fiefs in your faction. | `fiefs.list` |
 | `/fi create "<name>"` | Create a new fief in your faction. | `fiefs.create` |
 | `/fi disband` | Disband your fief. | `fiefs.disband` |

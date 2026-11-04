@@ -8,8 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Usage reporting now counts a `command` event only when a player runs the command; console, command-block and plugin-dispatched commands are no longer reported.
 - `COMMANDS.md` now shows the arguments each command takes. Only `/fi help` and `/fi whois` had them; the table listed `/fi create`, `/fi invite`, `/fi flags`, `/fi config` and the other argument-taking commands by name alone.
+- `README.md`, `CONFIG.md` and the comment in the bundled `config.yml` now say that a command is reported only when a player runs it, which has been the behaviour since 1.1.1. The `config.yml` comment also now says that repeats are coalesced.
+
+### Fixed
+- `COMMANDS.md` now shows the page number of `/fi help` as optional: `/fi help` on its own opens page 1.
+
+## [1.1.2] – 2026-10-31
+
+No operator-facing changes: this release adds tests for the hourly autosave scheduler.
+
+## [1.1.1] – 2026-10-30
+
+### Changed
+- Usage reporting now counts a `command` event only when a player runs the command; console, command-block and plugin-dispatched commands are no longer reported.
 
 ## [1.1.0] – 2026-10-29
 
