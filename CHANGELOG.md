@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - `COMMANDS.md` now shows the page number of `/fi help` as optional: `/fi help` on its own opens page 1.
+- Bare `/fi` now requires `fiefs.default`, as documented. The node was declared but nothing checked it, so denying it had no effect; a player denied it is now refused the way any other command refuses them. The node defaults to `true`, so only servers that already deny it see a change (#266).
+- The wiki link printed by bare `/fi` now points at `Dans-Plugins/Fiefs` instead of the old `dmccoystephenson/Fiefs` address (#266).
 
 ## [1.1.2] – 2026-10-31
 
