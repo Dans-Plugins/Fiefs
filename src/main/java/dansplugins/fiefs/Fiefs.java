@@ -94,7 +94,7 @@ public final class Fiefs extends PonderBukkitPlugin {
             trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
         }
         if (args.length == 0) {
-            DefaultCommand defaultCommand = new DefaultCommand(this);
+            DefaultCommand defaultCommand = new DefaultCommand(getVersion());
             return defaultCommand.execute(sender);
         }
 

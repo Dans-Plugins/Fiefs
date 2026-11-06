@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -222,6 +223,26 @@ public final class BukkitTestDoubles {
                     && args[0] instanceof String) {
                 sentMessages.add((String) args[0]);
                 return null;
+            }
+            throw unsupported(method);
+        });
+    }
+
+    /**
+     * A command sender holding exactly the given permission nodes, appending every message sent
+     * to it to {@code sentMessages}. Answers {@code sendMessage(String)} and
+     * {@code hasPermission(String)}.
+     */
+    public static CommandSender senderWithPermissions(Set<String> grantedNodes, List<String> sentMessages) {
+        return proxy(CommandSender.class, (method, args) -> {
+            if (method.getName().equals("sendMessage") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                sentMessages.add((String) args[0]);
+                return null;
+            }
+            if (method.getName().equals("hasPermission") && args != null && args.length == 1
+                    && args[0] instanceof String) {
+                return grantedNodes.contains(args[0]);
             }
             throw unsupported(method);
         });
