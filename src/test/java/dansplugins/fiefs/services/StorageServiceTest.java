@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -202,13 +203,15 @@ class StorageServiceTest {
 
         PersistentData persistentData = new PersistentData(null);
         StorageService storageService = newStorageService(persistentData);
-        tempFile = Files.createTempFile("fiefs-storage-test", ".json");
-        storageService.applyFiefs(tempFile.toString());
+        Files.createDirectories(PLUGINS_DIR);
+        Path fiefsFile = PLUGINS_DIR.resolve("fiefs.json");
+        Files.createFile(fiefsFile);
+        storageService.load();
         persistentData.addFief(newFief("CreatedAfterEmptyLoad"));
 
         storageService.save();
 
-        assertTrue(Files.exists(PLUGINS_DIR.resolve("fiefs.json")),
+        assertTrue(Files.size(fiefsFile) > 0,
                 "an empty save file must not disable saving for the session");
     }
 
@@ -335,12 +338,33 @@ class StorageServiceTest {
         List<Map<String, String>> data = new ArrayList<>();
         data.add(corrupted);
         Path file = writeJson(data);
+        storageService.load();
         storageService.applyFiefs(file.toString());
         assertFalse(storageService.isLoadCompletedCleanly());
 
         assertDoesNotThrow(storageService::save);
 
         assertFalse(Files.exists(PLUGINS_DIR), "save() must not write ./plugins/Fiefs/ after an incomplete load");
+    }
+
+    /**
+     * When Medieval Factions cannot be used, {@code onEnable()} returns before {@code load()},
+     * but {@code onDisable()} still calls {@code save()}. Nothing was read, so the empty
+     * in-memory state must not replace the files: they hold the server's fiefs and claims.
+     */
+    @Test
+    void save_leavesExistingFilesAloneWhenNothingWasLoaded() throws IOException {
+        Files.createDirectories(PLUGINS_DIR);
+        byte[] savedFiefs = GSON.toJson(List.of(newFief("Testopia").save())).getBytes(StandardCharsets.UTF_8);
+        byte[] savedChunks = "[{\"chunk\":\"sentinel\"}]".getBytes(StandardCharsets.UTF_8);
+        Files.write(PLUGINS_DIR.resolve("fiefs.json"), savedFiefs);
+        Files.write(PLUGINS_DIR.resolve("claimedChunks.json"), savedChunks);
+        StorageService storageService = newStorageService(new PersistentData(null));
+
+        assertDoesNotThrow(storageService::save);
+
+        assertArrayEquals(savedFiefs, Files.readAllBytes(PLUGINS_DIR.resolve("fiefs.json")));
+        assertArrayEquals(savedChunks, Files.readAllBytes(PLUGINS_DIR.resolve("claimedChunks.json")));
     }
 
     /**
@@ -355,8 +379,9 @@ class StorageServiceTest {
         assumeFalse(Files.exists(PLUGINS_TOP_LEVEL_DIR), "test expects no pre-existing ./plugins/ directory");
 
         PersistentData persistentData = new PersistentData(null);
-        persistentData.addFief(newFief("Testopia"));
         StorageService storageService = newStorageService(persistentData);
+        storageService.load();
+        persistentData.addFief(newFief("Testopia"));
         assertTrue(storageService.isLoadCompletedCleanly());
 
         storageService.save();

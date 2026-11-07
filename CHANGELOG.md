@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+- Stopping a server after Fiefs failed to enable no longer erases `fiefs.json` and `claimedChunks.json`. When Medieval Factions could not be used, for example an incompatible version, Fiefs stopped enabling before it read its files but still saved at shutdown, which replaced them with empty lists. Fiefs now saves only if it has loaded in that session (#273).
+
+## [1.1.4] – 2026-11-07
+
+### Fixed
+- Bare `/fi` now requires `fiefs.default`, as documented. The node was declared but nothing checked it, so denying it had no effect; a player denied it is now refused the way any other command refuses them. The node defaults to `true`, so only servers that already deny it see a change (#266).
+- The wiki link printed by bare `/fi` now points at `Dans-Plugins/Fiefs` instead of the old `dmccoystephenson/Fiefs` address (#266).
+
+## [1.1.3] – 2026-11-05
+
 ### Changed
 
 - `COMMANDS.md` now shows the arguments each command takes. Only `/fi help` and `/fi whois` had them; the table listed `/fi create`, `/fi invite`, `/fi flags`, `/fi config` and the other argument-taking commands by name alone.
@@ -13,8 +24,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - `COMMANDS.md` now shows the page number of `/fi help` as optional: `/fi help` on its own opens page 1.
-- Bare `/fi` now requires `fiefs.default`, as documented. The node was declared but nothing checked it, so denying it had no effect; a player denied it is now refused the way any other command refuses them. The node defaults to `true`, so only servers that already deny it see a change (#266).
-- The wiki link printed by bare `/fi` now points at `Dans-Plugins/Fiefs` instead of the old `dmccoystephenson/Fiefs` address (#266).
 
 ## [1.1.2] – 2026-10-31
 
