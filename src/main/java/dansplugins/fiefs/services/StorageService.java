@@ -39,10 +39,10 @@ public class StorageService {
     // fiefs.json/claimedChunks.json with the empty or partial in-memory state (#153).
     private boolean loadCompletedCleanly = true;
 
-    // False until load() runs. onEnable() returns before load() when Medieval Factions can't be
-    // used, but onDisable() still calls save(), so without this the empty in-memory state would
-    // replace whatever fiefs.json/claimedChunks.json already hold.
-    private boolean loadAttempted = false;
+    // False until load() reaches its end. onEnable() returns before load() when Medieval Factions
+    // can't be used, but onDisable() still calls save(), so without this the empty in-memory state
+    // would replace whatever fiefs.json/claimedChunks.json already hold.
+    private boolean loadFinished = false;
 
     public StorageService(ConfigService configService, Fiefs fiefs, PersistentData persistentData, Logger logger, MedievalFactionsIntegrator medievalFactionsIntegrator) {
         this.configService = configService;
@@ -53,7 +53,7 @@ public class StorageService {
     }
 
     public void save() {
-        if (!loadAttempted) {
+        if (!loadFinished) {
             System.out.println("ERROR: skipping save because nothing was loaded this session. " +
                     FIEFS_FILE_NAME + "/" + CLAIMED_CHUNKS_FILE_NAME + " were left as they are.");
             return;
@@ -71,10 +71,10 @@ public class StorageService {
     }
 
     public void load() {
-        loadAttempted = true;
         loadCompletedCleanly = true;
         loadFiefs();
         loadClaimedChunks();
+        loadFinished = true;
     }
 
     /**
