@@ -1,5 +1,7 @@
 # Fiefs
 
+![Fiefs banner: a Strata render of a test-server world with faction claims and the fiefs Ironbrook and Westfold drawn over them in lighter shades](docs/images/banner.jpg)
+
 ![Creating and claiming the fief Millbrook inside the faction Riverhold, then /fi info and /fi checkclaim](docs/images/fief-commands.png)
 
 *Real in-game output from Fiefs 1.0.0 on a local throwaway Paper 1.21.11 test server: the commands were typed by a scripted bot client, and the chat it received is drawn as Minecraft-style chat (typed commands appear in the input bars; grey lines say what happened between commands).*
