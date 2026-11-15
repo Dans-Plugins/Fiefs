@@ -115,9 +115,14 @@ class InteractionProtectionTest {
         assertTrue(messages.isEmpty());
     }
 
+    /**
+     * Spigot already reports a click with no block as cancelled (its clicked-block result defaults
+     * to DENY), so only the absence of a refusal message distinguishes the handler's early return.
+     */
     @Test
-    void clickingAirIsIgnoredWithoutLookingUpAChunk() {
+    void clickingAirSendsNoRefusal() {
         PlayerInteractEvent event = new PlayerInteractEvent(outsider(), Action.RIGHT_CLICK_AIR, null, null, BlockFace.UP);
+        assertTrue(event.isCancelled(), "Spigot's default for a click with no block");
 
         listener.handle(event);
 
@@ -207,6 +212,7 @@ class InteractionProtectionTest {
         listener.handle(event);
 
         assertTrue(event.isCancelled());
+        assertEquals(1, messages.size());
     }
 
     @Test
