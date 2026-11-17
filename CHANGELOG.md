@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- The plugin JAR no longer bundles JUnit 4 and Hamcrest. The Ponder 1.1 library carries copies of both inside its own JAR, so they were shaded into the plugin JAR unrelocated, where they could clash with another plugin's copy. Ponder's own JUnit test class is left out as well. Nothing in Fiefs uses them at runtime (#278).
 - Stopping a server after Fiefs failed to enable no longer erases `fiefs.json` and `claimedChunks.json`. When Medieval Factions could not be used, for example an incompatible version, Fiefs stopped enabling before it read its files but still saved at shutdown, which replaced them with empty lists. Fiefs now saves only if it has loaded in that session (#273).
 
 ## [1.1.4] – 2026-11-07
