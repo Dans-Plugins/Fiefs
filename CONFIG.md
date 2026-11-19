@@ -10,7 +10,7 @@ Configuration can be viewed and changed in-game with `/fi config`. A `config.yml
 | `debugMode` | Boolean | `false` | Enables verbose debug logging to the console. |
 | `limitLand` | Boolean | `true` | Currently has no effect: nothing reads it. `/fi claim` always requires land that the player's own faction has claimed, whatever this is set to. |
 | `enableTerritoryAlerts` | Boolean | `true` | Whether players receive a message when entering or leaving fief territory. |
-| `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. Only `true`, `on` or `yes` turns it on; any other value, including a quoted `"false"`, turns it off, and the plugin never writes the switch back on once it is off in the file. |
+| `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. Only `true`, `on` or `yes` turns it on; any other value, including a quoted `"false"`, turns it off, and the plugin never writes the switch back on once it is off in the file. Other spellings of the block or the switch (`usage_reporting:`, `usageReporting:`, `enable: false`, `disabled: true`), or `usage-reporting: false`, also count as off. |
 | `usage-reporting.endpoint` | String | `https://trace.danielstephenson.dev` | The trace server events are sent to. |
 | `usage-reporting.key` | String | the plugin's key | Identifies this plugin to the trace server so reports are attributed to it. Not a secret: it ships in the default config and can only report as Fiefs. Empty means reporting is off regardless of `enabled`. |
 
