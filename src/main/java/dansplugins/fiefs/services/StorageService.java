@@ -65,9 +65,9 @@ public class StorageService {
         }
         saveFiefs();
         saveClaimedChunks();
-        if (configService.hasBeenAltered()) {
-            fiefs.saveConfig();
-        }
+        // config.yml is not written here: /fi config set already saved each change, and writing the
+        // loaded config again would undo anything edited by hand while the server was running --
+        // including usage-reporting.enabled: false.
     }
 
     public void load() {

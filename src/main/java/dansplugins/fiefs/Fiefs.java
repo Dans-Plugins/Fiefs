@@ -12,6 +12,7 @@ import dansplugins.fiefs.services.ChunkService;
 import dansplugins.fiefs.services.ConfigService;
 import dansplugins.fiefs.services.StorageService;
 import dansplugins.fiefs.trace.TraceClient;
+import dansplugins.fiefs.trace.UsageReportingSetting;
 import dansplugins.fiefs.utils.Logger;
 import dansplugins.fiefs.utils.Scheduler;
 import org.bukkit.command.Command;
@@ -73,6 +74,45 @@ public final class Fiefs extends PonderBukkitPlugin {
     /**
      * This runs when the server stops.
      */
+    /**
+     * Every save of config.yml goes through here. A file Bukkit could not parse was loaded as
+     * empty, so saving would replace it with the bundled defaults, usage reporting switched on
+     * included; it is left alone instead. An opt-out written into the file by hand while the
+     * server runs is carried into the loaded copy first, so a save cannot turn reporting back on,
+     * unless /fi config set usage-reporting.enabled changed the switch since.
+     */
+    @Override
+    public void saveConfig() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (UsageReportingSetting.isUnparseable(configFile)) {
+            getLogger().severe("config.yml could not be read, so it was not overwritten. Fix the YAML error in it and restart; "
+                    + "until then the defaults are used, and usage reporting is off.");
+            return;
+        }
+        if (!configService.isUsageReportingSetByCommand()) {
+            UsageReportingSetting.keepOptOutFromDisk(getConfig(), configFile);
+        }
+        super.saveConfig();
+    }
+
+    /**
+     * Stops usage reporting at once, for an operator who has just turned it off in-game. Turning
+     * it back on still waits for the next restart; turning it off never does.
+     */
+    public void stopUsageReporting() {
+        TraceClient previous = trace;
+        trace = TraceClient.disabled();
+        if (previous != null) {
+            previous.close();
+        }
+        getLogger().info("Usage reporting is off (config.yml).");
+    }
+
+    /** The client reporting right now; a disabled one when reporting is off. */
+    public TraceClient getTrace() {
+        return trace;
+    }
+
     @Override
     public void onDisable() {
         trace.close();
