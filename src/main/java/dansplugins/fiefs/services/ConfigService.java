@@ -1,9 +1,13 @@
 package dansplugins.fiefs.services;
 
 import dansplugins.fiefs.Fiefs;
+import dansplugins.fiefs.trace.TraceClient;
+import dansplugins.fiefs.trace.UsageReportingSetting;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.io.File;
 
 /*
     To add a new config option, the following methods must be altered:
@@ -24,6 +28,9 @@ public class ConfigService {
     private final Fiefs fiefs;
 
     private boolean altered = false;
+    // Set when /fi config set usage-reporting.enabled was used: that command, and only that one,
+    // may change the switch away from what config.yml on disk says.
+    private boolean usageReportingSetByCommand = false;
 
     public ConfigService(Fiefs fiefs) {
         this.fiefs = fiefs;
@@ -75,6 +82,13 @@ public class ConfigService {
                 }
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + "Boolean set.");
+                if (option.equalsIgnoreCase(USAGE_REPORTING_ENABLED_KEY)) {
+                    usageReportingSetByCommand = true;
+                    if (!Boolean.parseBoolean(value)) {
+                        // Turning it off takes effect at once; turning it on waits for a restart.
+                        stopUsageReporting();
+                    }
+                }
             } else if (option.equalsIgnoreCase("c")) { // no doubles yet
                 getConfig().set(option, Double.parseDouble(value));
                 sender.sendMessage(ChatColor.GREEN + "Double set.");
@@ -119,6 +133,21 @@ public class ConfigService {
         return altered;
     }
 
+    /** Stops the running usage-reporting client at once. */
+    protected void stopUsageReporting() {
+        fiefs.stopUsageReporting();
+    }
+
+    /** Whether /fi config set usage-reporting.enabled has changed the switch since the server started. */
+    public boolean isUsageReportingSetByCommand() {
+        return usageReportingSetByCommand;
+    }
+
+    /** The plugin's config.yml, which may not exist yet. */
+    public File getConfigFile() {
+        return new File(fiefs.getDataFolder(), "config.yml");
+    }
+
     public FileConfiguration getConfig() {
         return fiefs.getConfig();
     }
@@ -147,8 +176,16 @@ public class ConfigService {
     // for a hand-trimmed config.yml or a plugins directory that could not be written to.
     // Verified against YamlConfiguration, not assumed.
 
+    /**
+     * Fails closed: only true, on or yes turns reporting on, so a quoted "false" or a typo turns
+     * it off (getBoolean() would return the bundled true for them), and an opt-out in config.yml on
+     * disk wins over the copy loaded at startup unless /fi config set changed the switch since.
+     */
     public boolean isUsageReportingEnabled() {
-        return getConfig().getBoolean(USAGE_REPORTING_ENABLED_KEY);
+        if (!usageReportingSetByCommand && UsageReportingSetting.turnedOffOnDisk(getConfigFile())) {
+            return false;
+        }
+        return TraceClient.allowsReporting(getConfig().get(USAGE_REPORTING_ENABLED_KEY));
     }
 
     public String getUsageReportingEndpoint() {

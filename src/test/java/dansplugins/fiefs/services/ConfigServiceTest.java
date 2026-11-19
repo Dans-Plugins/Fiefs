@@ -5,6 +5,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +34,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ConfigServiceTest {
 
+    @TempDir
+    File dataFolder;
+
+    private int stops = 0;
     private final YamlConfiguration config = new YamlConfiguration();
     private final ConfigService configService = new ConfigService(null) {
         @Override
         public FileConfiguration getConfig() {
             return config;
         }
+
+        @Override
+        public File getConfigFile() {
+            return new File(dataFolder, "config.yml");
+        }
+
+        @Override
+        protected void stopUsageReporting() {
+            stops++;
+        }
     };
+
+    private void writeConfigFile(String contents) throws Exception {
+        Files.write(new File(dataFolder, "config.yml").toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    }
     private final List<String> messages = new ArrayList<>();
     private final CommandSender sender = BukkitTestDoubles.messageCapturingConsole(messages);
 
@@ -277,5 +300,55 @@ class ConfigServiceTest {
         assertEquals("text", configService.getString("someString"));
         assertTrue(configService.getBoolean("someBoolean"));
         assertSame(config, configService.getConfig());
+    }
+
+    @Test
+    void usageReporting_aQuotedFalseTurnsReportingOff() {
+        // getBoolean() would return the bundled default, true, for the string "false".
+        config.set("usage-reporting.enabled", "false");
+
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void usageReporting_anOptOutOnDiskWinsOverTheLoadedConfig() throws Exception {
+        // The operator turned reporting off by hand after the config was loaded.
+        writeConfigFile("usage-reporting:\n  enabled: false\n");
+        config.set("usage-reporting.enabled", true);
+
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void usageReporting_aFileBukkitCannotParseKeepsReportingOff() throws Exception {
+        // Bukkit loads such a file as empty, so the loaded config falls through to the bundled true.
+        writeConfigFile("usage-reporting:\n  enabled: false\n\tbroken: [\n");
+        YamlConfiguration defaults = new YamlConfiguration();
+        defaults.set("usage-reporting.enabled", true);
+        config.setDefaults(defaults);
+
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void turningUsageReportingOffInGameStopsItAtOnce() {
+        config.set("usage-reporting.enabled", true);
+
+        setUpToTheSave("usage-reporting.enabled", "false");
+
+        assertEquals(1, stops);
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void turningUsageReportingOnInGameStillWinsOverAnOptOutOnDisk() throws Exception {
+        // An explicit /fi config set usage-reporting.enabled true is the operator's own choice.
+        writeConfigFile("usage-reporting:\n  enabled: false\n");
+        config.set("usage-reporting.enabled", false);
+
+        setUpToTheSave("usage-reporting.enabled", "true");
+
+        assertEquals(0, stops);
+        assertTrue(configService.isUsageReportingEnabled());
     }
 }
